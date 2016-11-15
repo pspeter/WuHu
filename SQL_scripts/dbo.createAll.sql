@@ -1,8 +1,8 @@
 ﻿
 CREATE TABLE [dbo].[Match]
 ( 
-	[tournamentId]       int  NOT NULL  IDENTITY ( 0,1 ) ,
-	[matchId]            int  NOT NULL ,
+	[tournamentId]       int  NOT NULL,
+	[matchId]            int  NOT NULL  IDENTITY ( 0,1 ),
 	[time]               Datetime2  NOT NULL ,
 	[scoreTeam1]         int  NULL ,
 	[scoreTeam2]         int  NULL ,
