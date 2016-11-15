@@ -1,0 +1,5 @@
+﻿INSERT INTO [dbo].[ScoreParameter] ([value], [name]) VALUES ('initialscore', '2000')
+INSERT INTO [dbo].[ScoreParameter] ([value], [name]) VALUES ('scoredMatches', '100')
+INSERT INTO [dbo].[ScoreParameter] ([value], [name]) VALUES ('halflife', '40')
+INSERT INTO [dbo].[ScoreParameter] ([value], [name]) VALUES ('k-rating', '30')
+INSERT INTO [dbo].[ScoreParameter] ([value], [name]) VALUES ('timepenalty', '50')

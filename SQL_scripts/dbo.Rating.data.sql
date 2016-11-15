@@ -1,0 +1,6 @@
+﻿INSERT INTO [dbo].[Rating] ([playerId], [value]) VALUES (0, 2000)
+INSERT INTO [dbo].[Rating] ([playerId], [value]) VALUES (1, 2000)
+INSERT INTO [dbo].[Rating] ([playerId], [value]) VALUES (2, 2000)
+INSERT INTO [dbo].[Rating] ([playerId], [value]) VALUES (3, 2000)
+INSERT INTO [dbo].[Rating] ([playerId], [value]) VALUES (4, 2000)
+INSERT INTO [dbo].[Rating] ([playerId], [value]) VALUES (5, 2000)
