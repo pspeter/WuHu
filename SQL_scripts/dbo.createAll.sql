@@ -4,6 +4,10 @@ CREATE TABLE [dbo].[Match]
 	[tournamentId]       int  NOT NULL,
 	[matchId]            int  NOT NULL  IDENTITY ( 0,1 ),
 	[time]               Datetime2  NOT NULL ,
+    [player1]    INT			 NOT NULL,
+    [player2]    INT			 NOT NULL,
+    [player3]    INT			 NOT NULL,
+    [player4]    INT			 NOT NULL,
 	[scoreTeam1]         int  NULL ,
 	[scoreTeam2]         int  NULL ,
 	[deltaPoints]        int  NOT NULL ,
@@ -67,19 +71,6 @@ go
 
 ALTER TABLE [dbo].[ScoreParameter]
 	ADD CONSTRAINT [XPKScoreParameter] PRIMARY KEY  CLUSTERED ([parameterId] ASC)
-go
-
-CREATE TABLE [dbo].[Team]
-( 
-	[playerId1]           int  NOT NULL ,
-	[playerId2]           int  NOT NULL ,
-	[tournamentId]       int  NOT NULL ,
-	[matchId]            int  NOT NULL 
-)
-go
-
-ALTER TABLE [dbo].[Team]
-	ADD CONSTRAINT [XPKTeam] PRIMARY KEY  CLUSTERED ([playerId1] ASC,[playerId2] ASC,[tournamentId] ASC,[matchId] ASC)
 go
 
 CREATE TABLE [dbo].[Tournament]
