@@ -1,5 +1,6 @@
 import random
 from os import urandom
+import hashlib, binascii
 random.seed(42)
 
 # data generated with http://www.json-generator.com/
@@ -21,28 +22,37 @@ def insertInto(table, keys, values):
     for value in values[1:]:
         statement += "," + str(value)
         
-    statement += ")"
+    statement += ");"
     return statement
+    
+def quote(str):
+    return "'" + str + "'"
    
 randomDataKeys = ["firstName","lastName", "nickName", "userName","password","isAdmin"]
 dayKeys = ["playsMondays", "playsTuesdays", "playsWednesdays", "playsThursdays", "playsFridays", "playsSaturdays", "playsSundays"]
-byteArrayKey = ["salt"]
-allKeys = randomDataKeys + dayKeys + byteArrayKey
+allKeys = ["firstName","lastName", "nickName", "userName","password","salt","isAdmin"] + dayKeys
+
 # Player
 with open("dbo.Player.data.sql", "w") as f:
     for player in randomPlayer[:30]:
         values = []
-        for key in randomDataKeys[:-1]:
-            values.append("'" + player[key] + "'") # all from randomDataKeys but isAdmin
-        values.append(player[randomDataKeys[-1]]) # isAdmin (as bit, not as string)
-        for key in dayKeys:
-            plays = (random.random() < 0.6)
-            values.append(plays)
-        values.append(urandom(32))
+        for key in randomDataKeys[:-2]:
+            values.append(quote(player[key])) # all from randomDataKeys but isAdmin
+        
+        salt = urandom(32)
+        password = hashlib.pbkdf2_hmac('sha256', randomDataKeys[-2], salt, 100000)
+        values.append("0x" + binascii.hexlify(salt)) 
+        values.append("0x" + binascii.hexlify(password))
+        
+        values.append(player[randomDataKeys[-1]])
+        
+        for _ in dayKeys:
+            isPlaying = int(random.random() < 0.4)
+            values.append(isPlaying)
         f.write(insertInto("Player", allKeys, values) + "\n")
 
             
-# Ranking
+# Rating
 with open("dbo.Rating.data.sql", "w") as f:
         f.write("declare @startDate datetime2\n")
         f.write("set @startDate = '2014-01-02 07:36:13.000'\n")
@@ -62,7 +72,7 @@ with open("dbo.Tournament.data.sql", "w") as f:
         k = random.randint(0, len(randomNames) - 1)
         l = random.randint(0, len(randomNames) - 1)
         admin = random.randint(0, 1)
-        f.write(insertInto("Tournament", ["name", "playerId"], [randomCities[k]+"_"+randomNames[l], admin]) + "\n")
+        f.write(insertInto("Tournament", ["name", "creator"], [quote(randomCities[k]+"_"+randomNames[l]), admin]) + "\n")
     
 # Match
 STARTID = 1250 # first tournamentId 

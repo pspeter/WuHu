@@ -46,7 +46,7 @@ go
 
 CREATE TABLE [dbo].[Rating]
 ( 
-	[ratingId]           int  NOT NULL ,
+	[ratingId]           int  NOT NULL IDENTITY(0, 1),
 	[playerId]           int  NOT NULL ,
 	[date]               Datetime2  NOT NULL 
 	CONSTRAINT [now_timestamp]
