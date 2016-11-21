@@ -6,7 +6,7 @@ namespace WuHu.Dal.Common
     public interface IDatabase
     {
         DbCommand CreateCommand(string commandText);
-        int DeclareParametere(DbCommand command, string name, DbType type);
+        int DeclareParameter(DbCommand command, string name, DbType type);
         void SetParameter(DbCommand command, string name, object value);
         void DefineParameter(DbCommand command, string name, DbType type, object value);
 

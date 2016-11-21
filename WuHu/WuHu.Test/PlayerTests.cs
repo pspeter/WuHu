@@ -2,68 +2,82 @@
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Configuration;
+using WuHu.Dal.Common;
+using WuHu.Domain;
 
 namespace WuHu.Test
 {
-    /// <summary>
-    /// Summary description for PlayerTests
-    /// </summary>
     [TestClass]
     public class PlayerTests
     {
-        public PlayerTests()
+
+        private static string connectionString;
+        private static IDatabase database;
+        private static IPlayerDao playerDao;
+        public static TestContext PlayerTestContext { get; set; }
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext testContext)
         {
-            //
-            // TODO: Add constructor logic here
-            //
+            connectionString = ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString;
+            database = DalFactory.CreateDatabase();
+            PlayerTestContext = testContext;
+            playerDao = DalFactory.CreatePlayerDao(database);
         }
 
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
+        [ClassCleanup]
+        public static void ClassCleanup()
         {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
+
         }
 
-        #region Additional test attributes
-        //
-        // You can use the following additional attributes as you write your tests:
-        //
-        // Use ClassInitialize to run code before running the first test in the class
-        // [ClassInitialize()]
-        // public static void MyClassInitialize(TestContext testContext) { }
-        //
-        // Use ClassCleanup to run code after all tests in a class have run
-        // [ClassCleanup()]
-        // public static void MyClassCleanup() { }
-        //
-        // Use TestInitialize to run code before running each test 
-        // [TestInitialize()]
-        // public void MyTestInitialize() { }
-        //
-        // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
-        #endregion
+        [TestInitialize]
+        public void TestInitialize()
+        {
+
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+
+        }
+        
 
         [TestMethod]
-        public void TestMethod1()
+        public void Insert()
         {
-            //
-            // TODO: Add test logic here
-            //
+            int cnt = playerDao.Count();
+            Assert.AreEqual(0, cnt);
+            playerDao.Insert(new Player("first", "last", "nick", "user", "pass", 
+                false, false, false, false, false, true, true, true, null));
+            cnt = playerDao.Count();
+            Assert.AreEqual(1, cnt);
         }
+
+        [TestMethod]
+        public void Count()
+        {
+
+        }
+
+        [TestMethod]
+        public void Update()
+        {
+
+        }
+
+        [TestMethod]
+        public void Constructor()
+        {
+
+        }
+
+       
+        
+
+
     }
+    
 }

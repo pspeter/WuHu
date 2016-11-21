@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuHu.Test", "WuHu.Test\WuHu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuHu.Dal.SqlServer", "WuHu.Dal.SqlServer\WuHu.Dal.SqlServer.csproj", "{25DB2BEE-95CF-4F82-B0BF-3C5CE3FCA970}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuHu.Common", "..\WuHu.Common\WuHu.Common.csproj", "{B995CB61-A5E2-4149-B397-F7513255CC4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{25DB2BEE-95CF-4F82-B0BF-3C5CE3FCA970}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25DB2BEE-95CF-4F82-B0BF-3C5CE3FCA970}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25DB2BEE-95CF-4F82-B0BF-3C5CE3FCA970}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B995CB61-A5E2-4149-B397-F7513255CC4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B995CB61-A5E2-4149-B397-F7513255CC4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B995CB61-A5E2-4149-B397-F7513255CC4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B995CB61-A5E2-4149-B397-F7513255CC4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -48,9 +48,9 @@
     <Compile Include="Tournament.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\WuHu.Dal.Common\WuHu.Dal.Common.csproj">
-      <Project>{04f6460d-1635-43d4-8080-f4903b40db76}</Project>
-      <Name>WuHu.Dal.Common</Name>
+    <ProjectReference Include="..\..\WuHu.Common\WuHu.Common.csproj">
+      <Project>{b995cb61-a5e2-4149-b397-f7513255cc4a}</Project>
+      <Name>WuHu.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

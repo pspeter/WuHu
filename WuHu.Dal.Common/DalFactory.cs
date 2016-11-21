@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Reflection;
 
+
 namespace WuHu.Dal.Common
 {
     public static class DalFactory
