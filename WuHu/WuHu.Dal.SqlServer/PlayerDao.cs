@@ -22,7 +22,7 @@ namespace WuHu.Dal.SqlServer
         const string SQL_FIND_BY_STRING =
           @"SELECT * FROM Player WHERE firstName = @playerId;";
 
-        const string SQL_FIND_ALL = @"SELECT * FROM Player";
+        const string SQL_FIND_ALL = @"SELECT * FROM Player;";
 
         const string SQL_FIND_ALL_ON_DAYS = @"SELECT * FROM Player 
                                                 WHERE playsMondays = @playsMondays,
@@ -31,10 +31,10 @@ namespace WuHu.Dal.SqlServer
                                                       playsThursdays = @playsThursdays,
                                                       playsFridays = @playsFridays,
                                                       playsSaturdays = @playsSaturdays,
-                                                      playsSundays = @playsSundays";
+                                                      playsSundays = @playsSundays;";
 
         const string SQL_UPDATE_BY_ID =
-          @"UPDATE Player (firstName,lastName,nickName,userName,password,salt,isAdmin,
+          @"UPDATE Player (playerId,firstName,lastName,nickName,userName,password,salt,isAdmin,
                     playsMondays,playsTuesdays,playsWednesdays,playsThursdays,playsFridays,playsSaturdays,playsSundays,picture)
             SET firstName = @firstName, 
                 lastName = @lastName,
@@ -51,13 +51,16 @@ namespace WuHu.Dal.SqlServer
                 playsSaturdays = @playsSaturdays,
                 playsSundays = @playsSundays,
                 picture = @picture
-            WHERE playerId = @playerId";
+            WHERE playerId = @playerId;";
 
         const string SQL_INSERT =
           @"INSERT INTO Player (firstName,lastName,nickName,userName,password,salt,isAdmin,
                     playsMondays,playsTuesdays,playsWednesdays,playsThursdays,playsFridays,playsSaturdays,playsSundays,picture)
             VALUES (@firstName, @lastName, @nickName, @userName, @password, @salt, @isAdmin, @playsMondays, 
-                    @playsTuesdays, @playsWednesdays, @playsThursdays, @playsFridays, @playsSaturdays, @playsSundays, @picture)";
+                    @playsTuesdays, @playsWednesdays, @playsThursdays, @playsFridays, @playsSaturdays, @playsSundays, @picture);";
+
+        const string SQL_COUNT =
+            @"SELECT Count(*) as Cnt FROM Player;";
 
         private IDatabase database;
 
@@ -78,55 +81,6 @@ namespace WuHu.Dal.SqlServer
             return database.CreateCommand(SQL_FIND_ALL);
         }
 
-        protected DbCommand CreateInsertCmd(string firstName, string lastName, string nickName, 
-                                            string userName, byte[] password, byte[] salt, bool isAdmin,
-                                            bool playsMondays, bool playsTuesdays, bool playsWednesdays,
-                                            bool playsThursdays, bool playsFridays, bool playsSaturdays,
-                                            bool playsSundays, byte[] picture)
-        {
-            DbCommand insertCmd = database.CreateCommand(SQL_INSERT);
-            database.DefineParameter(insertCmd, "firstName", DbType.String, firstName);
-            database.DefineParameter(insertCmd, "lastName", DbType.String, lastName);
-            database.DefineParameter(insertCmd, "nickName", DbType.String, nickName);
-            database.DefineParameter(insertCmd, "userName", DbType.String, userName);
-            database.DefineParameter(insertCmd, "password", DbType.Binary, password);
-            database.DefineParameter(insertCmd, "salt", DbType.Binary, salt);
-            database.DefineParameter(insertCmd, "playsMondays", DbType.Boolean, playsMondays);
-            database.DefineParameter(insertCmd, "playsTuesdays", DbType.Boolean, playsTuesdays);
-            database.DefineParameter(insertCmd, "playsWednesdays", DbType.Boolean, playsWednesdays);
-            database.DefineParameter(insertCmd, "playsThursdays", DbType.Boolean, playsThursdays);
-            database.DefineParameter(insertCmd, "playsFridays", DbType.Boolean, playsFridays);
-            database.DefineParameter(insertCmd, "playsSaturdays", DbType.Boolean, playsSaturdays);
-            database.DefineParameter(insertCmd, "playsSundays", DbType.Boolean, playsSundays);
-            database.DefineParameter(insertCmd, "picture", DbType.Binary, picture);
-
-            return insertCmd;
-        }
-
-        protected DbCommand CreateUpdateByIdCmd(int playerId, string firstName, string lastName, string nickName,
-                                            string userName, byte[] password, byte[] salt, bool isAdmin,
-                                            bool playsMondays, bool playsTuesdays, bool playsWednesdays,
-                                            bool playsThursdays, bool playsFridays, bool playsSaturdays,
-                                            bool playsSundays, byte[] picture)
-        {
-            DbCommand updateByIdCmd = database.CreateCommand(SQL_UPDATE_BY_ID);
-            database.DefineParameter(updateByIdCmd, "playerId", DbType.Int32, playerId);
-            database.DefineParameter(updateByIdCmd, "firstName", DbType.String, firstName);
-            database.DefineParameter(updateByIdCmd, "lastName", DbType.String, lastName);
-            database.DefineParameter(updateByIdCmd, "nickName", DbType.String, nickName);
-            database.DefineParameter(updateByIdCmd, "userName", DbType.String, userName);
-            database.DefineParameter(updateByIdCmd, "password", DbType.Binary, password);
-            database.DefineParameter(updateByIdCmd, "salt", DbType.Binary, salt);
-            database.DefineParameter(updateByIdCmd, "playsMondays", DbType.Boolean, playsMondays);
-            database.DefineParameter(updateByIdCmd, "playsTuesdays", DbType.Boolean, playsTuesdays);
-            database.DefineParameter(updateByIdCmd, "playsWednesdays", DbType.Boolean, playsWednesdays);
-            database.DefineParameter(updateByIdCmd, "playsThursdays", DbType.Boolean, playsThursdays);
-            database.DefineParameter(updateByIdCmd, "playsFridays", DbType.Boolean, playsFridays);
-            database.DefineParameter(updateByIdCmd, "playsSaturdays", DbType.Boolean, playsSaturdays);
-            database.DefineParameter(updateByIdCmd, "playsSundays", DbType.Boolean, playsSundays);
-            database.DefineParameter(updateByIdCmd, "picture", DbType.Binary, picture);
-            return updateByIdCmd;
-        }
 
         public IList<Player> FindAll()
         {
@@ -265,19 +219,111 @@ namespace WuHu.Dal.SqlServer
             }
         }
 
+
+        protected DbCommand CreateInsertCmd(string firstName, string lastName, string nickName,
+                                            string userName, byte[] password, byte[] salt, bool isAdmin,
+                                            bool playsMondays, bool playsTuesdays, bool playsWednesdays,
+                                            bool playsThursdays, bool playsFridays, bool playsSaturdays,
+                                            bool playsSundays, byte[] picture)
+        {
+            DbCommand insertCmd = database.CreateCommand(SQL_INSERT);
+            database.DefineParameter(insertCmd, "firstName", DbType.String, firstName);
+            database.DefineParameter(insertCmd, "lastName", DbType.String, lastName);
+            database.DefineParameter(insertCmd, "nickName", DbType.String, nickName);
+            database.DefineParameter(insertCmd, "userName", DbType.String, userName);
+            database.DefineParameter(insertCmd, "password", DbType.Binary, password);
+            database.DefineParameter(insertCmd, "salt", DbType.Binary, salt);
+            database.DefineParameter(insertCmd, "playsMondays", DbType.Boolean, playsMondays);
+            database.DefineParameter(insertCmd, "playsTuesdays", DbType.Boolean, playsTuesdays);
+            database.DefineParameter(insertCmd, "playsWednesdays", DbType.Boolean, playsWednesdays);
+            database.DefineParameter(insertCmd, "playsThursdays", DbType.Boolean, playsThursdays);
+            database.DefineParameter(insertCmd, "playsFridays", DbType.Boolean, playsFridays);
+            database.DefineParameter(insertCmd, "playsSaturdays", DbType.Boolean, playsSaturdays);
+            database.DefineParameter(insertCmd, "playsSundays", DbType.Boolean, playsSundays);
+            database.DefineParameter(insertCmd, "picture", DbType.Binary, picture);
+
+            return insertCmd;
+        }
+
+
         public int Insert(Player player)
         {
-            throw new NotImplementedException();
+            using (DbCommand command = CreateInsertCmd(player.FirstName, player.LastName, player.NickName,
+                                                        player.UserName, player.Password, player.Salt, player.IsAdmin,
+                                                        player.PlaysMondays, player.PlaysTuesdays, player.PlaysWednesdays,
+                                                        player.PlaysThursdays, player.PlaysFridays, player.PlaysSaturdays,
+                                                        player.PlaysSundays, player.Picture))
+            {
+                return database.ExecuteNonQuery(command);
+            }
+        }
+
+
+        // Update
+        protected DbCommand CreateUpdateByIdCmd(int playerId, string firstName, string lastName, string nickName,
+                                            string userName, byte[] password, byte[] salt, bool isAdmin,
+                                            bool playsMondays, bool playsTuesdays, bool playsWednesdays,
+                                            bool playsThursdays, bool playsFridays, bool playsSaturdays,
+                                            bool playsSundays, byte[] picture)
+        {
+            DbCommand updateByIdCmd = database.CreateCommand(SQL_UPDATE_BY_ID);
+            database.DefineParameter(updateByIdCmd, "playerId", DbType.Int32, playerId);
+            database.DefineParameter(updateByIdCmd, "firstName", DbType.String, firstName);
+            database.DefineParameter(updateByIdCmd, "lastName", DbType.String, lastName);
+            database.DefineParameter(updateByIdCmd, "nickName", DbType.String, nickName);
+            database.DefineParameter(updateByIdCmd, "userName", DbType.String, userName);
+            database.DefineParameter(updateByIdCmd, "password", DbType.Binary, password);
+            database.DefineParameter(updateByIdCmd, "salt", DbType.Binary, salt);
+            database.DefineParameter(updateByIdCmd, "playsMondays", DbType.Boolean, playsMondays);
+            database.DefineParameter(updateByIdCmd, "playsTuesdays", DbType.Boolean, playsTuesdays);
+            database.DefineParameter(updateByIdCmd, "playsWednesdays", DbType.Boolean, playsWednesdays);
+            database.DefineParameter(updateByIdCmd, "playsThursdays", DbType.Boolean, playsThursdays);
+            database.DefineParameter(updateByIdCmd, "playsFridays", DbType.Boolean, playsFridays);
+            database.DefineParameter(updateByIdCmd, "playsSaturdays", DbType.Boolean, playsSaturdays);
+            database.DefineParameter(updateByIdCmd, "playsSundays", DbType.Boolean, playsSundays);
+            database.DefineParameter(updateByIdCmd, "picture", DbType.Binary, picture);
+            return updateByIdCmd;
         }
 
         public bool Update(Player player)
         {
-            throw new NotImplementedException();
+            if (player.PlayerId == null)
+            {
+                throw new ArgumentException("PlayerId null on update");
+            }
+            int playerId = player.PlayerId.GetValueOrDefault();
+            using (DbCommand command = CreateUpdateByIdCmd(playerId, player.FirstName, player.LastName, player.NickName,
+                                            player.UserName, player.Password, player.Salt, player.IsAdmin,
+                                            player.PlaysMondays, player.PlaysTuesdays, player.PlaysWednesdays,
+                                            player.PlaysThursdays, player.PlaysFridays, player.PlaysSaturdays,
+                                            player.PlaysSundays, player.Picture))
+            {
+                return database.ExecuteNonQuery(command) == 1;
+            }
         }
 
+
+        // Count
+
+        protected DbCommand CreateCountCmd()
+        {
+            DbCommand countCmd = database.CreateCommand(SQL_COUNT);
+            return countCmd;
+        }
         public int Count()
         {
-            throw new NotImplementedException();
+            using (DbCommand command = CreateCountCmd())
+            using (IDataReader reader = database.ExecuteReader(command))
+            {
+                if (reader.Read())
+                {
+                    return (int)reader["Cnt"];
+                }
+                else
+                {
+                    return 0;
+                }
+            }
         }
     }
 }
