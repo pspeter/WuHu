@@ -15,8 +15,7 @@ namespace WuHu.Domain
             this.Key = key;
             this.Value = value;
         }
-
-        public int ParameterId { get; }
+        
         public string Key { get; set; }
         public string Value { get; set; }
     }
