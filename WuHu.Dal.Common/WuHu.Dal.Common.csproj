@@ -46,7 +46,12 @@
   <ItemGroup>
     <Compile Include="DalFactory.cs" />
     <Compile Include="IDatabase.cs" />
+    <Compile Include="IMatchDao.cs" />
     <Compile Include="IPlayerDao.cs" />
+    <Compile Include="IRatingDao.cs" />
+    <Compile Include="IScoreParameterDao.cs" />
+    <Compile Include="ITournamentDao.cs" />
+    <Compile Include="PasswordManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

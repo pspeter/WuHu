@@ -231,16 +231,16 @@ namespace WuHu.Dal.SqlServer
             }
         }
 
-        private DbCommand CreateFindByStringCmd(string name)
+        private DbCommand CreateFindAllByStringCmd(string name)
         {
             DbCommand findCmd = database.CreateCommand(SQL_FIND_BY_STRING);
             database.DefineParameter(findCmd, "name", DbType.String, name);
             return findCmd;
         }
 
-        public IList<Player> FindByString(string name)
+        public IList<Player> FindAllByString(string name)
         {
-            using (DbCommand command = CreateFindByStringCmd(name))
+            using (DbCommand command = CreateFindAllByStringCmd(name))
             using (IDataReader reader = database.ExecuteReader(command))
             {
                 IList<Player> result = new List<Player>();
@@ -263,7 +263,6 @@ namespace WuHu.Dal.SqlServer
                                           (byte[])reader["picture"]));
                 return result;
             }
-        }
         }
 
         public int Insert(Player player)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using WuHu.Common;
 
 namespace WuHu.Domain
 {
@@ -60,8 +61,8 @@ namespace WuHu.Domain
             this.LastName = lastName;
             this.NickName = nickName;
             this.UserName = userName;
-            this.Password = password;
-            this.Salt = salt;
+            this.Salt = PasswordManager.GenerateSalt();
+            this.Password = PasswordManager.HashPassword(password, this.Salt);
             this.IsAdmin = isAdmin;
             this.PlaysMondays = playsMondays;
             this.PlaysTuesdays = playsTuesdays;
