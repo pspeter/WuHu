@@ -3,7 +3,7 @@ using System.Data.Common;
 
 namespace WuHu.Dal.Common
 {
-    interface IDatabase
+    public interface IDatabase
     {
         DbCommand CreateCommand(string commandText);
         int DeclareParametere(DbCommand command, string name, DbType type);

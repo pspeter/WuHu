@@ -7,7 +7,7 @@ using WuHu.Domain;
 
 namespace WuHu.Dal.Common
 {
-    interface IRatingDao
+    public interface IRatingDao
     {
         IList<Rating> FindAll();
         Rating FindById(int ratingId);
