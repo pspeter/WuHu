@@ -62,7 +62,7 @@ go
 CREATE TABLE [dbo].[ScoreParameter]
 ( 
 	[key]                nchar(200)  NOT NULL,
-	[name]               nchar(200)  NOT NULL 
+	[value]               nchar(200)  NOT NULL 
 )
 go
 

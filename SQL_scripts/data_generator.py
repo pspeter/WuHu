@@ -75,7 +75,7 @@ with open("dbo.Tournament.data.sql", "w") as f:
         f.write(insertInto("Tournament", ["name", "creator"], [quote(randomCities[k]+"_"+randomNames[l]), admin]) + "\n")
     
 # Match
-STARTID = 1250 # first tournamentId 
+STARTID = 0 # first tournamentId 
 with open("dbo.Match.data.sql", "w") as f:
     f.write("declare @startDate datetime2\n")
     f.write("set @startDate = '2014-01-02 07:36:13.000'\n")
@@ -102,9 +102,9 @@ with open("dbo.Match.data.sql", "w") as f:
                 
                 
 with open("dbo.ScoreParameter.data.sql", "w") as f:
-    f.write(insertInto("ScoreParameter", ["initialscore"], ["'2000'"]) + "\n")
-    f.write(insertInto("ScoreParameter", ["scoredMatches"], ["'100'"]) + "\n")
-    f.write(insertInto("ScoreParameter", ["halflife"], ["'50'"]) + "\n")
-    f.write(insertInto("ScoreParameter", ["k-rating"], ["'32'"]) + "\n")
-    f.write(insertInto("ScoreParameter", ["timepenalty"], ["'50'"]) + "\n")
+    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("initialscore"), quote("2000")]) + "\n")
+    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("scoredMatches"), quote("100")]) + "\n")
+    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("halflife"), quote("50")]) + "\n")
+    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("k-rating"), quote("32")]) + "\n")
+    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("timepenalty"), quote("50")]) + "\n")
 
