@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WuHu.Dal.Common;
 using WuHu.Domain;
+using System.Security.Cryptography;
 
 namespace WuHu.Dal.SqlServer
 {
@@ -112,6 +113,61 @@ namespace WuHu.Dal.SqlServer
             return updateByIdCmd;
         }
 
+        public IList<Player> FindAll()
+        {
+            using (DbCommand command = CreateFindAllCmd())
+            using (IDataReader reader = database.ExecuteReader(command))
+            {
+                IList<Player> result = new List<Player>();
+                while (reader.Read())
+                    result.Add(new Player((int) reader["playerId"], 
+                                          (string) reader["firstName"],
+                                          (string) reader["lastName"],
+                                          (string) reader["nickName"],
+                                          (string) reader["userName"],
+                                          (byte[]) reader["password"],
+                                          (byte[]) reader["salt"],
+                                          (bool) reader["isAdmin"],
+                                          (bool) reader["playsMondays"],
+                                          (bool) reader["playsTuesdays"],
+                                          (bool) reader["playsWednesdays"],
+                                          (bool) reader["playsThursdays"],
+                                          (bool) reader["playsFridays"],
+                                          (bool) reader["playsSaturdays"],
+                                          (bool) reader["playsSundays"],
+                                          (byte[]) reader["picture"]));
+                return result;
+            }
+        }
 
+        public IList<Player> FindAllOnDays(bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Player FindById(int playerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Player FindByUser(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Insert(Player player)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(Player player)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Count()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -27,12 +27,35 @@ namespace WuHu.Domain
         }
 
         public Player(int? playerId, string firstName, string lastName, string nickName, string userName, 
-            string password, byte[] salt, bool isAdmin, bool playsMondays,
+            byte[] password, byte[] salt, bool isAdmin, bool playsMondays,
             bool playsTuesdays, bool playsWednesdays, bool playsThursdays, 
             bool playsFridays, bool playsSaturdays, bool playsSundays,
             byte[] picture)
         { 
             this.PlayerId = playerId;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.NickName = nickName;
+            this.UserName = userName;
+            this.Password = password;
+            this.Salt = salt;
+            this.IsAdmin = isAdmin;
+            this.PlaysMondays = playsMondays;
+            this.PlaysTuesdays = playsTuesdays;
+            this.PlaysWednesdays = playsWednesdays;
+            this.PlaysThursdays = playsThursdays;
+            this.PlaysFridays = playsFridays;
+            this.PlaysSaturdays = playsSaturdays;
+            this.PlaysSundays = playsSundays;
+            this.Picture = picture;
+        }
+
+        public Player(string firstName, string lastName, string nickName, string userName,
+            string password, bool isAdmin, bool playsMondays,
+            bool playsTuesdays, bool playsWednesdays, bool playsThursdays,
+            bool playsFridays, bool playsSaturdays, bool playsSundays,
+            byte[] picture)
+        {
             this.FirstName = firstName;
             this.LastName = lastName;
             this.NickName = nickName;
@@ -59,7 +82,7 @@ namespace WuHu.Domain
 
         public string UserName { get; set; }
 
-        public string Password { get; set; }
+        public byte[] Password { get; set; }
 
         public byte[] Salt { get; set; }
 
