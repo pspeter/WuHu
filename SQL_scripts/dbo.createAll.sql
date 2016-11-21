@@ -25,7 +25,7 @@ CREATE TABLE [dbo].[Player]
 	[firstName]          nchar(100)  NOT NULL ,
 	[lastName]           nchar(100)  NOT NULL ,
 	[nickName]           nchar(20)  NULL ,
-	[userName]           nchar(20)  NOT NULL ,
+	[userName]           nchar(20)  UNIQUE NOT NULL ,
 	[password]           nchar(100)  NOT NULL ,
 	[salt]               VARBINARY(32)   NOT NULL ,
 	[picture]            binary  NULL ,

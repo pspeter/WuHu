@@ -34,8 +34,12 @@ allKeys = ["firstName","lastName", "nickName", "userName","password","salt","isA
 
 # Player
 with open("dbo.Player.data.sql", "w") as f:
+    i = 0
     for player in randomPlayer[:30]:
         values = []
+        if i > 5:
+            player["userName"] = "player" + str(i) # make sure our username is unique
+        i += 1
         for key in randomDataKeys[:-2]:
             values.append(quote(player[key])) # all from randomDataKeys but isAdmin
         
