@@ -52,8 +52,14 @@ namespace WuHu.Test
             Assert.AreEqual(0, cnt);
             playerDao.Insert(new Player("first", "last", "nick", "user", "pass", 
                 false, false, false, false, false, true, true, true, null));
-            cnt = playerDao.Count();
-            Assert.AreEqual(1, cnt);
+            int newCnt = playerDao.Count();
+            Assert.AreEqual(cnt + 1, newCnt);
+        }
+
+        [TestMethod]
+        public void InsertNicknameUnique()
+        {
+            throw new NotImplementedException();
         }
 
         [TestMethod]
