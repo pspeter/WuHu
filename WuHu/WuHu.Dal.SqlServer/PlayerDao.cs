@@ -14,7 +14,13 @@ namespace WuHu.Dal.SqlServer
     class PlayerDao : IPlayerDao
     {
         const string SQL_FIND_BY_ID =
-          @"SELECT * FROM Player WHERE playerId = @playerId;";
+          @"SELECT * FROM Player WHERE firstName LIKE %@name%
+                                    OR lastName LIKE %@name%
+                                    OR nickName LIKE %@name%
+                                    OR userName LIKE %@name%;";
+
+        const string SQL_FIND_BY_STRING =
+          @"SELECT * FROM Player WHERE firstName = @playerId;";
 
         const string SQL_FIND_ALL = @"SELECT * FROM Player";
 
@@ -196,12 +202,68 @@ namespace WuHu.Dal.SqlServer
 
         public Player FindById(int playerId)
         {
-            throw new NotImplementedException();
+            using (DbCommand command = CreateFindByIdCmd(playerId))
+            using (IDataReader reader = database.ExecuteReader(command))
+            {
+                if (reader.Read())
+                {
+                    return new Player((int)reader["playerId"],
+                                      (string)reader["firstName"],
+                                      (string)reader["lastName"],
+                                      (string)reader["nickName"],
+                                      (string)reader["userName"],
+                                      (byte[])reader["password"],
+                                      (byte[])reader["salt"],
+                                      (bool)reader["isAdmin"],
+                                      (bool)reader["playsMondays"],
+                                      (bool)reader["playsTuesdays"],
+                                      (bool)reader["playsWednesdays"],
+                                      (bool)reader["playsThursdays"],
+                                      (bool)reader["playsFridays"],
+                                      (bool)reader["playsSaturdays"],
+                                      (bool)reader["playsSundays"],
+                                      (byte[])reader["picture"] );
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
-        public Player FindByUser(string username)
+        private DbCommand CreateFindByStringCmd(string name)
         {
-            throw new NotImplementedException();
+            DbCommand findCmd = database.CreateCommand(SQL_FIND_BY_STRING);
+            database.DefineParameter(findCmd, "name", DbType.String, name);
+            return findCmd;
+        }
+
+        public IList<Player> FindByString(string name)
+        {
+            using (DbCommand command = CreateFindByStringCmd(name))
+            using (IDataReader reader = database.ExecuteReader(command))
+            {
+                IList<Player> result = new List<Player>();
+                while (reader.Read())
+                    result.Add(new Player((int)reader["playerId"],
+                                          (string)reader["firstName"],
+                                          (string)reader["lastName"],
+                                          (string)reader["nickName"],
+                                          (string)reader["userName"],
+                                          (byte[])reader["password"],
+                                          (byte[])reader["salt"],
+                                          (bool)reader["isAdmin"],
+                                          (bool)reader["playsMondays"],
+                                          (bool)reader["playsTuesdays"],
+                                          (bool)reader["playsWednesdays"],
+                                          (bool)reader["playsThursdays"],
+                                          (bool)reader["playsFridays"],
+                                          (bool)reader["playsSaturdays"],
+                                          (bool)reader["playsSundays"],
+                                          (byte[])reader["picture"]));
+                return result;
+            }
+        }
         }
 
         public int Insert(Player player)
