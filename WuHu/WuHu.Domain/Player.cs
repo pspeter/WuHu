@@ -49,7 +49,7 @@ namespace WuHu.Domain
             this.PlaysSundays = playsSundays;
             this.Picture = picture;
         }
-
+        
         public Player(string firstName, string lastName, string nickName, string userName,
             string password, bool isAdmin, bool playsMondays,
             bool playsTuesdays, bool playsWednesdays, bool playsThursdays,

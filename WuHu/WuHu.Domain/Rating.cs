@@ -10,16 +10,15 @@ namespace WuHu.Domain
     public class Rating
     {
         public Rating() { }
-        public Rating(int? ratingId, int playerId, DateTime datetime, int value)
+        public Rating(int? ratingId, Player player, DateTime datetime, int value)
         {
-            this.RatingId = ratingId;
-            this.PlayerId = playerId;
+            this.Player = player;
             this.Datetime = datetime;
             this.Value = value;
         }
-
+        
         public int? RatingId { get; set; }
-        public int PlayerId { get; set; }
+        public Player Player { get; set; }
         public DateTime Datetime { get; set; }
         public int Value { get; set; }
     }

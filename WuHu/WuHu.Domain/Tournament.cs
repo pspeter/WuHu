@@ -12,16 +12,16 @@ namespace WuHu.Domain
 
         public Tournament() { }
 
-        public Tournament(int? tournamentId, string name, int creatorId)
+        public Tournament(int? tournamentId, string name, Player creator)
         {
             this.TournamentId = tournamentId;
             this.Name = name;
-            this.Creator = creatorId;
+            this.Creator = creator;
         }
        
         public int? TournamentId { get; set; }
         public string Name { get;  set; }
-        public int Creator { get; set; }
+        public Player Creator { get; set; }
 
         public override string ToString()
         {
