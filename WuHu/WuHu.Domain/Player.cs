@@ -26,12 +26,12 @@ namespace WuHu.Domain
         {
         }
 
-        public Player(int playerId, string firstName, string lastName, string nickName, string userName, 
+        public Player(int? playerId, string firstName, string lastName, string nickName, string userName, 
             string password, byte[] salt, bool isAdmin, bool playsMondays,
             bool playsTuesdays, bool playsWednesdays, bool playsThursdays, 
             bool playsFridays, bool playsSaturdays, bool playsSundays,
             byte[] picture)
-        {
+        { 
             this.PlayerId = playerId;
             this.FirstName = firstName;
             this.LastName = lastName;
@@ -50,7 +50,7 @@ namespace WuHu.Domain
             this.Picture = picture;
         }
 
-        public int PlayerId { get; set; }
+        public int? PlayerId { get; set; }
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
