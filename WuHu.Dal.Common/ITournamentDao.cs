@@ -13,5 +13,6 @@ namespace WuHu.Dal.Common
         Tournament FindById(int tournamentId);
         int Insert(Tournament tournament);
         bool Update(Tournament tournament);
+        int Count();
     }
 }

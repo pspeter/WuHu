@@ -13,5 +13,6 @@ namespace WuHu.Dal.Common
         ScoreParameter FindById(string key);
         int Insert(ScoreParameter param);
         bool Update(ScoreParameter param);
+        int Count();
     }
 }
