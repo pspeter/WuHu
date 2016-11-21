@@ -1,5 +1,0 @@
-INSERT INTO [dbo].[Weekday] ([day]) VALUES ('Montag')
-INSERT INTO [dbo].[Weekday] ([day]) VALUES ('Dienstag')
-INSERT INTO [dbo].[Weekday] ([day]) VALUES ('Mittwoch')
-INSERT INTO [dbo].[Weekday] ([day]) VALUES ('Donnerstag')
-INSERT INTO [dbo].[Weekday] ([day]) VALUES ('Freitag')
