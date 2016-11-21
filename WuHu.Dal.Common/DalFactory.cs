@@ -28,20 +28,9 @@ namespace WuHu.Dal.Common
             return Activator.CreateInstance(dbClass, connectionString) as IDatabase;
         }
 
-        public static IZoneDao CreateZoneDao(IDatabase database)
+        public static IPlayerDao CreatePlayerDao(IDatabase database)
         {
-            return CreateDao<IZoneDao>(database, "ZoneDao");
-        }
-
-
-        public static ITariffDao CreateTariffDao(IDatabase database)
-        {
-            return CreateDao<ITariffDao>(database, "TariffDao");
-        }
-
-        public static IRateDao CreateRateDao(IDatabase database)
-        {
-            return CreateDao<IRateDao>(database, "RateDao");
+            return CreateDao<IPlayerDao>(database, "PlayerDao");
         }
 
         private static T CreateDao<T>(IDatabase database, string typeName)
