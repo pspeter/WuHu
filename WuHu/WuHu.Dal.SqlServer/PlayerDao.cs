@@ -18,6 +18,15 @@ namespace WuHu.Dal.SqlServer
 
         const string SQL_FIND_ALL = @"SELECT * FROM Player";
 
+        const string SQL_FIND_ALL_ON_DAYS = @"SELECT * FROM Player 
+                                                WHERE playsMondays = @playsMondays,
+                                                      playsTuesdays = @playsTuesdays,
+                                                      playsWednesdays = @playsWednesdays,
+                                                      playsThursdays = @playsThursdays,
+                                                      playsFridays = @playsFridays,
+                                                      playsSaturdays = @playsSaturdays,
+                                                      playsSundays = @playsSundays";
+
         const string SQL_UPDATE_BY_ID =
           @"UPDATE Player (firstName,lastName,nickName,userName,password,salt,isAdmin,
                     playsMondays,playsTuesdays,playsWednesdays,playsThursdays,playsFridays,playsSaturdays,playsSundays,picture)
@@ -140,10 +149,50 @@ namespace WuHu.Dal.SqlServer
             }
         }
 
+        private DbCommand CreateFindAllOnDaysCmd(bool playsMondays, bool playsTuesdays, bool playsWednesdays,
+                                                 bool playsThursdays, bool playsFridays, bool playsSaturdays,
+                                                 bool playsSundays)
+        {
+            DbCommand findCmd = database.CreateCommand(SQL_FIND_ALL_ON_DAYS);
+            database.DefineParameter(findCmd, "playsMondays", DbType.Boolean, playsMondays);
+            database.DefineParameter(findCmd, "playsTuesdays", DbType.Boolean, playsTuesdays);
+            database.DefineParameter(findCmd, "playsWednesdays", DbType.Boolean, playsWednesdays);
+            database.DefineParameter(findCmd, "playsThursdays", DbType.Boolean, playsThursdays);
+            database.DefineParameter(findCmd, "playsFridays", DbType.Boolean, playsFridays);
+            database.DefineParameter(findCmd, "playsSaturdays", DbType.Boolean, playsSaturdays);
+            database.DefineParameter(findCmd, "playsSundays", DbType.Boolean, playsSundays);
+
+            return findCmd;
+        }
+
         public IList<Player> FindAllOnDays(bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday)
         {
-            throw new NotImplementedException();
+            using (DbCommand command = CreateFindAllOnDaysCmd(monday, tuesday, wednesday, thursday, friday, saturday, sunday))
+            using (IDataReader reader = database.ExecuteReader(command))
+            {
+                IList<Player> result = new List<Player>();
+                while (reader.Read())
+                    result.Add(new Player((int)reader["playerId"],
+                                          (string)reader["firstName"],
+                                          (string)reader["lastName"],
+                                          (string)reader["nickName"],
+                                          (string)reader["userName"],
+                                          (byte[])reader["password"],
+                                          (byte[])reader["salt"],
+                                          (bool)reader["isAdmin"],
+                                          (bool)reader["playsMondays"],
+                                          (bool)reader["playsTuesdays"],
+                                          (bool)reader["playsWednesdays"],
+                                          (bool)reader["playsThursdays"],
+                                          (bool)reader["playsFridays"],
+                                          (bool)reader["playsSaturdays"],
+                                          (bool)reader["playsSundays"],
+                                          (byte[])reader["picture"]));
+                return result;
+            }
         }
+
+
 
         public Player FindById(int playerId)
         {
