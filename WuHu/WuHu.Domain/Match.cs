@@ -9,10 +9,6 @@ namespace WuHu.Domain
     [Serializable]
     public class Match
     {
-        
-        public Match() { }
-
-
         public Match(int? matchId, Tournament tournament, DateTime datetime, byte? scoreteam1, byte? scoreteam2, float estimatedWinChance, bool isDone)
         {
             this.MatchId = matchId;

@@ -9,9 +9,6 @@ namespace WuHu.Domain
     [Serializable]
     public class Tournament
     {
-
-        public Tournament() { }
-
         public Tournament(int? tournamentId, string name, Player creator)
         {
             this.TournamentId = tournamentId;

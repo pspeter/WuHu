@@ -9,7 +9,6 @@ namespace WuHu.Domain
     [Serializable]
     public class ScoreParameter
     {
-        public ScoreParameter() { }
         public ScoreParameter(string key, string value)
         {
             this.Key = key;

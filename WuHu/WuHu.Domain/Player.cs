@@ -23,10 +23,6 @@ namespace WuHu.Domain
             return salt;
         }
 
-        public Player()
-        {
-        }
-
         public Player(int? playerId, string firstName, string lastName, string nickName, string userName, 
             byte[] password, byte[] salt, bool isAdmin, bool playsMondays,
             bool playsTuesdays, bool playsWednesdays, bool playsThursdays, 

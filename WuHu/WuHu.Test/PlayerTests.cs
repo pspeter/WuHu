@@ -138,20 +138,18 @@ namespace WuHu.Test
         [TestMethod]
         public void Constructor()
         {
-            var player1 = new Player();
-            Assert.AreEqual(player1.FirstName, null);
 
             string uniqueUsername = Guid.NewGuid().ToString().Substring(0, 15);
-            var player2 = new Player("first", "last", "nick", uniqueUsername, "pass",
+            var player1 = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
-            Assert.AreEqual(player2.UserName, uniqueUsername);
+            Assert.AreEqual(player1.UserName, uniqueUsername);
 
             uniqueUsername = Guid.NewGuid().ToString().Substring(0, 15);
             var pw = new byte[32];
             var salt = new byte[32];
-            var player3 = new Player(0, "first", "last", "nick", uniqueUsername, pw, salt,
+            var player2 = new Player(0, "first", "last", "nick", uniqueUsername, pw, salt,
                 false, false, false, false, false, true, true, true, null);
-            Assert.AreEqual(player3.UserName, uniqueUsername);
+            Assert.AreEqual(player2.UserName, uniqueUsername);
         }
 
         [TestMethod]
