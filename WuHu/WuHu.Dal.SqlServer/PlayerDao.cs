@@ -233,6 +233,7 @@ namespace WuHu.Dal.SqlServer
             database.DefineParameter(insertCmd, "userName", DbType.String, userName);
             database.DefineParameter(insertCmd, "password", DbType.Binary, password);
             database.DefineParameter(insertCmd, "salt", DbType.Binary, salt);
+            database.DefineParameter(insertCmd, "isAdmin", DbType.Boolean, isAdmin);
             database.DefineParameter(insertCmd, "playsMondays", DbType.Boolean, playsMondays);
             database.DefineParameter(insertCmd, "playsTuesdays", DbType.Boolean, playsTuesdays);
             database.DefineParameter(insertCmd, "playsWednesdays", DbType.Boolean, playsWednesdays);
@@ -240,7 +241,14 @@ namespace WuHu.Dal.SqlServer
             database.DefineParameter(insertCmd, "playsFridays", DbType.Boolean, playsFridays);
             database.DefineParameter(insertCmd, "playsSaturdays", DbType.Boolean, playsSaturdays);
             database.DefineParameter(insertCmd, "playsSundays", DbType.Boolean, playsSundays);
-            database.DefineParameter(insertCmd, "picture", DbType.Binary, picture);
+            if (picture == null)
+            {
+                database.DefineParameter(insertCmd, "picture", DbType.Binary, new byte[32]);
+            }
+            else
+            {
+                database.DefineParameter(insertCmd, "picture", DbType.Binary, picture);
+            }
 
             return insertCmd;
         }
