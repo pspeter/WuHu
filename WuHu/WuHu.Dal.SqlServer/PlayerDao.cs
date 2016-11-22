@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,12 +70,7 @@ namespace WuHu.Dal.SqlServer
             this.database = database;
         }
 
-        protected DbCommand CreateFindByIdCmd(int playerId)
-        {
-            DbCommand findByIdCmd = database.CreateCommand(SQL_FIND_BY_ID);
-            database.DefineParameter(findByIdCmd, "tariffId", DbType.Int32, playerId);
-            return findByIdCmd;
-        }
+
 
         protected DbCommand CreateFindAllCmd()
         {
@@ -152,7 +148,12 @@ namespace WuHu.Dal.SqlServer
             }
         }
 
-
+        protected DbCommand CreateFindByIdCmd(int playerId)
+        {
+            DbCommand findByIdCmd = database.CreateCommand(SQL_FIND_BY_ID);
+            database.DefineParameter(findByIdCmd, "playerId", DbType.Int32, playerId);
+            return findByIdCmd;
+        }
 
         public Player FindById(int playerId)
         {
@@ -176,7 +177,8 @@ namespace WuHu.Dal.SqlServer
                                       (bool)reader["playsFridays"],
                                       (bool)reader["playsSaturdays"],
                                       (bool)reader["playsSundays"],
-                                      (byte[])reader["picture"] );
+                                      reader.IsDBNull(reader.GetOrdinal("picture")) ?
+                                      null : (byte[])reader["picture"]);
                 }
                 else
                 {
@@ -241,18 +243,10 @@ namespace WuHu.Dal.SqlServer
             database.DefineParameter(insertCmd, "playsFridays", DbType.Boolean, playsFridays);
             database.DefineParameter(insertCmd, "playsSaturdays", DbType.Boolean, playsSaturdays);
             database.DefineParameter(insertCmd, "playsSundays", DbType.Boolean, playsSundays);
-            if (picture == null)
-            {
-                database.DefineParameter(insertCmd, "picture", DbType.Binary, new byte[32]);
-            }
-            else
-            {
-                database.DefineParameter(insertCmd, "picture", DbType.Binary, picture);
-            }
-
+            database.DefineParameter(insertCmd, "picture", DbType.Binary, picture ?? SqlBinary.Null);
             return insertCmd;
         }
-
+        
 
         public int Insert(Player player)
         {
@@ -290,7 +284,8 @@ namespace WuHu.Dal.SqlServer
             database.DefineParameter(updateByIdCmd, "playsFridays", DbType.Boolean, playsFridays);
             database.DefineParameter(updateByIdCmd, "playsSaturdays", DbType.Boolean, playsSaturdays);
             database.DefineParameter(updateByIdCmd, "playsSundays", DbType.Boolean, playsSundays);
-            database.DefineParameter(updateByIdCmd, "picture", DbType.Binary, picture);
+            database.DefineParameter(updateByIdCmd, "picture", DbType.Binary, picture ?? SqlBinary.Null);
+
             return updateByIdCmd;
         }
 
