@@ -41,5 +41,22 @@ namespace WuHu.Test
             DbCommand cmd = database.CreateCommand("DELETE FROM dbo." + table);
             database.ExecuteNonQuery(cmd);
         }
+
+        internal static void BeginTransaction(IDatabase database)
+        {
+            DbCommand cmd = database.CreateCommand("BEGIN TRANSACTION;");
+            database.ExecuteNonQuery(cmd);
+        }
+
+        internal static void Commit(IDatabase database)
+        {
+            DbCommand cmd = database.CreateCommand("COMMIT;");
+            database.ExecuteNonQuery(cmd);
+        }
+        internal static void Rollback(IDatabase database)
+        {
+            DbCommand cmd = database.CreateCommand("ROLLBACK;");
+            database.ExecuteNonQuery(cmd);
+        }
     }
 }

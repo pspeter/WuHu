@@ -40,13 +40,13 @@ namespace WuHu.Test
         [TestInitialize]
         public void TestInitialize()
         {
-            CommonData.DeleteAllFromTable(database, "Player");
+            CommonData.BeginTransaction(database);
         }
 
         [TestCleanup]
         public void TestCleanup()
         {
-
+            CommonData.Rollback(database);
         }
         
 
@@ -175,8 +175,7 @@ namespace WuHu.Test
             Assert.AreEqual(players.Count, cnt);
         }
         
-
-
+        
     }
     
 }
