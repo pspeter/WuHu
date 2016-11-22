@@ -13,5 +13,7 @@ namespace WuHu.Dal.Common
         IDataReader ExecuteReader(DbCommand command);
         int ExecuteNonQuery(DbCommand command);
         int ExecuteScalar(DbCommand command);
+        void CreateTables();
+        void DropTables();
     }
 }
