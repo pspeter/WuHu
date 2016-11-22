@@ -110,31 +110,7 @@ namespace WuHu.Dal.SqlServer
                 ReleaseConnection(connection);
             }
         }
-
-        public void CreateTables()
-        {
-            string script = File.ReadAllText(@"C:\Users\Peter\Documents\Sourcetree\WuHu\SQL_scripts\dbo.createAll.sql");
-
-            DbCommand cmd = CreateCommand(script);
-            ExecuteNonQuery(cmd);
-        }
-
-        public void DropTables()
-        {
-            string script = File.ReadAllText(@"C:\Users\Peter\Documents\Sourcetree\WuHu\SQL_scripts\dbo.dropAll.sql");
-
-            DbCommand cmd = CreateCommand(script);
-            ExecuteNonQuery(cmd);
-        }
-
-        public void InsertTestData()
-        {
-            string script = File.ReadAllText(@"C:\Users\Peter\Documents\Sourcetree\WuHu\SQL_scripts\dbo.Testdata.sql");
-
-            DbCommand cmd = CreateCommand(script);
-            ExecuteNonQuery(cmd);
-        }
-
+        
         [ThreadStatic] // one instance for every thread, not only one for all threads
         private static DbConnection sharedConnection;
 
