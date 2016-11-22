@@ -14,14 +14,14 @@ namespace WuHu.Dal.SqlServer
 {
     class PlayerDao : IPlayerDao
     {
-        const string SQL_FIND_BY_ID =
+        const string SQL_FIND_BY_STRING =
           @"SELECT * FROM Player WHERE firstName LIKE %@name%
                                     OR lastName LIKE %@name%
                                     OR nickName LIKE %@name%
                                     OR userName LIKE %@name%;";
 
-        const string SQL_FIND_BY_STRING =
-          @"SELECT * FROM Player WHERE firstName = @playerId;";
+        const string SQL_FIND_BY_ID =
+          @"SELECT * FROM Player WHERE playerId = @playerId;";
 
         const string SQL_FIND_ALL = @"SELECT * FROM Player;";
 
