@@ -94,6 +94,22 @@ namespace WuHu.Dal.SqlServer
             // connection. It will be closed by the reader's Dispose method.
         }
 
+        public int ExecuteScalar(DbCommand command)
+        {
+            DbConnection connection = null;
+
+            try
+            {
+                connection = GetOpenConnection();
+                command.Connection = connection;
+                return (int) command.ExecuteScalar();
+            }
+            finally
+            {
+                ReleaseConnection(connection);
+            }
+        }
+
         [ThreadStatic] // one instance for every thread, not only one for all threads
         private static DbConnection sharedConnection;
 

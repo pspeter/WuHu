@@ -56,6 +56,7 @@ namespace WuHu.Dal.SqlServer
         const string SQL_INSERT =
           @"INSERT INTO Player (firstName,lastName,nickName,userName,password,salt,isAdmin,
                     playsMondays,playsTuesdays,playsWednesdays,playsThursdays,playsFridays,playsSaturdays,playsSundays,picture)
+            OUTPUT Inserted.playerId
             VALUES (@firstName, @lastName, @nickName, @userName, @password, @salt, @isAdmin, @playsMondays, 
                     @playsTuesdays, @playsWednesdays, @playsThursdays, @playsFridays, @playsSaturdays, @playsSundays, @picture);";
 
@@ -262,7 +263,7 @@ namespace WuHu.Dal.SqlServer
                                                         player.PlaysThursdays, player.PlaysFridays, player.PlaysSaturdays,
                                                         player.PlaysSundays, player.Picture))
             {
-                return database.ExecuteNonQuery(command);
+                return database.ExecuteScalar(command);
             }
         }
 
