@@ -32,8 +32,9 @@ randomDataKeys = ["firstName","lastName", "nickName", "userName","password","isA
 dayKeys = ["playsMondays", "playsTuesdays", "playsWednesdays", "playsThursdays", "playsFridays", "playsSaturdays", "playsSundays"]
 allKeys = ["firstName","lastName", "nickName", "userName","password","salt","isAdmin"] + dayKeys
 
-# Player
-with open("dbo.Player.data.sql", "w") as f:
+
+with open("dbo.Testdata.sql", "w") as f:
+    # Player
     i = 0
     for player in randomPlayer[:30]:
         values = []
@@ -53,36 +54,33 @@ with open("dbo.Player.data.sql", "w") as f:
         for _ in dayKeys:
             isPlaying = int(random.random() < 0.4)
             values.append(isPlaying)
-        f.write(insertInto("Player", allKeys, values) + "\n")
+        f.write(insertInto("Player", allKeys, values))
 
             
-# Rating
-with open("dbo.Rating.data.sql", "w") as f:
-        f.write("declare @startDate datetime2\n")
-        f.write("set @startDate = '2014-01-02 07:36:13.000'\n")
+    # Rating
+        f.write("declare @startDate datetime2;")
+        f.write("set @startDate = '2014-01-02 07:36:13.000';")
         for playerid in range(30):
             rating = 2000
             for i in range(365*2):
-                f.write(insertInto("Rating", ["playerId", "date", "value"], [playerid, "dateadd(day, " + str(i) + ", @startDate)", rating]) + "\n")
+                f.write(insertInto("Rating", ["playerId", "date", "value"], [playerid, "dateadd(day, " + str(i) + ", @startDate)", rating]))
                 rating += random.randint(-50, 50)
                 if rating < 1: 
                     rating = 1
             
             
 
-# Tournament
-with open("dbo.Tournament.data.sql", "w") as f:
+    # Tournament
     for i in range(365*2):
         k = random.randint(0, len(randomNames) - 1)
         l = random.randint(0, len(randomNames) - 1)
         admin = random.randint(0, 1)
-        f.write(insertInto("Tournament", ["name", "creator"], [quote(randomCities[k]+"_"+randomNames[l]), admin]) + "\n")
+        f.write(insertInto("Tournament", ["name", "creator"], [quote(randomCities[k]+"_"+randomNames[l]), admin]))
     
-# Match
-STARTID = 0 # first tournamentId 
-with open("dbo.Match.data.sql", "w") as f:
-    f.write("declare @startDate datetime2\n")
-    f.write("set @startDate = '2014-01-02 07:36:13.000'\n")
+    # Match
+    STARTID = 0 # first tournamentId 
+    f.write("declare @startDate datetime2;")
+    f.write("set @startDate = '2014-01-02 07:36:13.000';")
     
     for i in range(365*2): # 2 years
         amount = random.randint(0, 8) # between 0 and 8 matches each day => avg. 4
@@ -102,13 +100,11 @@ with open("dbo.Match.data.sql", "w") as f:
             
             f.write(insertInto("Match", 
                 ["tournamentId", "time", "player1", "player2", "player3", "player4", "scoreTeam1", "scoreTeam2", "EstimatedWinChance", "isDone"],
-                [STARTID + i, "dateadd(day, " + str(i) + ", @startDate)", p1, p2, p3, p4, score1, score2, Ea, 1]) + "\n")
+                [STARTID + i, "dateadd(day, " + str(i) + ", @startDate)", p1, p2, p3, p4, score1, score2, Ea, 1]))
                 
-                
-with open("dbo.ScoreParameter.data.sql", "w") as f:
-    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("initialscore"), quote("2000")]) + "\n")
-    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("scoredMatches"), quote("100")]) + "\n")
-    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("halflife"), quote("50")]) + "\n")
-    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("k-rating"), quote("32")]) + "\n")
-    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("timepenalty"), quote("50")]) + "\n")
+    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("initialscore"), quote("2000")]))
+    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("scoredMatches"), quote("100")]))
+    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("halflife"), quote("50")]))
+    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("k-rating"), quote("32")]))
+    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("timepenalty"), quote("50")]))
 
