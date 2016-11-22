@@ -100,7 +100,8 @@ namespace WuHu.Dal.SqlServer
                                           (bool) reader["playsFridays"],
                                           (bool) reader["playsSaturdays"],
                                           (bool) reader["playsSundays"],
-                                          (byte[]) reader["picture"]));
+                                          reader.IsDBNull(reader.GetOrdinal("picture")) ?
+                                            null : (byte[])reader["picture"]));
                 return result;
             }
         }
@@ -143,7 +144,8 @@ namespace WuHu.Dal.SqlServer
                                           (bool)reader["playsFridays"],
                                           (bool)reader["playsSaturdays"],
                                           (bool)reader["playsSundays"],
-                                          (byte[])reader["picture"]));
+                                          reader.IsDBNull(reader.GetOrdinal("picture")) ?
+                                            null : (byte[])reader["picture"]));
                 return result;
             }
         }
@@ -178,7 +180,7 @@ namespace WuHu.Dal.SqlServer
                                       (bool)reader["playsSaturdays"],
                                       (bool)reader["playsSundays"],
                                       reader.IsDBNull(reader.GetOrdinal("picture")) ?
-                                      null : (byte[])reader["picture"]);
+                                        null : (byte[])reader["picture"]);
                 }
                 else
                 {
