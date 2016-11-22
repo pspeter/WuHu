@@ -34,8 +34,7 @@ namespace WuHu.Dal.SqlServer
                                                       playsSundays = @playsSundays;";
 
         const string SQL_UPDATE_BY_ID =
-          @"UPDATE Player (playerId,firstName,lastName,nickName,userName,password,salt,isAdmin,
-                    playsMondays,playsTuesdays,playsWednesdays,playsThursdays,playsFridays,playsSaturdays,playsSundays,picture)
+          @"UPDATE Player
             SET firstName = @firstName, 
                 lastName = @lastName,
                 nickName = @nickName,
@@ -283,6 +282,7 @@ namespace WuHu.Dal.SqlServer
             database.DefineParameter(updateByIdCmd, "userName", DbType.String, userName);
             database.DefineParameter(updateByIdCmd, "password", DbType.Binary, password);
             database.DefineParameter(updateByIdCmd, "salt", DbType.Binary, salt);
+            database.DefineParameter(updateByIdCmd, "isAdmin", DbType.Boolean, isAdmin);
             database.DefineParameter(updateByIdCmd, "playsMondays", DbType.Boolean, playsMondays);
             database.DefineParameter(updateByIdCmd, "playsTuesdays", DbType.Boolean, playsTuesdays);
             database.DefineParameter(updateByIdCmd, "playsWednesdays", DbType.Boolean, playsWednesdays);
