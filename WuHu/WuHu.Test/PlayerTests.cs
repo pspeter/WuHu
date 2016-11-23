@@ -195,7 +195,7 @@ namespace WuHu.Test
             int cntAfterSecondInsert = playerDao.Count();
             Assert.AreEqual(insertAmount * 2 + cntInital, cntAfterSecondInsert);
 
-            var players = playerDao.FindAllByString("last");
+            var players = playerDao.FindAllByString("first");
             Assert.AreEqual(insertAmount, players.Count);
         }
 

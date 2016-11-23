@@ -16,10 +16,10 @@ namespace WuHu.Dal.SqlServer
     {
         private const string SqlFindByString =
             @"SELECT * FROM Player 
-                WHERE firstName LIKE '%@name%'
-                    OR lastName LIKE '%@name%'
-                    OR nickName LIKE '%@name%'
-                    OR userName LIKE '%@name%';";
+                WHERE firstName LIKE @name
+                    OR lastName LIKE @name
+                    OR nickName LIKE @name
+                    OR userName LIKE @name;";
 
         private const string SqlFindById =
           @"SELECT * FROM Player 
@@ -195,7 +195,7 @@ namespace WuHu.Dal.SqlServer
         private DbCommand CreateFindAllByStringCmd(string name)
         {
             DbCommand findCmd = database.CreateCommand(SqlFindByString);
-            database.DefineParameter(findCmd, "name", DbType.String, name);
+            database.DefineParameter(findCmd, "name", DbType.String, "%" + name + "%");
             return findCmd;
         }
 
@@ -221,7 +221,8 @@ namespace WuHu.Dal.SqlServer
                                           (bool)reader["playsFridays"],
                                           (bool)reader["playsSaturdays"],
                                           (bool)reader["playsSundays"],
-                                          (byte[])reader["picture"]));
+                                          reader.IsDBNull(reader.GetOrdinal("picture")) ?
+                                          null : (byte[])reader["picture"]));
                 return result;
             }
         }
