@@ -14,20 +14,20 @@ namespace WuHu.Dal.SqlServer
 {
     class PlayerDao : IPlayerDao
     {
-        const string SQL_FIND_BY_STRING =
-          @"SELECT * FROM Player 
+        private const string SqlFindByString =
+            @"SELECT * FROM Player 
                 WHERE firstName LIKE '%@name%'
                     OR lastName LIKE '%@name%'
                     OR nickName LIKE '%@name%'
                     OR userName LIKE '%@name%';";
 
-        const string SQL_FIND_BY_ID =
+        private const string SqlFindById =
           @"SELECT * FROM Player 
             WHERE playerId = @playerId;";
 
-        const string SQL_FIND_ALL = @"SELECT * FROM Player;";
+        private const string SqlFindAll = @"SELECT * FROM Player;";
 
-        const string SQL_FIND_ALL_ON_DAYS = @"SELECT * FROM Player 
+        private const string SqlFindAllOnDays = @"SELECT * FROM Player 
                                                 WHERE playsMondays = @playsMondays OR playsMondays = 1 AND
                                                       playsTuesdays = @playsTuesdays OR playsTuesdays = 1 AND
                                                       playsWednesdays = @playsWednesdays OR playsWednesdays = 1 AND
@@ -36,7 +36,7 @@ namespace WuHu.Dal.SqlServer
                                                       playsSaturdays = @playsSaturdays OR playsSaturdays = 1 AND
                                                       playsSundays = @playsSundays OR playsSundays = 1;";
 
-        const string SQL_UPDATE_BY_ID =
+        private const string SqlUpdateById =
           @"UPDATE Player
             SET firstName = @firstName, 
                 lastName = @lastName,
@@ -55,17 +55,17 @@ namespace WuHu.Dal.SqlServer
                 picture = @picture
             WHERE playerId = @playerId;";
 
-        const string SQL_INSERT =
+        private const string SqlInsert =
           @"INSERT INTO Player (firstName,lastName,nickName,userName,password,salt,isAdmin,
                     playsMondays,playsTuesdays,playsWednesdays,playsThursdays,playsFridays,playsSaturdays,playsSundays,picture)
             OUTPUT Inserted.playerId
             VALUES (@firstName, @lastName, @nickName, @userName, @password, @salt, @isAdmin, @playsMondays, 
                     @playsTuesdays, @playsWednesdays, @playsThursdays, @playsFridays, @playsSaturdays, @playsSundays, @picture);";
 
-        const string SQL_COUNT =
+        private const string SqlCount =
             @"SELECT Count(*) as Cnt FROM Player;";
 
-        private IDatabase database;
+        private readonly IDatabase database;
 
         public PlayerDao(IDatabase database)
         {
@@ -76,7 +76,7 @@ namespace WuHu.Dal.SqlServer
 
         protected DbCommand CreateFindAllCmd()
         {
-            return database.CreateCommand(SQL_FIND_ALL);
+            return database.CreateCommand(SqlFindAll);
         }
 
 
@@ -113,7 +113,7 @@ namespace WuHu.Dal.SqlServer
             bool playsThursdays = false, bool playsFridays = false, bool playsSaturdays = false,
             bool playsSundays = false)
         {
-            DbCommand findCmd = database.CreateCommand(SQL_FIND_ALL_ON_DAYS);
+            DbCommand findCmd = database.CreateCommand(SqlFindAllOnDays);
             database.DefineParameter(findCmd, "playsMondays", DbType.Boolean, playsMondays);
             database.DefineParameter(findCmd, "playsTuesdays", DbType.Boolean, playsTuesdays);
             database.DefineParameter(findCmd, "playsWednesdays", DbType.Boolean, playsWednesdays);
@@ -155,7 +155,7 @@ namespace WuHu.Dal.SqlServer
 
         protected DbCommand CreateFindByIdCmd(int playerId)
         {
-            DbCommand findByIdCmd = database.CreateCommand(SQL_FIND_BY_ID);
+            DbCommand findByIdCmd = database.CreateCommand(SqlFindById);
             database.DefineParameter(findByIdCmd, "playerId", DbType.Int32, playerId);
             return findByIdCmd;
         }
@@ -194,7 +194,7 @@ namespace WuHu.Dal.SqlServer
 
         private DbCommand CreateFindAllByStringCmd(string name)
         {
-            DbCommand findCmd = database.CreateCommand(SQL_FIND_BY_STRING);
+            DbCommand findCmd = database.CreateCommand(SqlFindByString);
             database.DefineParameter(findCmd, "name", DbType.String, name);
             return findCmd;
         }
@@ -233,7 +233,7 @@ namespace WuHu.Dal.SqlServer
                                             bool playsThursdays, bool playsFridays, bool playsSaturdays,
                                             bool playsSundays, byte[] picture)
         {
-            DbCommand insertCmd = database.CreateCommand(SQL_INSERT);
+            DbCommand insertCmd = database.CreateCommand(SqlInsert);
             database.DefineParameter(insertCmd, "firstName", DbType.String, firstName);
             database.DefineParameter(insertCmd, "lastName", DbType.String, lastName);
             database.DefineParameter(insertCmd, "nickName", DbType.String, nickName);
@@ -273,7 +273,7 @@ namespace WuHu.Dal.SqlServer
                                             bool playsThursdays, bool playsFridays, bool playsSaturdays,
                                             bool playsSundays, byte[] picture)
         {
-            DbCommand updateByIdCmd = database.CreateCommand(SQL_UPDATE_BY_ID);
+            DbCommand updateByIdCmd = database.CreateCommand(SqlUpdateById);
             database.DefineParameter(updateByIdCmd, "playerId", DbType.Int32, playerId);
             database.DefineParameter(updateByIdCmd, "firstName", DbType.String, firstName);
             database.DefineParameter(updateByIdCmd, "lastName", DbType.String, lastName);
@@ -316,7 +316,7 @@ namespace WuHu.Dal.SqlServer
 
         protected DbCommand CreateCountCmd()
         {
-            DbCommand countCmd = database.CreateCommand(SQL_COUNT);
+            DbCommand countCmd = database.CreateCommand(SqlCount);
             return countCmd;
         }
         public int Count()
