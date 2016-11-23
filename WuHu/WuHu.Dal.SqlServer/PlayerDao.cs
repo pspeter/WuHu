@@ -15,24 +15,26 @@ namespace WuHu.Dal.SqlServer
     class PlayerDao : IPlayerDao
     {
         const string SQL_FIND_BY_STRING =
-          @"SELECT * FROM Player WHERE firstName LIKE %@name%
-                                    OR lastName LIKE %@name%
-                                    OR nickName LIKE %@name%
-                                    OR userName LIKE %@name%;";
+          @"SELECT * FROM Player 
+                WHERE firstName LIKE '%@name%'
+                    OR lastName LIKE '%@name%'
+                    OR nickName LIKE '%@name%'
+                    OR userName LIKE '%@name%';";
 
         const string SQL_FIND_BY_ID =
-          @"SELECT * FROM Player WHERE playerId = @playerId;";
+          @"SELECT * FROM Player 
+            WHERE playerId = @playerId;";
 
         const string SQL_FIND_ALL = @"SELECT * FROM Player;";
 
         const string SQL_FIND_ALL_ON_DAYS = @"SELECT * FROM Player 
-                                                WHERE playsMondays = @playsMondays,
-                                                      playsTuesdays = @playsTuesdays,
-                                                      playsWednesdays = @playsWednesdays,
-                                                      playsThursdays = @playsThursdays,
-                                                      playsFridays = @playsFridays,
-                                                      playsSaturdays = @playsSaturdays,
-                                                      playsSundays = @playsSundays;";
+                                                WHERE playsMondays = @playsMondays OR playsMondays = 1 AND
+                                                      playsTuesdays = @playsTuesdays OR playsTuesdays = 1 AND
+                                                      playsWednesdays = @playsWednesdays OR playsWednesdays = 1 AND
+                                                      playsThursdays = @playsThursdays OR playsThursdays = 1 AND
+                                                      playsFridays = @playsFridays OR playsFridays = 1 AND
+                                                      playsSaturdays = @playsSaturdays OR playsSaturdays = 1 AND
+                                                      playsSundays = @playsSundays OR playsSundays = 1;";
 
         const string SQL_UPDATE_BY_ID =
           @"UPDATE Player
