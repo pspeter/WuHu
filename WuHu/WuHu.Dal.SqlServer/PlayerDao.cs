@@ -297,12 +297,11 @@ namespace WuHu.Dal.SqlServer
 
         public bool Update(Player player)
         {
-            if (player.PlayerId == null)
+            if (player?.PlayerId == null)
             {
                 throw new ArgumentException("PlayerId null on update");
             }
-            int playerId = player.PlayerId.GetValueOrDefault();
-            using (DbCommand command = CreateUpdateByIdCmd(playerId, player.FirstName, player.LastName, player.NickName,
+            using (DbCommand command = CreateUpdateByIdCmd(player.PlayerId.Value, player.FirstName, player.LastName, player.NickName,
                                             player.UserName, player.Password, player.Salt, player.IsAdmin,
                                             player.PlaysMondays, player.PlaysTuesdays, player.PlaysWednesdays,
                                             player.PlaysThursdays, player.PlaysFridays, player.PlaysSaturdays,
@@ -320,6 +319,7 @@ namespace WuHu.Dal.SqlServer
             DbCommand countCmd = database.CreateCommand(SqlCount);
             return countCmd;
         }
+
         public int Count()
         {
             using (DbCommand command = CreateCountCmd())
@@ -329,10 +329,7 @@ namespace WuHu.Dal.SqlServer
                 {
                     return (int)reader["Cnt"];
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
     }
