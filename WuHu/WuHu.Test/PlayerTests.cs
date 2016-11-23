@@ -40,22 +40,24 @@ namespace WuHu.Test
         [TestInitialize]
         public void TestInitialize()
         {
-            CommonData.BeginTransaction(database);
         }
 
         [TestCleanup]
         public void TestCleanup()
         {
-            CommonData.Rollback(database);
+            CommonData.DeleteAllFromTable(database, "Player");
         }
-        
 
+        private string GenerateNickName()
+        {
+            return Guid.NewGuid().ToString().Substring(0, 20);
+        }
         
         [TestMethod]
         public void Insert()
         {
             //generates a random string for our user field
-            string uniqueUsername = Guid.NewGuid().ToString().Substring(0, 15);
+            string uniqueUsername = GenerateNickName();
             int cnt = playerDao.Count();
             var playerId = playerDao.Insert(new Player("first", "last", "nick", uniqueUsername, "pass", 
                 false, false, false, false, false, true, true, true, null));
@@ -68,7 +70,7 @@ namespace WuHu.Test
         [TestMethod]
         public void InsertUserUniqueConstraint()
         {
-            string uniqueUsername = Guid.NewGuid().ToString().Substring(0, 15);
+            string uniqueUsername = GenerateNickName();
             var player = new Player("", "", "", uniqueUsername, "", false, false, 
                                 false, false, false, false, false, false, null);
 
@@ -89,7 +91,7 @@ namespace WuHu.Test
             Assert.IsTrue(cnt1 >= 0);
             try
             {
-                string uniqueUsername = Guid.NewGuid().ToString().Substring(0, 15);
+                string uniqueUsername = GenerateNickName();
                 playerDao.Insert(new Player("first", "last", "nick", uniqueUsername, "pass",
                     false, false, false, false, false, true, true, true, null));
             }
@@ -105,7 +107,7 @@ namespace WuHu.Test
         [TestMethod]
         public void Update()
         {
-            string uniqueUsername = Guid.NewGuid().ToString().Substring(0, 15);
+            string uniqueUsername = GenerateNickName();
             var player = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
 
@@ -123,12 +125,12 @@ namespace WuHu.Test
         [TestMethod]
         public void UpdateWithoutPlayerIdFails()
         {
-            string uniqueUsername = Guid.NewGuid().ToString().Substring(0, 15);
+            string uniqueUsername = GenerateNickName();
             var player = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
             try
             {
-                playerDao.Update(player);
+                playerDao.Update(player); // should throw ArgumentException
                 Assert.Fail();
             }
             catch (ArgumentException)
@@ -139,12 +141,12 @@ namespace WuHu.Test
         public void Constructor()
         {
 
-            string uniqueUsername = Guid.NewGuid().ToString().Substring(0, 15);
+            string uniqueUsername = GenerateNickName();
             var player1 = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
             Assert.AreEqual(player1.UserName, uniqueUsername);
 
-            uniqueUsername = Guid.NewGuid().ToString().Substring(0, 15);
+            uniqueUsername = GenerateNickName();
             var pw = new byte[32];
             var salt = new byte[32];
             var player2 = new Player(0, "first", "last", "nick", uniqueUsername, pw, salt,

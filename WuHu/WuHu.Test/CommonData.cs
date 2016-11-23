@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
+﻿using System.Data.Common;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WuHu.Dal.Common;
 
 namespace WuHu.Test
@@ -39,23 +33,6 @@ namespace WuHu.Test
         internal static void DeleteAllFromTable(IDatabase database, string table)
         {
             DbCommand cmd = database.CreateCommand("DELETE FROM dbo." + table);
-            database.ExecuteNonQuery(cmd);
-        }
-
-        internal static void BeginTransaction(IDatabase database)
-        {
-            DbCommand cmd = database.CreateCommand("BEGIN TRANSACTION;");
-            database.ExecuteNonQuery(cmd);
-        }
-
-        internal static void Commit(IDatabase database)
-        {
-            DbCommand cmd = database.CreateCommand("COMMIT;");
-            database.ExecuteNonQuery(cmd);
-        }
-        internal static void Rollback(IDatabase database)
-        {
-            DbCommand cmd = database.CreateCommand("ROLLBACK;");
             database.ExecuteNonQuery(cmd);
         }
     }
