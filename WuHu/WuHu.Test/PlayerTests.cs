@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Configuration;
-using System.Data.Common;
 using WuHu.Dal.Common;
 using WuHu.Domain;
 using System.Data.SqlClient;
-using System.IO;
 
 namespace WuHu.Test
 {
@@ -157,27 +153,92 @@ namespace WuHu.Test
         [TestMethod]
         public void FindAll()
         {
-            int cnt = playerDao.Count();
-            Assert.AreEqual(0, cnt);
+            int cntInital = playerDao.Count();
 
-            const int insertAmount = 5;
+            const int insertAmount = 10;
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                string uniqueUsername = Guid.NewGuid().ToString().Substring(0, 15);
+                string uniqueUsername = GenerateNickName();
                 Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
                     false, false, false, false, false, true, true, true, null);
                 playerDao.Insert(player);
             }
 
-            cnt = playerDao.Count();
-            Assert.AreEqual(insertAmount, cnt);
+            int cntAfterInsert = playerDao.Count();
+            Assert.AreEqual(insertAmount + cntInital, cntAfterInsert);
 
             var players = playerDao.FindAll();
-            Assert.AreEqual(players.Count, cnt);
+            Assert.AreEqual(players.Count + cntInital, cntAfterInsert);
         }
-        
-        
+
+        [TestMethod]
+        public void FindAllByString()
+        {
+            int cntInital = playerDao.Count();
+
+            const int insertAmount = 10;
+
+            for (var i = 0; i < insertAmount; ++i)
+            {
+                string uniqueUsername = GenerateNickName();
+                Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
+                    false, false, false, false, false, true, true, true, null);
+                playerDao.Insert(player);
+            }
+
+
+            int cntAfterFirstInsert = playerDao.Count();
+            Assert.AreEqual(insertAmount + cntInital, cntAfterFirstInsert);
+
+            for (var i = 0; i < insertAmount; ++i)
+            {
+                string uniqueUsername = GenerateNickName();
+                Player player = new Player("other", "other", "other", uniqueUsername, "pass",
+                    false, false, false, false, false, true, true, true, null);
+                playerDao.Insert(player);
+            }
+
+            int cntAfterSecondInsert = playerDao.Count();
+            Assert.AreEqual(insertAmount * 2 + cntInital, cntAfterSecondInsert);
+
+            var players = playerDao.FindAllByString("last");
+            Assert.AreEqual(insertAmount, players.Count);
+        }
+
+        [TestMethod]
+        public void FindAllByDay()
+        {
+            int cntInital = playerDao.Count();
+
+            const int insertAmount = 10;
+
+            for (var i = 0; i < insertAmount; ++i)
+            {
+                string uniqueUsername = GenerateNickName();
+                Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
+                    false, false, false, false, false, false, false, false, null);
+                playerDao.Insert(player);
+            }
+
+
+            int cntAfterFirstInsert = playerDao.Count();
+            Assert.AreEqual(insertAmount + cntInital, cntAfterFirstInsert);
+
+            for (var i = 0; i < insertAmount; ++i)
+            {
+                string uniqueUsername = GenerateNickName();
+                Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
+                    false, true, true, true, true, true, true, true, null);
+                playerDao.Insert(player);
+            }
+
+            int cntAfterSecondInsert = playerDao.Count();
+            Assert.AreEqual(insertAmount * 2 + cntInital, cntAfterSecondInsert);
+
+            var players = playerDao.FindAllOnDays(monday: true);
+            Assert.AreEqual(insertAmount, players.Count);
+        }
     }
     
 }
