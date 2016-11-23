@@ -108,9 +108,10 @@ namespace WuHu.Dal.SqlServer
             }
         }
 
-        private DbCommand CreateFindAllOnDaysCmd(bool playsMondays, bool playsTuesdays, bool playsWednesdays,
-                                                 bool playsThursdays, bool playsFridays, bool playsSaturdays,
-                                                 bool playsSundays)
+        private DbCommand CreateFindAllOnDaysCmd(bool playsMondays = false, 
+            bool playsTuesdays = false, bool playsWednesdays = false,
+            bool playsThursdays = false, bool playsFridays = false, bool playsSaturdays = false,
+            bool playsSundays = false)
         {
             DbCommand findCmd = database.CreateCommand(SQL_FIND_ALL_ON_DAYS);
             database.DefineParameter(findCmd, "playsMondays", DbType.Boolean, playsMondays);
