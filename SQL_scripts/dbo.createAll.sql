@@ -7,7 +7,7 @@ BEGIN
     ( 
         [tournamentId]       int  NOT NULL,
         [matchId]            int  NOT NULL  IDENTITY ( 0,1 ),
-        [time]               Datetime2  NOT NULL ,
+        [datetime]               Datetime2  NOT NULL ,
         [player1]    INT			 NOT NULL,
         [player2]    INT			 NOT NULL,
         [player3]    INT			 NOT NULL,
@@ -48,7 +48,7 @@ BEGIN
     ( 
         [ratingId]           int  NOT NULL IDENTITY(0, 1),
         [playerId]           int  NOT NULL ,
-        [date]               Datetime2  NOT NULL 
+        [datetime]               Datetime2  NOT NULL 
         CONSTRAINT [now_timestamp]
              DEFAULT  CURRENT_TIMESTAMP,
         [value]              int  NULL 
