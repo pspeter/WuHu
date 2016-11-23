@@ -34,6 +34,11 @@ namespace WuHu.Dal.Common
             return CreateDao<IPlayerDao>(database, "PlayerDao");
         }
 
+        public static IRatingDao CreateRatingDao(IDatabase database)
+        {
+            return CreateDao<IRatingDao>(database, "RatingDao");
+        }
+
         private static T CreateDao<T>(IDatabase database, string typeName)
             where T : class // T must be a reference type
         {

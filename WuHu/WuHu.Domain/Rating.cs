@@ -9,13 +9,21 @@ namespace WuHu.Domain
     [Serializable]
     public class Rating
     {
-        public Rating(int? ratingId, Player player, DateTime datetime, int value)
+        public Rating(int ratingId, Player player, DateTime datetime, int value)
+        {
+            this.RatingId = ratingId;
+            this.Player = player;
+            this.Datetime = datetime;
+            this.Value = value;
+        }
+
+        public Rating(Player player, DateTime datetime, int value)
         {
             this.Player = player;
             this.Datetime = datetime;
             this.Value = value;
         }
-        
+
         public int? RatingId { get; set; }
         public Player Player { get; set; }
         public DateTime Datetime { get; set; }

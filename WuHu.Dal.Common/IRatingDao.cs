@@ -10,7 +10,7 @@ namespace WuHu.Dal.Common
     public interface IRatingDao
     {
         IList<Rating> FindAll();
-        IList<Rating> FindAllBy(Player player);
+        IList<Rating> FindAllByPlayer(Player player);
         Rating FindById(int ratingId);
         int Insert(Rating rating);
         bool Update(Rating rating);
