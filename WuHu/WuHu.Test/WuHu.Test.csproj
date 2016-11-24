@@ -76,10 +76,6 @@
       <Project>{3b5e2218-2c2f-4995-9b41-e382b34880b4}</Project>
       <Name>WuHu.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WuHu.Server.csproj">
-      <Project>{133d0de2-f6e3-4bef-b3cd-be74106b54c4}</Project>
-      <Name>WuHu.Server</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

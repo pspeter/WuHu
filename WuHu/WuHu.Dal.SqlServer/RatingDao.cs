@@ -18,7 +18,14 @@ namespace WuHu.Dal.SqlServer
             FROM Rating JOIN Player on (Rating.playerId = Player.playerId)
             WHERE ratingId = @ratingId;";
 
-        private const string SqlFindAll = @"SELECT * FROM Rating JOIN Player on (Rating.playerId = Player.playerId);";
+        private const string SqlFindAll = 
+            @"SELECT * 
+                FROM Rating JOIN Player on (Rating.playerId = Player.playerId);";
+
+        private const string SqlFindAllByPlayer = 
+            @"SELECT * 
+                FROM Rating JOIN Player on (Rating.playerId = Player.playerId)
+                WHERE Player.playerId = @playerId;";
 
         private const string SqlInsert =
             @"INSERT INTO Rating (playerId, datetime, value)
@@ -71,9 +78,46 @@ namespace WuHu.Dal.SqlServer
             }
         }
 
+        public DbCommand CreateFindAllByPlayerCmd(int playerId)
+        {
+            DbCommand command = database.CreateCommand(SqlFindAllByPlayer);
+            database.DefineParameter(command, "playerId", DbType.Int32, playerId);
+            return command;
+        }
+
         public IList<Rating> FindAllByPlayer(Player player)
         {
-            throw new NotImplementedException();
+            if (player?.PlayerId == null)
+            {
+                throw new ArgumentException("PlayerId null on update");
+            }
+            using (DbCommand command = CreateFindAllByPlayerCmd(player.PlayerId.Value))
+            using (IDataReader reader = database.ExecuteReader(command))
+            {
+                var result = new List<Rating>();
+                while (reader.Read())
+                    result.Add(new Rating((int)reader["ratingId"],
+                                          new Player((int)reader["playerId"],
+                                              (string)reader["firstName"],
+                                              (string)reader["lastName"],
+                                              (string)reader["nickName"],
+                                              (string)reader["userName"],
+                                              (byte[])reader["password"],
+                                              (byte[])reader["salt"],
+                                              (bool)reader["isAdmin"],
+                                              (bool)reader["playsMondays"],
+                                              (bool)reader["playsTuesdays"],
+                                              (bool)reader["playsWednesdays"],
+                                              (bool)reader["playsThursdays"],
+                                              (bool)reader["playsFridays"],
+                                              (bool)reader["playsSaturdays"],
+                                              (bool)reader["playsSundays"],
+                                              reader.IsDBNull(reader.GetOrdinal("picture")) ?
+                                                null : (byte[])reader["picture"]),
+                                          (DateTime)reader["datetime"],
+                                          (int)reader["value"]));
+                return result;
+            }
         }
 
         public Rating FindById(int ratingId)

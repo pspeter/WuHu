@@ -18,30 +18,28 @@ namespace WuHu.Test
         private static IPlayerDao playerDao;
         private static IRatingDao ratingDao;
         private static Player testPlayer;
-        public static TestContext PlayerTestContext { get; set; }
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
             connectionString = ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString;
             database = DalFactory.CreateDatabase();
-            CommonData.DropTables(database);
-            CommonData.CreateTables(database);
-            PlayerTestContext = testContext;
             playerDao = DalFactory.CreatePlayerDao(database);
             ratingDao = DalFactory.CreateRatingDao(database);
             
-            testPlayer = new Player("first", "last", "nick", "user", "pass",
+            testPlayer = playerDao.FindById(0);
+            if (testPlayer == null)
+            { 
+                testPlayer = new Player("first", "last", "nic2k", "us7er", "pass",
                 false, false, false, false, false, true, true, true, null);
-            int playerId = playerDao.Insert(testPlayer);
-            testPlayer.PlayerId = playerId;
+                int playerId = playerDao.Insert(testPlayer);
+            }
+            
         }
 
         [ClassCleanup]
         public static void ClassCleanup()
         {
-            CommonData.DropTables(database);
-            CommonData.CreateTables(database);
         }
 
         [TestInitialize]
@@ -52,7 +50,6 @@ namespace WuHu.Test
         [TestCleanup]
         public void TestCleanup()
         {
-            CommonData.DeleteAllFromTable(database, "Rating");
         }
 
         [TestMethod]
@@ -81,7 +78,10 @@ namespace WuHu.Test
         [TestMethod]
         public void FindAll()
         {
-            int cntInital = ratingDao.Count();
+            int foundInitial = ratingDao.FindAll().Count;
+            int cntInitial = ratingDao.Count();
+            Assert.AreEqual(foundInitial, cntInitial);
+
             const int insertAmount = 10;
             
             for (var i = 0; i < insertAmount; ++i)
@@ -90,10 +90,26 @@ namespace WuHu.Test
                 ratingDao.Insert(rating);
             }
             int cntAfterInsert = ratingDao.Count();
-            Assert.AreEqual(insertAmount + cntInital, cntAfterInsert);
+            Assert.AreEqual(insertAmount + foundInitial, cntAfterInsert);
 
-            IList<Rating> ratings = ratingDao.FindAll();
-            Assert.AreEqual(ratings.Count + cntInital, cntAfterInsert);
+            int foundAfterInsert = ratingDao.FindAll().Count;
+            Assert.AreEqual(cntAfterInsert, foundAfterInsert);
+        }
+
+        [TestMethod]
+        public void FindAllByPlayer()
+        {
+            int foundInitial = ratingDao.FindAllByPlayer(RatingTests.testPlayer).Count;
+            const int insertAmount = 10;
+
+            for (var i = 0; i < insertAmount; ++i)
+            {
+                Rating rating = new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000);
+                ratingDao.Insert(rating);
+            }
+
+            int foundAfterInsert = ratingDao.FindAllByPlayer(RatingTests.testPlayer).Count;
+            Assert.AreEqual(foundInitial + insertAmount, foundAfterInsert);
         }
 
         [TestMethod]
