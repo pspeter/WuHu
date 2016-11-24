@@ -10,101 +10,96 @@ randomPlayer = [{"firstName":"Herwig","lastName":"Maurer","nickName":"Herbi","us
 
 
 def insertInto(table, keys, values):
-    statement = "INSERT INTO [dbo].[" + table + "] ("
-    
-    statement += "[" + keys[0] + "]"
-    for key in keys[1:]:
-        statement += ",[" + key + "]"
-    
-    statement += ") VALUES ("
-    statement += str(values[0])
-        
-    for value in values[1:]:
-        statement += "," + str(value)
-        
-    statement += ");"
-    return statement
-    
+	statement = "INSERT INTO [dbo].[" + table + "] ("
+	
+	statement += "[" + keys[0] + "]"
+	for key in keys[1:]:
+		statement += ",[" + key + "]"
+	
+	statement += ") VALUES ("
+	statement += str(values[0])
+		
+	for value in values[1:]:
+		statement += "," + str(value)
+		
+	statement += ");\n"
+	return statement
+	
 def quote(str):
-    return "'" + str + "'"
+	return "'" + str + "'"
    
 randomDataKeys = ["firstName","lastName", "nickName", "userName","password","isAdmin"]
 dayKeys = ["playsMondays", "playsTuesdays", "playsWednesdays", "playsThursdays", "playsFridays", "playsSaturdays", "playsSundays"]
 allKeys = ["firstName","lastName", "nickName", "userName","password","salt","isAdmin"] + dayKeys
 
 
-with open("dbo.Testdata.sql", "w") as f:
-    # Player
-    i = 0
-    for player in randomPlayer[:30]:
-        values = []
-        if i > 5:
-            player["userName"] = "player" + str(i) # make sure our username is unique
-        i += 1
-        for key in randomDataKeys[:-2]:
-            values.append(quote(player[key])) # all from randomDataKeys but isAdmin
-        
-        salt = urandom(32)
-        password = hashlib.pbkdf2_hmac('sha256', randomDataKeys[-2], salt, 100000)
-        values.append("0x" + binascii.hexlify(salt)) 
-        values.append("0x" + binascii.hexlify(password))
-        
-        values.append(player[randomDataKeys[-1]])
-        
-        for _ in dayKeys:
-            isPlaying = int(random.random() < 0.4)
-            values.append(isPlaying)
-        f.write(insertInto("Player", allKeys, values))
+with open("dbo.Testdata.sql", "w") as f: # Player
+	i = 0
+	for player in randomPlayer[:30]:
+		values = []
+		if i > 5:
+			player["userName"] = "player" + str(i) # make sure our username is unique
+		i += 1
+		for key in randomDataKeys[:-2]:
+			values.append(quote(player[key])) # all from randomDataKeys but isAdmin
+		
+		salt = urandom(32)
+		password = hashlib.pbkdf2_hmac('sha256', randomDataKeys[-2], salt, 100000)
+		values.append("0x" + binascii.hexlify(salt)) 
+		values.append("0x" + binascii.hexlify(password))
+		
+		values.append(player[randomDataKeys[-1]])
+		
+		for _ in dayKeys:
+			isPlaying = int(random.random() < 0.4)
+			values.append(isPlaying)
+		f.write(insertInto("Player", allKeys, values))
 
-            
-    # Rating
-        f.write("declare @startDate datetime2;")
-        f.write("set @startDate = '2014-01-02 07:36:13.000';")
-        for playerid in range(30):
-            rating = 2000
-            for i in range(365*2):
-                f.write(insertInto("Rating", ["playerId", "date", "value"], [playerid, "dateadd(day, " + str(i) + ", @startDate)", rating]))
-                rating += random.randint(-50, 50)
-                if rating < 1: 
-                    rating = 1
-            
-            
+			
+	# Rating
+	for playerid in range(30):
+		rating = 2000
+		for i in range(365*2):
+			f.write(insertInto("Rating", ["playerId", "datetime", "value"], [playerid, "dateadd(day, " + str(i) + ", cast('2014-01-02 07:36:13.000' as datetime2))", rating]))
+			rating += random.randint(-50, 50)
+			if rating < 1: 
+				rating = 1
+			
+			
 
-    # Tournament
-    for i in range(365*2):
-        k = random.randint(0, len(randomNames) - 1)
-        l = random.randint(0, len(randomNames) - 1)
-        admin = random.randint(0, 1)
-        f.write(insertInto("Tournament", ["name", "creator"], [quote(randomCities[k]+"_"+randomNames[l]), admin]))
-    
-    # Match
-    STARTID = 0 # first tournamentId 
-    f.write("declare @startDate datetime2;")
-    f.write("set @startDate = '2014-01-02 07:36:13.000';")
-    
-    for i in range(365*2): # 2 years
-        amount = random.randint(0, 8) # between 0 and 8 matches each day => avg. 4
-        
-        for j in range(amount):
-            winner = random.random()
-            if winner < 0.5:    
-                score1 = 10
-                score2 = random.randint(0, 9)
-            else:
-                score1 = random.randint(0, 9)
-                score2 = 10
-                
-            Ea = random.random() # estimated probability of team 1 winning, here random
-            
-            p1, p2, p3, p4 = random.sample(range(30), 4)
-            
-            f.write(insertInto("Match", 
-                ["tournamentId", "time", "player1", "player2", "player3", "player4", "scoreTeam1", "scoreTeam2", "EstimatedWinChance", "isDone"],
-                [STARTID + i, "dateadd(day, " + str(i) + ", @startDate)", p1, p2, p3, p4, score1, score2, Ea, 1]))
-                
-    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("initialscore"), quote("2000")]))
-    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("scoredMatches"), quote("100")]))
-    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("halflife"), quote("50")]))
-    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("k-rating"), quote("32")]))
-    f.write(insertInto("ScoreParameter", ["key", "value"], [quote("timepenalty"), quote("50")]))
+	# Tournament
+	for i in range(365*2):
+		k = random.randint(0, len(randomNames) - 1)
+		l = random.randint(0, len(randomNames) - 1)
+		admin = random.randint(0, 1)
+		f.write(insertInto("Tournament", ["name", "creator"], [quote(randomCities[k]+"_"+randomNames[l]), admin]))
+	
+	# Match
+	STARTID = 0 # first tournamentId 
+	
+	for i in range(365*2): # 2 years
+		amount = random.randint(0, 8) # between 0 and 8 matches each day => avg. 4
+		
+		for j in range(amount):
+			winner = random.random()
+			if winner < 0.5:	
+				score1 = 10
+				score2 = random.randint(0, 9)
+			else:
+				score1 = random.randint(0, 9)
+				score2 = 10
+				
+			Ea = random.random() # estimated probability of team 1 winning, here random
+			
+			p1, p2, p3, p4 = random.sample(range(30), 4)
+			
+			f.write(insertInto("Match", 
+				["tournamentId", "datetime", "player1", "player2", "player3", "player4", "scoreTeam1", "scoreTeam2", "EstimatedWinChance", "isDone"],
+				[STARTID + i, "dateadd(day, " + str(i) + ", '2014-01-02 07:36:13.000')", p1, p2, p3, p4, score1, score2, Ea, 1]))
+				
+	f.write(insertInto("ScoreParameter", ["key", "value"], [quote("initialscore"), quote("2000")]))
+	f.write(insertInto("ScoreParameter", ["key", "value"], [quote("scoredMatches"), quote("100")]))
+	f.write(insertInto("ScoreParameter", ["key", "value"], [quote("halflife"), quote("50")]))
+	f.write(insertInto("ScoreParameter", ["key", "value"], [quote("k-rating"), quote("32")]))
+	f.write(insertInto("ScoreParameter", ["key", "value"], [quote("timepenalty"), quote("50")]))
 
