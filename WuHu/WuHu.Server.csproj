@@ -78,6 +78,20 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WuHu.Dal.Common\WuHu.Dal.Common.csproj">
+      <Project>{04F6460D-1635-43D4-8080-F4903B40DB76}</Project>
+      <Name>WuHu.Dal.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="WuHu.Dal.SqlServer\WuHu.Dal.SqlServer.csproj">
+      <Project>{25DB2BEE-95CF-4F82-B0BF-3C5CE3FCA970}</Project>
+      <Name>WuHu.Dal.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="WuHu.Test\WuHu.Test.csproj">
+      <Project>{0f03b446-8bac-477b-ba40-e367d3a9b5ef}</Project>
+      <Name>WuHu.Test</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
