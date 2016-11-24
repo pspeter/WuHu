@@ -1,10 +1,12 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using WuHu.Dal.Common;
 
 namespace WuHu.Test
 {
-    static class CommonData
+    public static class CommonData
     {
         internal static void CreateTables(IDatabase database)
         {
@@ -22,12 +24,18 @@ namespace WuHu.Test
             database.ExecuteNonQuery(cmd);
         }
 
-        internal static void InsertTestData(IDatabase database)
+        public static void InsertTestData(IDatabase database)
         {
-            string script = File.ReadAllText(@"C:\Users\Peter\Documents\Sourcetree\WuHu\SQL_scripts\dbo.Testdata.sql");
+            DropTables(database);
+            CreateTables(database);
+            IEnumerable<string> script = File.ReadLines(@"C:\Users\Peter\Documents\Sourcetree\WuHu\SQL_scripts\dbo.Testdata.sql");
 
-            DbCommand cmd = database.CreateCommand(script);
-            database.ExecuteNonQuery(cmd);
+            foreach (var line in script)
+            {
+                Console.WriteLine(line);
+                DbCommand cmd = database.CreateCommand(line);
+                database.ExecuteNonQuery(cmd);
+            }
         }
 
         internal static void DeleteAllFromTable(IDatabase database, string table)
