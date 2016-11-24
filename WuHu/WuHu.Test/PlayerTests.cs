@@ -20,8 +20,6 @@ namespace WuHu.Test
         {
             connectionString = ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString;
             database = DalFactory.CreateDatabase();
-            CommonData.DropTables(database);
-            CommonData.CreateTables(database);
             PlayerTestContext = testContext;
             playerDao = DalFactory.CreatePlayerDao(database);
         }
@@ -29,8 +27,6 @@ namespace WuHu.Test
         [ClassCleanup]
         public static void ClassCleanup()
         {
-            CommonData.DropTables(database);
-            CommonData.CreateTables(database);
         }
 
         [TestInitialize]
@@ -41,19 +37,18 @@ namespace WuHu.Test
         [TestCleanup]
         public void TestCleanup()
         {
-            CommonData.DeleteAllFromTable(database, "Player");
         }
 
-        private string GenerateNickName()
+        private string GenerateName()
         {
-            return Guid.NewGuid().ToString().Substring(0, 20);
+            return Guid.NewGuid().ToString().Substring(0, 20); //random 20 character string
         }
         
         [TestMethod]
         public void Insert()
         {
             //generates a random string for our user field
-            string uniqueUsername = GenerateNickName();
+            string uniqueUsername = GenerateName();
             int cnt = playerDao.Count();
             var playerId = playerDao.Insert(new Player("first", "last", "nick", uniqueUsername, "pass", 
                 false, false, false, false, false, true, true, true, null));
@@ -66,7 +61,7 @@ namespace WuHu.Test
         [TestMethod]
         public void InsertUserUniqueConstraint()
         {
-            string uniqueUsername = GenerateNickName();
+            string uniqueUsername = GenerateName();
             var player = new Player("", "", "", uniqueUsername, "", false, false, 
                                 false, false, false, false, false, false, null);
 
@@ -85,7 +80,7 @@ namespace WuHu.Test
         {
             int cnt1 = playerDao.Count();
             Assert.IsTrue(cnt1 >= 0);
-            string uniqueUsername = GenerateNickName();
+            string uniqueUsername = GenerateName();
             playerDao.Insert(new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null));
 
@@ -96,7 +91,7 @@ namespace WuHu.Test
         [TestMethod]
         public void Update()
         {
-            string uniqueUsername = GenerateNickName();
+            string uniqueUsername = GenerateName();
             var player = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
 
@@ -114,7 +109,7 @@ namespace WuHu.Test
         [TestMethod]
         public void UpdateWithoutPlayerIdFails()
         {
-            string uniqueUsername = GenerateNickName();
+            string uniqueUsername = GenerateName();
             var player = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
             try
@@ -130,12 +125,12 @@ namespace WuHu.Test
         public void Constructor()
         {
 
-            string uniqueUsername = GenerateNickName();
+            string uniqueUsername = GenerateName();
             var player1 = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
             Assert.AreEqual(player1.UserName, uniqueUsername);
 
-            uniqueUsername = GenerateNickName();
+            uniqueUsername = GenerateName();
             var pw = new byte[32];
             var salt = new byte[32];
             var player2 = new Player(0, "first", "last", "nick", uniqueUsername, pw, salt,
@@ -152,7 +147,7 @@ namespace WuHu.Test
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                string uniqueUsername = GenerateNickName();
+                string uniqueUsername = GenerateName();
                 Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
                     false, false, false, false, false, true, true, true, null);
                 playerDao.Insert(player);
@@ -162,75 +157,77 @@ namespace WuHu.Test
             Assert.AreEqual(insertAmount + cntInital, cntAfterInsert);
 
             var players = playerDao.FindAll();
-            Assert.AreEqual(players.Count + cntInital, cntAfterInsert);
+            Assert.AreEqual(players.Count, insertAmount + cntInital);
         }
 
         [TestMethod]
         public void FindAllByString()
         {
-            int cntInital = playerDao.Count();
+            string uniqueFirstName = GenerateName();
+
+            int totalInital = playerDao.Count();
+            int foundInitial = playerDao.FindAllByString(uniqueFirstName).Count;
 
             const int insertAmount = 10;
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                string uniqueUsername = GenerateNickName();
-                Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
+                string uniqueUsername = GenerateName();
+                Player player = new Player(uniqueFirstName, "last", "nick", uniqueUsername, "pass",
                     false, false, false, false, false, true, true, true, null);
                 playerDao.Insert(player);
             }
 
 
-            int cntAfterFirstInsert = playerDao.Count();
-            Assert.AreEqual(insertAmount + cntInital, cntAfterFirstInsert);
+            int totalAfterFirstInsert = playerDao.Count();
+            Assert.AreEqual(insertAmount + totalInital, totalAfterFirstInsert);
+            int foundAfterFirstInsert = playerDao.FindAllByString(uniqueFirstName).Count;
+            Assert.AreEqual(foundInitial + insertAmount, foundAfterFirstInsert);
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                string uniqueUsername = GenerateNickName();
+                string uniqueUsername = GenerateName();
                 Player player = new Player("other", "other", "other", uniqueUsername, "pass",
                     false, false, false, false, false, true, true, true, null);
                 playerDao.Insert(player);
             }
 
-            int cntAfterSecondInsert = playerDao.Count();
-            Assert.AreEqual(insertAmount * 2 + cntInital, cntAfterSecondInsert);
+            int totalAfterSecondInsert = playerDao.Count();
+            Assert.AreEqual(insertAmount * 2 + totalInital, totalAfterSecondInsert);
 
-            var players = playerDao.FindAllByString("first");
-            Assert.AreEqual(insertAmount, players.Count);
+            var foundAfterSecondInsert = playerDao.FindAllByString(uniqueFirstName).Count;
+            Assert.AreEqual(foundInitial + insertAmount, foundAfterSecondInsert);
         }
 
         [TestMethod]
         public void FindAllByDay()
         {
-            int cntInital = playerDao.Count();
+            int cntInital = playerDao.FindAllOnDays(monday: true).Count;
 
             const int insertAmount = 10;
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                string uniqueUsername = GenerateNickName();
+                string uniqueUsername = GenerateName();
                 Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
                     false, false, false, false, false, false, false, false, null);
                 playerDao.Insert(player);
             }
 
 
-            int cntAfterFirstInsert = playerDao.Count();
-            Assert.AreEqual(insertAmount + cntInital, cntAfterFirstInsert);
+            int cntAfterFirstInsert = playerDao.FindAllOnDays(monday: true).Count;
+            Assert.AreEqual(cntInital, cntAfterFirstInsert);
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                string uniqueUsername = GenerateNickName();
+                string uniqueUsername = GenerateName();
                 Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
                     false, true, true, true, true, true, true, true, null);
                 playerDao.Insert(player);
             }
 
-            int cntAfterSecondInsert = playerDao.Count();
-            Assert.AreEqual(insertAmount * 2 + cntInital, cntAfterSecondInsert);
-
-            var players = playerDao.FindAllOnDays(monday: true);
-            Assert.AreEqual(insertAmount, players.Count);
+            int cntAfterSecondInsert = playerDao.FindAllOnDays(monday: true).Count;
+            Assert.AreEqual(insertAmount + cntInital, cntAfterSecondInsert);
         }
     }
     
