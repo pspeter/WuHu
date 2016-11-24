@@ -77,40 +77,40 @@ BEGIN
         ADD CONSTRAINT [XPKTournament] PRIMARY KEY  CLUSTERED ([tournamentId] ASC);
 
     ALTER TABLE [dbo].[Rating]
-        ADD CONSTRAINT [R_1] FOREIGN KEY ([playerId]) REFERENCES [Player]([playerId])
+        ADD CONSTRAINT [FK_Rating_playerId] FOREIGN KEY ([playerId]) REFERENCES [Player]([playerId])
             ON DELETE CASCADE
             ON UPDATE CASCADE;
 
     ALTER TABLE [dbo].[Match]
-        ADD CONSTRAINT [R_9] FOREIGN KEY ([tournamentId]) REFERENCES [Tournament]([tournamentId])
+        ADD CONSTRAINT [FK_Match_tournamentId] FOREIGN KEY ([tournamentId]) REFERENCES [Tournament]([tournamentId])
             ON DELETE NO ACTION
             ON UPDATE NO ACTION;
 
 
 
     ALTER TABLE [dbo].[Match]
-        ADD CONSTRAINT [R_10] FOREIGN KEY ([player1]) REFERENCES [Player]([playerId])
+        ADD CONSTRAINT [FK_Match_player1] FOREIGN KEY ([player1]) REFERENCES [Player]([playerId])
             ON DELETE NO ACTION
             ON UPDATE NO ACTION;
 
     ALTER TABLE [dbo].[Match]
-        ADD CONSTRAINT [R_11] FOREIGN KEY ([player2]) REFERENCES [Player]([playerId])
+        ADD CONSTRAINT [FK_Match_player2] FOREIGN KEY ([player2]) REFERENCES [Player]([playerId])
             ON DELETE NO ACTION
             ON UPDATE NO ACTION;
 
     ALTER TABLE [dbo].[Match]
-        ADD CONSTRAINT [R_12] FOREIGN KEY ([player3]) REFERENCES [Player]([playerId])
+        ADD CONSTRAINT [FK_Match_player3] FOREIGN KEY ([player3]) REFERENCES [Player]([playerId])
             ON DELETE NO ACTION
             ON UPDATE NO ACTION;
 
     ALTER TABLE [dbo].[Match]
-        ADD CONSTRAINT [R_13] FOREIGN KEY ([player4]) REFERENCES [Player]([playerId])
+        ADD CONSTRAINT [FK_Match_player4] FOREIGN KEY ([player4]) REFERENCES [Player]([playerId])
             ON DELETE NO ACTION
             ON UPDATE NO ACTION;
 
 
     ALTER TABLE [dbo].[Tournament]
-        ADD CONSTRAINT [R_2] FOREIGN KEY ([creator]) REFERENCES [Player]([playerId])
+        ADD CONSTRAINT [FK_Tournament_creator] FOREIGN KEY ([creator]) REFERENCES [Player]([playerId])
             ON DELETE CASCADE
             ON UPDATE CASCADE;
 END;
