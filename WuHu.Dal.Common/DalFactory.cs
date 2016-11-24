@@ -25,7 +25,7 @@ namespace WuHu.Dal.Common
 
         public static IDatabase CreateDatabase(string connectionString)
         {
-            Type dbClass = dalAssembly.GetType(assemblyName + ".Database"); // ausgefeilter möglich
+            Type dbClass = dalAssembly.GetType(assemblyName + ".Database");
             return Activator.CreateInstance(dbClass, connectionString) as IDatabase;
         }
 
