@@ -262,7 +262,9 @@ namespace WuHu.Dal.SqlServer
                                                         player.PlaysThursdays, player.PlaysFridays, player.PlaysSaturdays,
                                                         player.PlaysSundays, player.Picture))
             {
-                return database.ExecuteScalar(command);
+                int playerId = database.ExecuteScalar(command);
+                player.PlayerId = playerId;
+                return playerId;
             }
         }
 
