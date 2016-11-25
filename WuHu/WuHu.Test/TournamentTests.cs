@@ -38,13 +38,16 @@ namespace WuHu.Test
         [TestMethod]
         public void Constructor()
         {
+            string name = "name";
             Assert.IsNotNull(tournamentDao);
 
-            Tournament tournament = new Tournament(0, "name", testPlayer);
+            Tournament tournament = new Tournament(0, name, testPlayer);
             Assert.IsNotNull(tournament);
 
-            tournament = new Tournament("name", testPlayer);
+            tournament = new Tournament(name, testPlayer);
             Assert.IsNotNull(tournament);
+
+            Assert.AreEqual(tournament.ToString(), name);
         }
 
         [TestMethod]
