@@ -260,8 +260,8 @@ namespace WuHu.Dal.SqlServer
 
         public int Insert(Player player)
         {
-            using (DbCommand command = CreateInsertCmd(player.FirstName, player.LastName, player.NickName,
-                                                        player.UserName, player.Password, player.Salt, player.IsAdmin,
+            using (DbCommand command = CreateInsertCmd(player.Firstname, player.Lastname, player.Nickname,
+                                                        player.Username, player.Password, player.Salt, player.IsAdmin,
                                                         player.PlaysMondays, player.PlaysTuesdays, player.PlaysWednesdays,
                                                         player.PlaysThursdays, player.PlaysFridays, player.PlaysSaturdays,
                                                         player.PlaysSundays, player.Picture))
@@ -307,8 +307,8 @@ namespace WuHu.Dal.SqlServer
             {
                 throw new ArgumentException("PlayerId null on update for Player");
             }
-            using (DbCommand command = CreateUpdateByIdCmd(player.PlayerId.Value, player.FirstName, player.LastName, player.NickName,
-                                            player.UserName, player.Password, player.Salt, player.IsAdmin,
+            using (DbCommand command = CreateUpdateByIdCmd(player.PlayerId.Value, player.Firstname, player.Lastname, player.Nickname,
+                                            player.Username, player.Password, player.Salt, player.IsAdmin,
                                             player.PlaysMondays, player.PlaysTuesdays, player.PlaysWednesdays,
                                             player.PlaysThursdays, player.PlaysFridays, player.PlaysSaturdays,
                                             player.PlaysSundays, player.Picture))

@@ -88,11 +88,11 @@ namespace WuHu.Test
 
             string newFirst = "newFirst";
             player.PlayerId = playerId;
-            player.FirstName = newFirst;
+            player.Firstname = newFirst;
             playerDao.Update(player);
 
             player = playerDao.FindById(playerId);
-            Assert.AreEqual(newFirst, player.FirstName);
+            Assert.AreEqual(newFirst, player.Firstname);
         }
 
         [TestMethod]
@@ -117,10 +117,10 @@ namespace WuHu.Test
             string uniqueUsername = GenerateName();
             var player1 = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
-            Assert.AreEqual(player1.UserName, uniqueUsername);
+            Assert.AreEqual(player1.Username, uniqueUsername);
             Assert.IsNull(player1.PlayerId);
             
-            string builtPlayerString = player1.FirstName + " '" + player1.NickName + "' " + player1.LastName;
+            string builtPlayerString = player1.Firstname + " '" + player1.Nickname + "' " + player1.Lastname;
             Assert.AreEqual(builtPlayerString, player1.ToString());
 
             uniqueUsername = GenerateName();
@@ -128,7 +128,7 @@ namespace WuHu.Test
             var salt = new byte[32];
             var player2 = new Player(0, "first", "last", "nick", uniqueUsername, pw, salt,
                 false, false, false, false, false, true, true, true, null);
-            Assert.AreEqual(player2.UserName, uniqueUsername);
+            Assert.AreEqual(player2.Username, uniqueUsername);
         }
 
         [TestMethod]

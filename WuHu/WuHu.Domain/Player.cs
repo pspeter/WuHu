@@ -11,17 +11,17 @@ namespace WuHu.Domain
     [Serializable]
     public class Player
     {
-        public Player(int playerId, string firstName, string lastName, string nickName, string userName, 
+        public Player(int playerId, string firstname, string lastname, string nickname, string username, 
             byte[] password, byte[] salt, bool isAdmin, bool playsMondays,
             bool playsTuesdays, bool playsWednesdays, bool playsThursdays, 
             bool playsFridays, bool playsSaturdays, bool playsSundays,
             byte[] picture)
         { 
             this.PlayerId = playerId;
-            this.FirstName = firstName;
-            this.LastName = lastName;
-            this.NickName = nickName;
-            this.UserName = userName;
+            this.Firstname = firstname;
+            this.Lastname = lastname;
+            this.Nickname = nickname;
+            this.Username = username;
             this.Password = password;
             this.Salt = salt;
             this.IsAdmin = isAdmin;
@@ -35,16 +35,16 @@ namespace WuHu.Domain
             this.Picture = picture;
         }
         
-        public Player(string firstName, string lastName, string nickName, string userName,
+        public Player(string firstname, string lastname, string nickname, string username,
             string password, bool isAdmin, bool playsMondays,
             bool playsTuesdays, bool playsWednesdays, bool playsThursdays,
             bool playsFridays, bool playsSaturdays, bool playsSundays,
             byte[] picture)
         {
-            this.FirstName = firstName;
-            this.LastName = lastName;
-            this.NickName = nickName;
-            this.UserName = userName;
+            this.Firstname = firstname;
+            this.Lastname = lastname;
+            this.Nickname = nickname;
+            this.Username = username;
             this.Salt = PasswordManager.GenerateSalt();
             this.Password = PasswordManager.HashPassword(password, this.Salt);
             this.IsAdmin = isAdmin;
@@ -59,13 +59,13 @@ namespace WuHu.Domain
         }
 
         public int? PlayerId { get; set; }
-        public string FirstName { get; set; }
+        public string Firstname { get; set; }
 
-        public string LastName { get; set; }
+        public string Lastname { get; set; }
 
-        public string NickName { get; set; }
+        public string Nickname { get; set; }
 
-        public string UserName { get; set; }
+        public string Username { get; set; }
 
         public byte[] Password { get; private set; }
 
@@ -91,7 +91,13 @@ namespace WuHu.Domain
 
         public override string ToString()
         {
-            return FirstName + " '" + NickName + "' " + LastName;
+            return Firstname + " '" + Nickname + "' " + Lastname;
+        }
+
+        public override bool Equals(object obj)
+        {
+            //playerId can be null, username is a better unique identifier
+            return Username == ((obj as Player)?.Username); 
         }
     }
 }
