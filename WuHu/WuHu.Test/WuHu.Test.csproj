@@ -61,6 +61,7 @@
     <Compile Include="RatingTests.cs" />
     <Compile Include="PasswordManagerTests.cs" />
     <Compile Include="TournamentTests.cs" />
+    <Compile Include="MatchTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\WuHu.Common\WuHu.Common.csproj">
