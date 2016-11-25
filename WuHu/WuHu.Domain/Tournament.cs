@@ -9,13 +9,19 @@ namespace WuHu.Domain
     [Serializable]
     public class Tournament
     {
-        public Tournament(int? tournamentId, string name, Player creator)
+        public Tournament(int tournamentId, string name, Player creator)
         {
             this.TournamentId = tournamentId;
             this.Name = name;
             this.Creator = creator;
         }
-       
+
+        public Tournament(string name, Player creator)
+        {
+            this.Name = name;
+            this.Creator = creator;
+        }
+
         public int? TournamentId { get; set; }
         public string Name { get;  set; }
         public Player Creator { get; set; }

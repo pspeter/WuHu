@@ -55,9 +55,12 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CommonData.cs" />
+    <Compile Include="DatabaseTests.cs" />
     <Compile Include="PlayerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatingTests.cs" />
+    <Compile Include="PasswordManagerTests.cs" />
+    <Compile Include="TournamentTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\WuHu.Common\WuHu.Common.csproj">

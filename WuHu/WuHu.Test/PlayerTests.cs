@@ -4,13 +4,14 @@ using System.Configuration;
 using WuHu.Dal.Common;
 using WuHu.Domain;
 using System.Data.SqlClient;
+using System.IO;
+using WuHu.Common;
 
 namespace WuHu.Test
 {
     [TestClass]
     public class PlayerTests
     {
-        private static string connectionString;
         private static IDatabase database;
         private static IPlayerDao playerDao;
         public static TestContext PlayerTestContext { get; set; }
@@ -18,32 +19,20 @@ namespace WuHu.Test
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            connectionString = ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString;
+            CommonData.BackupDb();
+
+            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString;
             database = DalFactory.CreateDatabase();
             PlayerTestContext = testContext;
             playerDao = DalFactory.CreatePlayerDao(database);
-        }
-
-        [ClassCleanup]
-        public static void ClassCleanup()
-        {
-        }
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
         }
 
         private string GenerateName()
         {
             return Guid.NewGuid().ToString().Substring(0, 20); //random 20 character string
         }
-        
+
+
         [TestMethod]
         public void Insert()
         {
@@ -115,7 +104,7 @@ namespace WuHu.Test
             try
             {
                 playerDao.Update(player); // should throw ArgumentException
-                Assert.Fail("ArgumentException not thorwn for invalid Player.Update()");
+                Assert.Fail("ArgumentException not thrown for invalid Player.Update()");
             }
             catch (ArgumentException)
             { }
@@ -129,6 +118,10 @@ namespace WuHu.Test
             var player1 = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
             Assert.AreEqual(player1.UserName, uniqueUsername);
+            Assert.IsNull(player1.PlayerId);
+            
+            string builtPlayerString = player1.FirstName + " '" + player1.NickName + "' " + player1.LastName;
+            Assert.AreEqual(builtPlayerString, player1.ToString());
 
             uniqueUsername = GenerateName();
             var pw = new byte[32];
@@ -229,6 +222,20 @@ namespace WuHu.Test
             int cntAfterSecondInsert = playerDao.FindAllOnDays(monday: true).Count;
             Assert.AreEqual(insertAmount + cntInital, cntAfterSecondInsert);
         }
+
+        [TestMethod]
+        public void ChangePassword()
+        {
+            string newPw = "newPw";
+
+            string uniqueUsername = GenerateName();
+            var player = new Player("first", "last", "nick", uniqueUsername, "pass",
+                    false, true, true, true, true, true, true, true, null);
+            player.ChangePassword(newPw);
+
+            bool success = PasswordManager.CheckPassword(newPw, player.Password, player.Salt);
+
+            Assert.IsTrue(success);
+        }
     }
-    
 }

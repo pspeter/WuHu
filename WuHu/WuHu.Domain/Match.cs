@@ -18,7 +18,16 @@ namespace WuHu.Domain
             this.EstimatedWinChance = estimatedWinChance;
             this.IsDone = isDone;
         }
-        
+
+        public Match(Tournament tournament, DateTime datetime, byte? scoreteam1, byte? scoreteam2, float estimatedWinChance, bool isDone)
+        {
+            this.Tournament = tournament;
+            this.ScoreTeam1 = scoreteam1;
+            this.ScoreTeam2 = scoreteam2;
+            this.EstimatedWinChance = estimatedWinChance;
+            this.IsDone = isDone;
+        }
+
         public Tournament Tournament { get; set; }
         public int? MatchId { get; set; }
         public DateTime Datetime { get; set; }

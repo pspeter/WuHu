@@ -54,7 +54,6 @@
     <Compile Include="IRatingDao.cs" />
     <Compile Include="IScoreParameterDao.cs" />
     <Compile Include="ITournamentDao.cs" />
-    <Compile Include="PasswordManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

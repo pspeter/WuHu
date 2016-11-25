@@ -11,7 +11,6 @@ namespace WuHu.Dal.Common
     {
         IList<Tournament> FindAll();
         Tournament FindById(int tournamentId);
-        Tournament FindAllByPlayer(Player player);
         int Insert(Tournament tournament);
         bool Update(Tournament tournament);
         int Count();

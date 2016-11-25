@@ -33,10 +33,19 @@ namespace WuHu.Dal.Common
         {
             return CreateDao<IPlayerDao>(database, "PlayerDao");
         }
+        public static ITournamentDao CreateTournamentDao(IDatabase database)
+        {
+            return CreateDao<ITournamentDao>(database, "TournamentDao");
+        }
 
         public static IRatingDao CreateRatingDao(IDatabase database)
         {
             return CreateDao<IRatingDao>(database, "RatingDao");
+        }
+
+        public static IMatchDao CreateMatchDao(IDatabase database)
+        {
+            return CreateDao<IMatchDao>(database, "MatchDao");
         }
 
         private static T CreateDao<T>(IDatabase database, string typeName)

@@ -11,18 +11,6 @@ namespace WuHu.Domain
     [Serializable]
     public class Player
     {
-        private static int SaltLengthLimit = 32;
-        private static byte[] GetSalt() // auslagern? nix in Domain zu suchen
-        {
-            var salt = new byte[SaltLengthLimit];
-            using (var random = new RNGCryptoServiceProvider())
-            {
-                random.GetNonZeroBytes(salt);
-            }
-
-            return salt;
-        }
-
         public Player(int playerId, string firstName, string lastName, string nickName, string userName, 
             byte[] password, byte[] salt, bool isAdmin, bool playsMondays,
             bool playsTuesdays, bool playsWednesdays, bool playsThursdays, 
@@ -103,7 +91,7 @@ namespace WuHu.Domain
 
         public override string ToString()
         {
-            return NickName;
+            return FirstName + " '" + NickName + "' " + LastName;
         }
     }
 }

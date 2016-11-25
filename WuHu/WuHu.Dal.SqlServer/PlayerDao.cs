@@ -65,6 +65,7 @@ namespace WuHu.Dal.SqlServer
         private const string SqlCount =
             @"SELECT Count(*) as Cnt FROM Player;";
 
+
         private readonly IDatabase database;
 
         public PlayerDao(IDatabase database)
@@ -107,6 +108,8 @@ namespace WuHu.Dal.SqlServer
                 return result;
             }
         }
+
+        
 
         private DbCommand CreateFindAllOnDaysCmd(bool playsMondays = false, 
             bool playsTuesdays = false, bool playsWednesdays = false,
@@ -167,23 +170,24 @@ namespace WuHu.Dal.SqlServer
             {
                 if (reader.Read())
                 {
-                    return new Player((int)reader["playerId"],
-                                      (string)reader["firstName"],
-                                      (string)reader["lastName"],
-                                      (string)reader["nickName"],
-                                      (string)reader["userName"],
-                                      (byte[])reader["password"],
-                                      (byte[])reader["salt"],
-                                      (bool)reader["isAdmin"],
-                                      (bool)reader["playsMondays"],
-                                      (bool)reader["playsTuesdays"],
-                                      (bool)reader["playsWednesdays"],
-                                      (bool)reader["playsThursdays"],
-                                      (bool)reader["playsFridays"],
-                                      (bool)reader["playsSaturdays"],
-                                      (bool)reader["playsSundays"],
-                                      reader.IsDBNull(reader.GetOrdinal("picture")) ?
-                                        null : (byte[])reader["picture"]);
+                    return new Player((int) reader["playerId"],
+                        (string) reader["firstName"],
+                        (string) reader["lastName"],
+                        (string) reader["nickName"],
+                        (string) reader["userName"],
+                        (byte[]) reader["password"],
+                        (byte[]) reader["salt"],
+                        (bool) reader["isAdmin"],
+                        (bool) reader["playsMondays"],
+                        (bool) reader["playsTuesdays"],
+                        (bool) reader["playsWednesdays"],
+                        (bool) reader["playsThursdays"],
+                        (bool) reader["playsFridays"],
+                        (bool) reader["playsSaturdays"],
+                        (bool) reader["playsSundays"],
+                        reader.IsDBNull(reader.GetOrdinal("picture"))
+                            ? null
+                            : (byte[]) reader["picture"]);
                 }
                 else
                 {
@@ -301,7 +305,7 @@ namespace WuHu.Dal.SqlServer
         {
             if (player?.PlayerId == null)
             {
-                throw new ArgumentException("PlayerId null on update");
+                throw new ArgumentException("PlayerId null on update for Player");
             }
             using (DbCommand command = CreateUpdateByIdCmd(player.PlayerId.Value, player.FirstName, player.LastName, player.NickName,
                                             player.UserName, player.Password, player.Salt, player.IsAdmin,
