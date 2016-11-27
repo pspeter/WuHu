@@ -105,6 +105,15 @@ namespace WuHu.Test
 
             int foundAfterInsert = ratingDao.FindAllByPlayer(RatingTests.testPlayer).Count;
             Assert.AreEqual(foundInitial + insertAmount, foundAfterInsert);
+
+            try
+            {
+                var player = new Player("", "", "", "", "", false, false,
+                                   false, false, false, false, false, false, null);
+                ratingDao.FindAllByPlayer(player);
+                Assert.Fail("No ArgumentException thrown");
+            }
+            catch (ArgumentException) { }
         }
 
         [TestMethod]
@@ -148,34 +157,29 @@ namespace WuHu.Test
 
             rating = ratingDao.FindById(ratingId);
             Assert.AreEqual(newValue, rating.Value);
-
-            rating.RatingId = null;
-            try
-            {
-                ratingDao.Update(rating);
-                Assert.Fail("No ArgumentException thrown");
-            }
-            catch (ArgumentException) { }
+            
         }
 
         [TestMethod]
-        public void UpdateWithoutPlayerIdFails()
+        public void UpdateWithoutIdFails()
         {
-            Player player = playerDao.FindById(0);
-            if (player == null)
-            {
-                player = new Player("first", "last", "nic2k", "us7er", "pass",
+            
+            Player player = new Player("first", "last", "nick", "us7er", "pass",
                     false, false, false, false, false, true, true, true, null);
-                playerDao.Insert(player);
-                player.PlayerId = null;
-            }
-            try
+            try // no playerId
             {
-                ratingDao.Update(new Rating(player, new DateTime(2000, 1, 1), 2000)); // should throw ArgumentException
+                ratingDao.Update(new Rating(0, player, new DateTime(2000, 1, 1), 2000)); 
                 Assert.Fail("No ArgumentException thrown");
             }
             catch (ArgumentException)
             { }
+
+            try // no ratingId
+            {
+                ratingDao.Update(new Rating(testPlayer, new DateTime(2000, 1, 1), 2000));
+                Assert.Fail("No ArgumentException thrown");
+            }
+            catch (ArgumentException) { }
         }
 
         [TestMethod]
