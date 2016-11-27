@@ -82,8 +82,8 @@ namespace WuHu.Dal.SqlServer
                 command.Connection = connection;
                 var behavior = Transaction.Current == null ?
                     CommandBehavior.CloseConnection : CommandBehavior.Default;
-
-                return command.ExecuteReader();
+                
+                return command.ExecuteReader(behavior);
             }
             catch
             {
