@@ -12,7 +12,7 @@ using System.Security.Cryptography;
 
 namespace WuHu.Dal.SqlServer
 {
-    class PlayerDao : IPlayerDao
+    public class PlayerDao : IPlayerDao
     {
         private const string SqlFindByString =
             @"SELECT * FROM Player 
@@ -63,7 +63,7 @@ namespace WuHu.Dal.SqlServer
                     @playsTuesdays, @playsWednesdays, @playsThursdays, @playsFridays, @playsSaturdays, @playsSundays, @picture);";
 
         private const string SqlCount =
-            @"SELECT Count(*) as Cnt FROM Player;";
+            @"SELECT Count(*) FROM Player;";
 
 
         private readonly IDatabase database;
@@ -329,13 +329,8 @@ namespace WuHu.Dal.SqlServer
         public int Count()
         {
             using (DbCommand command = CreateCountCmd())
-            using (IDataReader reader = database.ExecuteReader(command))
             {
-                if (reader.Read())
-                {
-                    return (int)reader["Cnt"];
-                }
-                return 0;
+                return database.ExecuteScalar(command);
             }
         }
     }

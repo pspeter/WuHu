@@ -10,7 +10,7 @@ using WuHu.Domain;
 
 namespace WuHu.Dal.SqlServer
 {
-    class TournamentDao : ITournamentDao
+    public class TournamentDao : ITournamentDao
     {
 
         private const string SqlFindById =

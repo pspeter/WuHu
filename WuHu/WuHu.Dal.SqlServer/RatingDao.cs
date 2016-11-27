@@ -11,7 +11,7 @@ using WuHu.Domain;
 
 namespace WuHu.Dal.SqlServer
 {
-    class RatingDao : IRatingDao
+    public class RatingDao : IRatingDao
     {
         private const string SqlFindById =
           @"SELECT * 
@@ -43,7 +43,7 @@ namespace WuHu.Dal.SqlServer
                 VALUES (@playerId, @datetime, @value);";
 
         private const string SqlCount =
-            @"SELECT Count(*) FROM Rating JOIN Player on (Rating.playerId = Player.playerId);";
+            @"SELECT Count(*) FROM Rating;";
 
         private const string SqlUpdate =
             @"UPDATE Rating
