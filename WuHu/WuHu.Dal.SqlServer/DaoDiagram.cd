@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="WuHu.Dal.SqlServer.Database" BaseTypeListCollapsed="true">
+    <Position X="11" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABCgAEAAEAEAAAAABAQAhAAAAgAAAAQA=</HashCode>
+      <FileName>Database.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="WuHu.Dal.SqlServer.MatchDao" BaseTypeListCollapsed="true">
+    <Position X="7" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>ECwAQFAAAABBAABAEACQQAQAIAEFAAAAAEAAAAAAgFA=</HashCode>
+      <FileName>MatchDao.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="WuHu.Dal.SqlServer.PlayerDao" BaseTypeListCollapsed="true">
+    <Position X="9" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>EK0AREIAAADAAIBAYAAwQAQAAAAFAAAAAAAAAAAAgBQ=</HashCode>
+      <FileName>PlayerDao.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="WuHu.Dal.SqlServer.RatingDao" BaseTypeListCollapsed="true">
+    <Position X="1" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>ECwAQFAAAABBAABAEAQQQAQAAAAFAABAAEAAAAAggBA=</HashCode>
+      <FileName>RatingDao.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="WuHu.Dal.SqlServer.ScoreParameterDao" BaseTypeListCollapsed="true">
+    <Position X="3" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>EAwAQEAAAAAAAABAAAAQQAAAAAAFAAAAAEAAAAAAgBA=</HashCode>
+      <FileName>ScoreParameterDao.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="WuHu.Dal.SqlServer.TournamentDao" BaseTypeListCollapsed="true">
+    <Position X="5" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>ECwAQEAAAABAAABAAAAQQAQAAAAFAAAAAEAAAAAAgBA=</HashCode>
+      <FileName>TournamentDao.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
