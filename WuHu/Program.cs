@@ -10,7 +10,9 @@ namespace WuHu.Server
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString;
             IDatabase database = DalFactory.CreateDatabase();
-            TestHelper.InsertTestData(database);
+            TestHelper.DropTables(database);
+            //TestHelper.CreateTables(database);
+            //TestHelper.InsertTestData(database);
         }
     }
 }

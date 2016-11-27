@@ -10,9 +10,13 @@ namespace WuHu.Test
 {
     public static class TestHelper
     {
-        internal static void CreateTables(IDatabase database)
+        private static readonly string DbPath = ConfigurationManager.AppSettings["DbPath"];
+        private static readonly string DbName = ConfigurationManager.AppSettings["DbName"];
+        private static readonly string SqlPath = ConfigurationManager.AppSettings["SqlPath"];
+
+        public static void CreateTables(IDatabase database)
         {
-            string script = File.ReadAllText(@"C:\Users\Peter\Documents\Sourcetree\WuHu\SQL_scripts\dbo.createAll.sql");
+            string script = File.ReadAllText(SqlPath + "dbo.createAll.sql");
 
             DbCommand cmd = database.CreateCommand(script);
             database.ExecuteNonQuery(cmd);
@@ -23,19 +27,26 @@ namespace WuHu.Test
             return Guid.NewGuid().ToString().Substring(0, 20); //random 20 character string
         }
 
-        internal static void DropTables(IDatabase database)
+        public static void DropTables(IDatabase database)
         {
-            string script = File.ReadAllText(@"..\..\..\SQL_scripts\dbo.dropAll.sql");
+            string script = File.ReadAllText(SqlPath + "dbo.dropAll.sql");
 
             DbCommand cmd = database.CreateCommand(script);
-            database.ExecuteNonQuery(cmd);
+            try
+            {
+                database.ExecuteNonQuery(cmd);
+            }
+            catch
+            {
+                // ignored
+            }
         }
 
         public static void InsertTestData(IDatabase database)
         {
             DropTables(database);
             CreateTables(database);
-            IEnumerable<string> script = File.ReadLines(@"C:\Users\Peter\Documents\Sourcetree\WuHu\SQL_scripts\dbo.Testdata.sql");
+            IEnumerable<string> script = File.ReadLines(SqlPath + "dbo.Testdata.sql");
 
             foreach (var line in script)
             {
@@ -53,18 +64,17 @@ namespace WuHu.Test
 
         internal static void BackupDb()
         {
-            string dbPath = ConfigurationManager.AppSettings["DbPath"];
             try
             {
-                if (!File.Exists(dbPath + "WuHuDB.mdf.bak"))
+                if (!File.Exists(DbPath + DbName + ".mdf.bak"))
                 {
-                    File.Copy(dbPath + "WuHuDB.mdf", dbPath + "WuHuDb.mdf.bak", true);
-                    File.Copy(dbPath + "WuHuDB_log.ldf", dbPath + "WuHuDB_log.ldf.bak", true);
+                    File.Copy(DbPath + DbName + ".mdf", DbPath + DbName + ".mdf.bak", true);
+                    File.Copy(DbPath + DbName + "_log.ldf", DbPath + DbName + "_log.ldf.bak", true);
                 }
                 else
                 {
-                    File.Copy(dbPath + "WuHuDB.mdf.bak", dbPath + "WuHuDb.mdf", true);
-                    File.Copy(dbPath + "WuHuDB_log.ldf.bak", dbPath + "WuHuDB_log.ldf", true);
+                    File.Copy(DbPath + DbName + ".mdf.bak", DbPath + DbName + ".mdf", true);
+                    File.Copy(DbPath + DbName + "_log.ldf.bak", DbPath + DbName + "_log.ldf", true);
                 }
             }
             catch (IOException)

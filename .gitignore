@@ -251,3 +251,4 @@ paket-files/
 .idea/
 *.sln.iml
 SQL_scripts/dbo.Testdata.sql
+WuHu-Ausbaustufe1.pdf
