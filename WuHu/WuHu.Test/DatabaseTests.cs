@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WuHu.Dal.Common;
 
@@ -44,6 +46,31 @@ namespace WuHu.Test
                 Assert.Fail("Set invalid parameter");
             }
             catch (ArgumentException) { }
+        }
+
+        [TestMethod]
+        public void InvalidCommand()
+        {
+            var cmd = database.CreateCommand("ABCDEFG");
+            try
+            {
+                database.ExecuteReader(cmd);
+                Assert.Fail("No SqlException thrown");
+            } catch (SqlException) { }
+
+            try
+            {
+                database.ExecuteNonQuery(cmd);
+                Assert.Fail("No SqlException thrown");
+            }
+            catch (SqlException) { }
+
+            try
+            {
+                database.ExecuteScalar(cmd);
+                Assert.Fail("No SqlException thrown");
+            }
+            catch (SqlException) { }
         }
     }
 }

@@ -17,6 +17,11 @@ namespace WuHu.Test
             database.ExecuteNonQuery(cmd);
         }
 
+        internal static string GenerateName()
+        {
+            return Guid.NewGuid().ToString().Substring(0, 20); //random 20 character string
+        }
+
         internal static void DropTables(IDatabase database)
         {
             string script = File.ReadAllText(@"C:\Users\Peter\Documents\Sourcetree\WuHu\SQL_scripts\dbo.dropAll.sql");

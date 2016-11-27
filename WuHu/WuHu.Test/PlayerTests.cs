@@ -23,16 +23,11 @@ namespace WuHu.Test
             database = DalFactory.CreateDatabase();
             playerDao = DalFactory.CreatePlayerDao(database);
         }
-
-        private string GenerateName()
-        {
-            return Guid.NewGuid().ToString().Substring(0, 20); //random 20 character string
-        }
         
         [TestMethod]
         public void FindById()
         {
-            string uniqueUsername = GenerateName();
+            string uniqueUsername = CommonData.GenerateName();
             Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
             int playerId = playerDao.Insert(player);
@@ -45,7 +40,7 @@ namespace WuHu.Test
         public void Insert()
         {
             //generates a random string for our user field
-            string uniqueUsername = GenerateName();
+            string uniqueUsername = CommonData.GenerateName();
             int cnt = playerDao.Count();
             var playerId = playerDao.Insert(new Player("first", "last", "nick", uniqueUsername, "pass", 
                 false, false, false, false, false, true, true, true, null));
@@ -58,7 +53,7 @@ namespace WuHu.Test
         [TestMethod]
         public void InsertUserUniqueConstraint()
         {
-            string uniqueUsername = GenerateName();
+            string uniqueUsername = CommonData.GenerateName();
             var player = new Player("", "", "", uniqueUsername, "", false, false, 
                                 false, false, false, false, false, false, null);
 
@@ -77,7 +72,7 @@ namespace WuHu.Test
         {
             int cnt1 = playerDao.Count();
             Assert.IsTrue(cnt1 >= 0);
-            string uniqueUsername = GenerateName();
+            string uniqueUsername = CommonData.GenerateName();
             playerDao.Insert(new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null));
 
@@ -88,7 +83,7 @@ namespace WuHu.Test
         [TestMethod]
         public void Update()
         {
-            string uniqueUsername = GenerateName();
+            string uniqueUsername = CommonData.GenerateName();
             var player = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
 
@@ -106,7 +101,7 @@ namespace WuHu.Test
         [TestMethod]
         public void UpdateWithoutPlayerIdFails()
         {
-            string uniqueUsername = GenerateName();
+            string uniqueUsername = CommonData.GenerateName();
             var player = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
             try
@@ -122,7 +117,7 @@ namespace WuHu.Test
         public void Constructor()
         {
 
-            string uniqueUsername = GenerateName();
+            string uniqueUsername = CommonData.GenerateName();
             var player1 = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
             Assert.AreEqual(player1.Username, uniqueUsername);
@@ -131,7 +126,7 @@ namespace WuHu.Test
             string builtPlayerString = player1.Firstname + " '" + player1.Nickname + "' " + player1.Lastname;
             Assert.AreEqual(builtPlayerString, player1.ToString());
 
-            uniqueUsername = GenerateName();
+            uniqueUsername = CommonData.GenerateName();
             var pw = new byte[32];
             var salt = new byte[32];
             var player2 = new Player(0, "first", "last", "nick", uniqueUsername, pw, salt,
@@ -148,7 +143,7 @@ namespace WuHu.Test
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                string uniqueUsername = GenerateName();
+                string uniqueUsername = CommonData.GenerateName();
                 Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
                     false, false, false, false, false, true, true, true, null);
                 playerDao.Insert(player);
@@ -164,7 +159,7 @@ namespace WuHu.Test
         [TestMethod]
         public void FindAllByString()
         {
-            string uniqueFirstName = GenerateName();
+            string uniqueFirstName = CommonData.GenerateName();
 
             int totalInital = playerDao.Count();
             int foundInitial = playerDao.FindAllByString(uniqueFirstName).Count;
@@ -173,7 +168,7 @@ namespace WuHu.Test
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                string uniqueUsername = GenerateName();
+                string uniqueUsername = CommonData.GenerateName();
                 Player player = new Player(uniqueFirstName, "last", "nick", uniqueUsername, "pass",
                     false, false, false, false, false, true, true, true, null);
                 playerDao.Insert(player);
@@ -187,7 +182,7 @@ namespace WuHu.Test
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                string uniqueUsername = GenerateName();
+                string uniqueUsername = CommonData.GenerateName();
                 Player player = new Player("other", "other", "other", uniqueUsername, "pass",
                     false, false, false, false, false, true, true, true, null);
                 playerDao.Insert(player);
@@ -201,6 +196,18 @@ namespace WuHu.Test
         }
 
         [TestMethod]
+        public void FindByUsername()
+        {
+            string uniqueUsername = CommonData.GenerateName();
+            Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
+                false, false, false, false, false, true, true, true, null);
+            int playerId = playerDao.Insert(player);
+            Player foundPlayer = playerDao.FindByUsername(uniqueUsername);
+
+            Assert.AreEqual(player.PlayerId, foundPlayer.PlayerId);
+        }
+
+        [TestMethod]
         public void FindAllByDay()
         {
             int cntInital = playerDao.FindAllOnDays(monday: true).Count;
@@ -209,7 +216,7 @@ namespace WuHu.Test
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                string uniqueUsername = GenerateName();
+                string uniqueUsername = CommonData.GenerateName();
                 Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
                     false, false, false, false, false, false, false, false, null);
                 playerDao.Insert(player);
@@ -221,7 +228,7 @@ namespace WuHu.Test
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                string uniqueUsername = GenerateName();
+                string uniqueUsername = CommonData.GenerateName();
                 Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
                     false, true, true, true, true, true, true, true, null);
                 playerDao.Insert(player);
@@ -236,7 +243,7 @@ namespace WuHu.Test
         {
             string newPw = "newPw";
 
-            string uniqueUsername = GenerateName();
+            string uniqueUsername = CommonData.GenerateName();
             var player = new Player("first", "last", "nick", uniqueUsername, "pass",
                     false, true, true, true, true, true, true, true, null);
             player.ChangePassword(newPw);

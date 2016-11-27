@@ -67,8 +67,11 @@ namespace WuHu.Test
             Rating foundRating = ratingDao.FindById(ratingId);
 
             Assert.AreEqual(rating.RatingId, foundRating.RatingId);
-        }
 
+            Rating nullRating = ratingDao.FindById(-1);
+            Assert.IsNull(nullRating);
+        }
+ 
         [TestMethod]
         public void FindAll()
         {
@@ -147,6 +150,14 @@ namespace WuHu.Test
 
             rating = ratingDao.FindById(ratingId);
             Assert.AreEqual(newValue, rating.Value);
+
+            rating.RatingId = null;
+            try
+            {
+                ratingDao.Update(rating);
+                Assert.Fail("No ArgumentException thrown");
+            }
+            catch (ArgumentException) { }
         }
 
         [TestMethod]
@@ -163,7 +174,7 @@ namespace WuHu.Test
             try
             {
                 ratingDao.Update(new Rating(player, new DateTime(2000, 1, 1), 2000)); // should throw ArgumentException
-                Assert.Fail("ArgumentException not thrown for invalid Player.Update()");
+                Assert.Fail("No ArgumentException thrown");
             }
             catch (ArgumentException)
             { }
@@ -176,6 +187,21 @@ namespace WuHu.Test
             ratingDao.Insert(rating);
             var mostRecentRating = ratingDao.FindCurrentRating(testPlayer);
             Assert.AreEqual(rating.RatingId, mostRecentRating.RatingId);
+
+            var username = CommonData.GenerateName();
+            var playerWithoutId = new Player("", "", "", username, "", false, false,
+                                false, false, false, false, false, false, null);
+
+            try
+            {
+                ratingDao.FindCurrentRating(playerWithoutId);
+                Assert.Fail("No ArgumentException thrown");
+            }
+            catch (ArgumentException) { }
+
+            playerDao.Insert(playerWithoutId);
+            Rating nullRating = ratingDao.FindCurrentRating(playerWithoutId);
+            Assert.IsNull(nullRating);
         }
     }
 }

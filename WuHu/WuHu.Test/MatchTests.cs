@@ -36,7 +36,7 @@ namespace WuHu.Test
             {
                 testPlayer1 = new Player("first", "last", "nick", "user1", "pass",
                     false, false, false, false, false, true, true, true, null);
-                int playerId = playerDao.Insert(testPlayer1);
+                playerDao.Insert(testPlayer1);
             }
 
             testPlayer2 = playerDao.FindById(1);
@@ -44,7 +44,7 @@ namespace WuHu.Test
             {
                 testPlayer2 = new Player("first", "last", "nick", "user2", "pass",
                     false, false, false, false, false, true, true, true, null);
-                int playerId = playerDao.Insert(testPlayer2);
+                 playerDao.Insert(testPlayer2);
             }
 
             testPlayer3 = playerDao.FindById(2);
@@ -52,14 +52,14 @@ namespace WuHu.Test
             {
                 testPlayer3 = new Player("first", "last", "nick", "user3", "pass",
                     false, false, false, false, false, true, true, true, null);
-                int playerId = playerDao.Insert(testPlayer3);
+                playerDao.Insert(testPlayer3);
             }
             testPlayer4 = playerDao.FindById(3);
             if (testPlayer4 == null)
             {
                 testPlayer4 = new Player("first", "last", "nick", "user4", "pass",
                     false, false, false, false, false, true, true, true, null);
-                int playerId = playerDao.Insert(testPlayer4);
+                playerDao.Insert(testPlayer4);
             }
             testTournament = tournamentDao.FindById(0);
             if (testTournament == null)
@@ -119,6 +119,10 @@ namespace WuHu.Test
         [TestMethod]
         public void FindAll()
         {
+            int foundInitial = matchDao.FindAll().Count;
+            int cntInitial = matchDao.Count();
+            Assert.AreEqual(foundInitial, cntInitial);
+
             const int insertAmount = 10;
 
             for (var i = 0; i < insertAmount; ++i)
@@ -126,15 +130,18 @@ namespace WuHu.Test
                 Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
                 matchDao.Insert(match);
             }
+            int cntAfterInsert = matchDao.Count();
+            Assert.AreEqual(insertAmount + foundInitial, cntAfterInsert);
 
             int foundAfterInsert = matchDao.FindAll().Count;
-            Assert.IsTrue(foundAfterInsert >= insertAmount);
+            Assert.AreEqual(cntAfterInsert, foundAfterInsert);
         }
 
         [TestMethod]
         public void FindAllByPlayer()
         {
             const int insertAmount = 10;
+            int foundInitial = matchDao.FindAllByPlayer(testPlayer1).Count;
             for (var i = 0; i < insertAmount; ++i)
             {
                 Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
@@ -142,7 +149,38 @@ namespace WuHu.Test
             }
 
             int foundAfterInsert = matchDao.FindAllByPlayer(testPlayer1).Count;
-            Assert.IsTrue(foundAfterInsert >= insertAmount);
+            Assert.AreEqual(insertAmount + foundInitial, foundAfterInsert);
+
+            try
+            {
+                matchDao.FindAllByPlayer(new Player("", "", "", "", "", false, false,
+                    false, false, false, false, false, false, null));
+                Assert.Fail("No ArgumentException thrown.");
+            }
+            catch (ArgumentException) { }
+        }
+
+        [TestMethod]
+        public void FindAllByTournament()
+        {
+            const int insertAmount = 10;
+            int foundInitial = matchDao.FindAllByTournament(testTournament).Count;
+
+            for (var i = 0; i < insertAmount; ++i)
+            {
+                Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+                matchDao.Insert(match);
+            }
+
+            int foundAfterInsert = matchDao.FindAllByTournament(testTournament).Count;
+            Assert.AreEqual(insertAmount + foundInitial, foundAfterInsert);
+
+            try
+            {
+                matchDao.FindAllByTournament(new Tournament("name", testPlayer1));
+                Assert.Fail("No ArgumentException thrown.");
+            }
+            catch (ArgumentException) { }
         }
 
         [TestMethod]
@@ -163,7 +201,6 @@ namespace WuHu.Test
         {
             var player = new Player("", "", "", "", "", false, false,
                                 false, false, false, false, false, false, null);
-
             try
             {
                 matchDao.Insert(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, player, testPlayer2, testPlayer3, testPlayer4));
@@ -171,14 +208,28 @@ namespace WuHu.Test
             }
             catch (ArgumentException)
             { }
-            
+        }
+
+        [TestMethod]
+        public void InsertWithoutTournamentIdFails()
+        {
+            Tournament tournamentWithoutId = tournamentDao.FindById(0);
+            if (tournamentWithoutId == null)
+            {
+                tournamentWithoutId = new Tournament("name", testPlayer1);
+                tournamentDao.Insert(tournamentWithoutId);
+            }
+            tournamentWithoutId.TournamentId = null;
+            Match match = new Match(tournamentWithoutId, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+
             try
             {
-                matchDao.Insert(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer1, testPlayer3, testPlayer4));
+                matchDao.Insert(match);
                 Assert.Fail("No ArgumentException thrown.");
             }
             catch (ArgumentException)
-            { }
+            {
+            }
         }
 
         [TestMethod]
@@ -206,24 +257,26 @@ namespace WuHu.Test
 
             match = matchDao.FindById(matchId);
             Assert.AreEqual(newValue, match.ScoreTeam1);
+
+            match = matchDao.FindById(-1);
+            Assert.IsNull(match);
         }
 
         [TestMethod]
         public void UpdateWithoutPlayerIdFails()
         {
-            Player player = playerDao.FindById(0);
-            if (player == null)
+            Player playerWithoutId = playerDao.FindById(0);
+            if (playerWithoutId == null)
             {
-                player = new Player("first", "last", "nic2k", "us7er", "pass",
+                playerWithoutId = new Player("first", "last", "nic2k", "us7er", "pass",
                     false, false, false, false, false, true, true, true, null);
-                playerDao.Insert(player);
-                player.PlayerId = null;
+                playerDao.Insert(playerWithoutId);
+                playerWithoutId.PlayerId = null;
             }
             try
             {
-                matchDao.Update(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4));
-                    // should throw ArgumentException
-                Assert.Fail("ArgumentException not thrown for invalid Player.Update()");
+                matchDao.Update(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, playerWithoutId, testPlayer2, testPlayer3, testPlayer4));
+                Assert.Fail("No ArgumentException thrown.");
             }
             catch (ArgumentException)
             {
@@ -233,18 +286,40 @@ namespace WuHu.Test
         [TestMethod]
         public void UpdateWithoutTournamentIdFails()
         {
-            Tournament tournament = tournamentDao.FindById(0);
-            if (tournament == null)
+            Tournament tournamentWithoutId = tournamentDao.FindById(0);
+            if (tournamentWithoutId == null)
             {
-                tournament = new Tournament("name", testPlayer1);
-                tournamentDao.Insert(tournament);
-                tournament.TournamentId = null;
+                tournamentWithoutId = new Tournament("name", testPlayer1);
+                tournamentDao.Insert(tournamentWithoutId);
             }
+            tournamentWithoutId.TournamentId = null;
+
+            Match match = matchDao.FindById(0);
+            if (match == null)
+            {
+                match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+                matchDao.Insert(match); // inserts Match and gives us a matchId
+            }
+
+            match.Tournament = tournamentWithoutId;
+
+            try
+            {
+                matchDao.Update(match);
+                Assert.Fail("No ArgumentException thrown.");
+            }
+            catch (ArgumentException)
+            {
+            }
+        }
+
+        [TestMethod]
+        public void UpdateWithoutMatchIdFails()
+        {
             try
             {
                 matchDao.Update(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4));
-                // should throw ArgumentException
-                Assert.Fail("ArgumentException not thrown for invalid Player.Update()");
+                Assert.Fail("No ArgumentException thrown.");
             }
             catch (ArgumentException)
             {

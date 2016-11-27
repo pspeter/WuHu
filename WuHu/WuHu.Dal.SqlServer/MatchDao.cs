@@ -32,8 +32,8 @@ namespace WuHu.Dal.SqlServer
 
         private const string SqlFindAllByTournament =
             @"SELECT *
-            FROM Match m
-                WHERE t.tournamentId = m.tournamentId;";
+            FROM Match
+                WHERE tournamentId = @tournamentId;";
 
         private const string SqlInsert =
             @"INSERT INTO Match (tournamentId, datetime, scoreTeam1, scoreTeam2,
@@ -141,7 +141,7 @@ namespace WuHu.Dal.SqlServer
         protected DbCommand CreateFindAllByTournamentCmd(int tournamentId)
         {
             DbCommand findByIdCmd = database.CreateCommand(SqlFindAllByTournament);
-            database.DefineParameter(findByIdCmd, "matchId", DbType.Int32, tournamentId);
+            database.DefineParameter(findByIdCmd, "tournamentId", DbType.Int32, tournamentId);
             return findByIdCmd;
         }
 

@@ -49,6 +49,24 @@ namespace WuHu.Test
         }
 
         [TestMethod]
+        public void FindAll()
+        {
+            int foundInitial = paramDao.FindAll().Count;
+
+            const int insertAmount = 10;
+
+            for (var i = 0; i < insertAmount; ++i)
+            {
+                string id = GenerateName();
+                ScoreParameter param = new ScoreParameter(id, "val");
+                paramDao.Insert(param);
+            }
+
+            int foundAfterInsert = paramDao.FindAll().Count;
+            Assert.AreEqual(insertAmount + foundInitial, foundAfterInsert);
+        }
+        
+        [TestMethod]
         public void Insert()
         {
             string id = GenerateName();
