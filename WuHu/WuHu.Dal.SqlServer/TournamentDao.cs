@@ -142,8 +142,7 @@ namespace WuHu.Dal.SqlServer
                 return id;
             }
         }
-
-        // Update
+        
         protected DbCommand CreateUpdateCmd(int tournamentId, string name, int playerId)
         {
             DbCommand updateByIdCmd = database.CreateCommand(SqlUpdate);

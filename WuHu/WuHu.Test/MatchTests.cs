@@ -23,8 +23,6 @@ namespace WuHu.Test
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            CommonData.BackupDb();
-
             connectionString = ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString;
             database = DalFactory.CreateDatabase();
             playerDao = DalFactory.CreatePlayerDao(database);
@@ -74,7 +72,7 @@ namespace WuHu.Test
         {
             Assert.IsNotNull(matchDao);
 
-            Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+            Match match = new Match(null, testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
             Assert.IsNotNull(match);
 
             match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
@@ -90,6 +88,20 @@ namespace WuHu.Test
             try
             {
                 new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 1.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+                Assert.Fail("Win chance out of range");
+            }
+            catch (ArgumentOutOfRangeException) { }
+
+            try
+            {
+                new Match(null, testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer1, testPlayer3, testPlayer4);
+                Assert.Fail("Player can play with or against himseslf");
+            }
+            catch (ArgumentException) { }
+
+            try
+            {
+                new Match(null, testTournament, new DateTime(2000, 1, 1), 0, 0, 1.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
                 Assert.Fail("Win chance out of range");
             }
             catch (ArgumentOutOfRangeException) { }

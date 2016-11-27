@@ -54,7 +54,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="CommonData.cs" />
+    <Compile Include="TestHelper.cs" />
     <Compile Include="DatabaseTests.cs" />
     <Compile Include="PlayerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

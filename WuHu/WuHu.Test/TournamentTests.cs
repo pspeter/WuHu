@@ -2,6 +2,7 @@
 using System.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WuHu.Dal.Common;
+using WuHu.Dal.SqlServer;
 using WuHu.Domain;
 
 namespace WuHu.Test
@@ -18,8 +19,6 @@ namespace WuHu.Test
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            CommonData.BackupDb();
-            
             database = DalFactory.CreateDatabase();
             playerDao = DalFactory.CreatePlayerDao(database);
             tournamentDao = DalFactory.CreateTournamentDao(database);
@@ -67,6 +66,9 @@ namespace WuHu.Test
             Tournament foundTournament = tournamentDao.FindById(tournamentId);
 
             Assert.AreEqual(tournament.TournamentId, foundTournament.TournamentId);
+
+            Tournament nullTournament = tournamentDao.FindById(-1);
+            Assert.IsNull(nullTournament);
         }
 
         [TestMethod]
@@ -131,24 +133,26 @@ namespace WuHu.Test
 
             tournament = tournamentDao.FindById(tournamentId);
             Assert.AreEqual(newName, tournament.Name);
+
+            try
+            {
+                tournamentDao.Update(new Tournament("name", testPlayer));
+                Assert.Fail("No ArgumentException thrown");
+            }
+            catch (ArgumentException) { }
         }
 
         [TestMethod]
         public void UpdateWithoutPlayerIdFails()
         {
-            Player player = playerDao.FindById(0);
-            if (player == null)
-            {
-                player = new Player("first", "last", "nick", "us7er", "pass",
-                    false, false, false, false, false, true, true, true, null);
-                playerDao.Insert(player);
-                player.PlayerId = null;
-            }
-
+            
+            Player player = new Player("first", "last", "nick", "user", "pass",
+                false, false, false, false, false, true, true, true, null);
+            
             try
             {
                 tournamentDao.Update(new Tournament("name", player)); // should throw ArgumentException
-                Assert.Fail("ArgumentException not thrown for invalid Player.Update()");
+                Assert.Fail("No ArgumentException thrown");
             }
             catch (ArgumentException)
             { }

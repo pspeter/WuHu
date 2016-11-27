@@ -21,8 +21,6 @@ namespace WuHu.Test
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            CommonData.BackupDb();
-            
             database = DalFactory.CreateDatabase();
             playerDao = DalFactory.CreatePlayerDao(database);
             ratingDao = DalFactory.CreateRatingDao(database);
@@ -188,7 +186,7 @@ namespace WuHu.Test
             var mostRecentRating = ratingDao.FindCurrentRating(testPlayer);
             Assert.AreEqual(rating.RatingId, mostRecentRating.RatingId);
 
-            var username = CommonData.GenerateName();
+            var username = TestHelper.GenerateName();
             var playerWithoutId = new Player("", "", "", username, "", false, false,
                                 false, false, false, false, false, false, null);
 

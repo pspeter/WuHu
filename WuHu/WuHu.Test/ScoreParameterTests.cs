@@ -15,8 +15,6 @@ namespace WuHu.Test
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            CommonData.BackupDb();
-            
             database = DalFactory.CreateDatabase();
             paramDao = DalFactory.CreateScoreParameterDao(database);
         }
@@ -46,6 +44,10 @@ namespace WuHu.Test
 
             Assert.AreEqual(param.Value, foundParam.Value);
             Assert.AreEqual(param.Key, foundParam.Key);
+
+
+            ScoreParameter nullParam = paramDao.FindById("");
+            Assert.IsNull(nullParam);
         }
 
         [TestMethod]
