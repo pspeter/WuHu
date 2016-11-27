@@ -164,7 +164,7 @@ namespace WuHu.Test
         public void UpdateWithoutIdFails()
         {
             
-            Player player = new Player("first", "last", "nick", "us7er", "pass",
+            Player player = new Player("first", "last", "nick", "user", "pass",
                     false, false, false, false, false, true, true, true, null);
             try // no playerId
             {
