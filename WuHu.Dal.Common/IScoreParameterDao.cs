@@ -11,8 +11,7 @@ namespace WuHu.Dal.Common
     {
         IList<ScoreParameter> FindAll();
         ScoreParameter FindById(string key);
-        int Insert(ScoreParameter param);
+        bool Insert(ScoreParameter param);
         bool Update(ScoreParameter param);
-        int Count();
     }
 }

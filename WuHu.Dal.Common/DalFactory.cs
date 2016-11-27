@@ -48,6 +48,11 @@ namespace WuHu.Dal.Common
             return CreateDao<IMatchDao>(database, "MatchDao");
         }
 
+        public static IScoreParameterDao CreateScoreParameterDao(IDatabase database)
+        {
+            return CreateDao<IScoreParameterDao>(database, "ScoreParameterDao");
+        }
+
         private static T CreateDao<T>(IDatabase database, string typeName)
             where T : class // T must be a reference type
         {
