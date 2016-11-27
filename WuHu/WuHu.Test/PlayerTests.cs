@@ -124,7 +124,9 @@ namespace WuHu.Test
                 false, false, false, false, false, true, true, true, null);
             Assert.AreEqual(player1.Username, uniqueUsername);
             Assert.IsNull(player1.PlayerId);
-            
+            Assert.IsNotNull(player1.Password);
+            Assert.IsNotNull(player1.Salt);
+
             string builtPlayerString = player1.Firstname + " '" + player1.Nickname + "' " + player1.Lastname;
             Assert.AreEqual(builtPlayerString, player1.ToString());
 
@@ -134,6 +136,12 @@ namespace WuHu.Test
             var player2 = new Player(0, "first", "last", "nick", uniqueUsername, pw, salt,
                 false, false, false, false, false, true, true, true, null);
             Assert.AreEqual(player2.Username, uniqueUsername);
+
+            var hashCode = player2.GetHashCode();
+            Assert.IsNotNull(hashCode);
+
+            Assert.IsFalse(player1.Equals(player2));
+            Assert.IsTrue(player1.Equals(player1));
         }
 
         [TestMethod]

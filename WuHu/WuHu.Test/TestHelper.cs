@@ -10,12 +10,6 @@ namespace WuHu.Test
 {
     public static class TestHelper
     {
-        [AssemblyInitialize]
-        public static void AssemblyInitialize()
-        {
-            BackupDb();
-        }
-
         internal static void CreateTables(IDatabase database)
         {
             string script = File.ReadAllText(@"C:\Users\Peter\Documents\Sourcetree\WuHu\SQL_scripts\dbo.createAll.sql");

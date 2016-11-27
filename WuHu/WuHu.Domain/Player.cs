@@ -65,7 +65,7 @@ namespace WuHu.Domain
 
         public string Nickname { get; set; }
 
-        public string Username { get; set; }
+        public string Username { get; }
 
         public byte[] Password { get; private set; }
 
@@ -75,7 +75,7 @@ namespace WuHu.Domain
             this.Password = PasswordManager.HashPassword(password, this.Salt);
         }
 
-        public byte[] Salt { get; set; }
+        public byte[] Salt { get; private set; }
 
         public bool IsAdmin { get; set; }
         public bool PlaysMondays { get; set; }
@@ -94,10 +94,15 @@ namespace WuHu.Domain
             return Firstname + " '" + Nickname + "' " + Lastname;
         }
 
-        public override bool Equals(object obj)
+        //playerId can be null, username is a better unique identifier
+        protected bool Equals(Player other) 
         {
-            //playerId can be null, username is a better unique identifier
-            return Username == ((obj as Player)?.Username); 
+            return string.Equals(Username, other.Username, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public override int GetHashCode()
+        {
+            return (Username != null ? StringComparer.OrdinalIgnoreCase.GetHashCode(Username) : 0);
         }
     }
 }
