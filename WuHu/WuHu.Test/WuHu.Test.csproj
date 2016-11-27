@@ -65,11 +65,11 @@
     <Compile Include="MatchTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\WuHu.Common\WuHu.Common.csproj">
-      <Project>{b995cb61-a5e2-4149-b397-f7513255cc4a}</Project>
+    <ProjectReference Include="..\WuHu.Common\WuHu.Common.csproj">
+      <Project>{B995CB61-A5E2-4149-B397-F7513255CC4A}</Project>
       <Name>WuHu.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\WuHu.Dal.Common\WuHu.Dal.Common.csproj">
+    <ProjectReference Include="..\WuHu.Dal.Common\WuHu.Dal.Common.csproj">
       <Project>{04F6460D-1635-43D4-8080-F4903B40DB76}</Project>
       <Name>WuHu.Dal.Common</Name>
     </ProjectReference>

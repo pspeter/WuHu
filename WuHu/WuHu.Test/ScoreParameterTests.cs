@@ -72,7 +72,6 @@ namespace WuHu.Test
         public void Insert()
         {
             string id = GenerateName();
-            string val = "val";
             ScoreParameter param = new ScoreParameter(id, "val");
             paramDao.Insert(param);
 

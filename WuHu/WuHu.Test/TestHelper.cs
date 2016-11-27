@@ -31,7 +31,7 @@ namespace WuHu.Test
 
         internal static void DropTables(IDatabase database)
         {
-            string script = File.ReadAllText(@"C:\Users\Peter\Documents\Sourcetree\WuHu\SQL_scripts\dbo.dropAll.sql");
+            string script = File.ReadAllText(@"..\..\..\SQL_scripts\dbo.dropAll.sql");
 
             DbCommand cmd = database.CreateCommand(script);
             database.ExecuteNonQuery(cmd);

@@ -57,7 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WuHu\WuHu.Domain\WuHu.Domain.csproj">
+    <ProjectReference Include="..\WuHu.Domain\WuHu.Domain.csproj">
       <Project>{3B5E2218-2C2F-4995-9B41-E382B34880B4}</Project>
       <Name>WuHu.Domain</Name>
     </ProjectReference>

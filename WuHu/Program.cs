@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 using WuHu.Dal.Common;
-using WuHu.Dal.SqlServer;
 using WuHu.Test;
 
 namespace WuHu.Server

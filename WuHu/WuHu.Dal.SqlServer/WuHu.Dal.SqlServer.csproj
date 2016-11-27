@@ -51,7 +51,7 @@
     <Compile Include="TournamentDao.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\WuHu.Dal.Common\WuHu.Dal.Common.csproj">
+    <ProjectReference Include="..\WuHu.Dal.Common\WuHu.Dal.Common.csproj">
       <Project>{04F6460D-1635-43D4-8080-F4903B40DB76}</Project>
       <Name>WuHu.Dal.Common</Name>
     </ProjectReference>
