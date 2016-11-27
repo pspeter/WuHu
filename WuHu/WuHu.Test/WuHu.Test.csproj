@@ -60,6 +60,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatingTests.cs" />
     <Compile Include="PasswordManagerTests.cs" />
+    <Compile Include="ScoreParameterTests.cs" />
     <Compile Include="TournamentTests.cs" />
     <Compile Include="MatchTests.cs" />
   </ItemGroup>

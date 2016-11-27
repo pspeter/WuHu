@@ -14,16 +14,13 @@ namespace WuHu.Test
     {
         private static IDatabase database;
         private static IPlayerDao playerDao;
-        public static TestContext PlayerTestContext { get; set; }
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
             CommonData.BackupDb();
-
-            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString;
+            
             database = DalFactory.CreateDatabase();
-            PlayerTestContext = testContext;
             playerDao = DalFactory.CreatePlayerDao(database);
         }
 
@@ -31,7 +28,18 @@ namespace WuHu.Test
         {
             return Guid.NewGuid().ToString().Substring(0, 20); //random 20 character string
         }
+        
+        [TestMethod]
+        public void FindById()
+        {
+            string uniqueUsername = GenerateName();
+            Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
+                false, false, false, false, false, true, true, true, null);
+            int playerId = playerDao.Insert(player);
+            Player foundPlayer = playerDao.FindById(playerId);
 
+            Assert.AreEqual(player.PlayerId, foundPlayer.PlayerId);
+        }
 
         [TestMethod]
         public void Insert()

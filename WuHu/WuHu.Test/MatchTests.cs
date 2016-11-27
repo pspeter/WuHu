@@ -74,22 +74,22 @@ namespace WuHu.Test
         {
             Assert.IsNotNull(matchDao);
 
-            Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5f, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+            Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
             Assert.IsNotNull(match);
 
-            match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5f, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+            match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
             Assert.IsNotNull(match);
 
             try
             {
-                new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5f, false, testPlayer1, testPlayer1, testPlayer3, testPlayer4);
+                new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer1, testPlayer3, testPlayer4);
                 Assert.Fail("Player can play with or against himseslf");
             }
             catch (ArgumentException) { }
 
             try
             {
-                new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 1.5f, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+                new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 1.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
                 Assert.Fail("Win chance out of range");
             }
             catch (ArgumentOutOfRangeException) { }
@@ -100,54 +100,56 @@ namespace WuHu.Test
         {
             int cnt1 = matchDao.Count();
             Assert.IsTrue(cnt1 >= 0);
-            matchDao.Insert(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5f, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4));
+            matchDao.Insert(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4));
 
             int cnt2 = matchDao.Count();
             Assert.AreEqual(cnt1 + 1, cnt2);
         }
 
         [TestMethod]
+        public void FindById()
+        {
+            Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+            int matchId = matchDao.Insert(match);
+            Match foundMatch = matchDao.FindById(matchId);
+
+            Assert.AreEqual(match.MatchId, foundMatch.MatchId);
+        }
+
+        [TestMethod]
         public void FindAll()
         {
-            int foundInitial = matchDao.FindAll().Count;
-            int cntInitial = matchDao.Count();
-            Assert.AreEqual(foundInitial, cntInitial);
-
             const int insertAmount = 10;
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5f, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+                Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
                 matchDao.Insert(match);
             }
-            int cntAfterInsert = matchDao.Count();
-            Assert.AreEqual(insertAmount + foundInitial, cntAfterInsert);
 
             int foundAfterInsert = matchDao.FindAll().Count;
-            Assert.AreEqual(cntAfterInsert, foundAfterInsert);
+            Assert.IsTrue(foundAfterInsert >= insertAmount);
         }
 
         [TestMethod]
         public void FindAllByPlayer()
         {
-            int foundInitial = matchDao.FindAllByPlayer(testPlayer1).Count;
             const int insertAmount = 10;
-
             for (var i = 0; i < insertAmount; ++i)
             {
-                Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5f, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+                Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
                 matchDao.Insert(match);
             }
 
             int foundAfterInsert = matchDao.FindAllByPlayer(testPlayer1).Count;
-            Assert.AreEqual(foundInitial + insertAmount, foundAfterInsert);
+            Assert.IsTrue(foundAfterInsert >= insertAmount);
         }
 
         [TestMethod]
         public void Insert()
         {
             int cnt = matchDao.Count();
-            var match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5f, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+            var match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
             var matchId = matchDao.Insert(match);
             int newCnt = matchDao.Count();
             Assert.AreEqual(cnt + 1, newCnt);
@@ -164,7 +166,27 @@ namespace WuHu.Test
 
             try
             {
-                matchDao.Insert(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5f, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4));
+                matchDao.Insert(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, player, testPlayer2, testPlayer3, testPlayer4));
+                Assert.Fail("No ArgumentException thrown.");
+            }
+            catch (ArgumentException)
+            { }
+            
+            try
+            {
+                matchDao.Insert(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer1, testPlayer3, testPlayer4));
+                Assert.Fail("No ArgumentException thrown.");
+            }
+            catch (ArgumentException)
+            { }
+        }
+
+        [TestMethod]
+        public void PlayerPlayingAgainstHimselfFails()
+        {
+            try
+            {
+                matchDao.Insert(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer1, testPlayer3, testPlayer4));
                 Assert.Fail("No ArgumentException thrown.");
             }
             catch (ArgumentException)
@@ -174,7 +196,7 @@ namespace WuHu.Test
         [TestMethod]
         public void Update()
         {
-            var match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5f, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+            var match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
 
             int matchId = matchDao.Insert(match);
 
@@ -199,8 +221,29 @@ namespace WuHu.Test
             }
             try
             {
-                matchDao.Update(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5f, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4));
+                matchDao.Update(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4));
                     // should throw ArgumentException
+                Assert.Fail("ArgumentException not thrown for invalid Player.Update()");
+            }
+            catch (ArgumentException)
+            {
+            }
+        }
+
+        [TestMethod]
+        public void UpdateWithoutTournamentIdFails()
+        {
+            Tournament tournament = tournamentDao.FindById(0);
+            if (tournament == null)
+            {
+                tournament = new Tournament("name", testPlayer1);
+                tournamentDao.Insert(tournament);
+                tournament.TournamentId = null;
+            }
+            try
+            {
+                matchDao.Update(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4));
+                // should throw ArgumentException
                 Assert.Fail("ArgumentException not thrown for invalid Player.Update()");
             }
             catch (ArgumentException)

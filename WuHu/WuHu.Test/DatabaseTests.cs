@@ -14,9 +14,6 @@ namespace WuHu.Test
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            CommonData.BackupDb();
-
-            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString;
             database = DalFactory.CreateDatabase();
         }
 

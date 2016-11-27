@@ -9,8 +9,7 @@ namespace WuHu.Test
     [TestClass]
     public class TournamentTests
     {
-
-        private static string connectionString;
+        
         private static IDatabase database;
         private static IPlayerDao playerDao;
         private static ITournamentDao tournamentDao;
@@ -20,8 +19,7 @@ namespace WuHu.Test
         public static void ClassInitialize(TestContext testContext)
         {
             CommonData.BackupDb();
-
-            connectionString = ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString;
+            
             database = DalFactory.CreateDatabase();
             playerDao = DalFactory.CreatePlayerDao(database);
             tournamentDao = DalFactory.CreateTournamentDao(database);
@@ -59,6 +57,16 @@ namespace WuHu.Test
 
             int cnt2 = tournamentDao.Count();
             Assert.AreEqual(cnt1 + 1, cnt2);
+        }
+
+        [TestMethod]
+        public void FindById()
+        {
+            Tournament tournament = new Tournament("name", testPlayer);
+            int tournamentId = tournamentDao.Insert(tournament);
+            Tournament foundTournament = tournamentDao.FindById(tournamentId);
+
+            Assert.AreEqual(tournament.TournamentId, foundTournament.TournamentId);
         }
 
         [TestMethod]

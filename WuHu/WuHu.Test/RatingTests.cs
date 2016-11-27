@@ -13,8 +13,6 @@ namespace WuHu.Test
     [TestClass]
     public class RatingTests
     {
-
-        private static string connectionString;
         private static IDatabase database;
         private static IPlayerDao playerDao;
         private static IRatingDao ratingDao;
@@ -24,8 +22,7 @@ namespace WuHu.Test
         public static void ClassInitialize(TestContext testContext)
         {
             CommonData.BackupDb();
-
-            connectionString = ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString;
+            
             database = DalFactory.CreateDatabase();
             playerDao = DalFactory.CreatePlayerDao(database);
             ratingDao = DalFactory.CreateRatingDao(database);
@@ -61,7 +58,17 @@ namespace WuHu.Test
             int cnt2 = ratingDao.Count();
             Assert.AreEqual(cnt1 + 1, cnt2);
         }
-        
+
+        [TestMethod]
+        public void FindById()
+        {
+            Rating rating = new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000);
+            int ratingId = ratingDao.Insert(rating);
+            Rating foundRating = ratingDao.FindById(ratingId);
+
+            Assert.AreEqual(rating.RatingId, foundRating.RatingId);
+        }
+
         [TestMethod]
         public void FindAll()
         {
@@ -82,7 +89,7 @@ namespace WuHu.Test
             int foundAfterInsert = ratingDao.FindAll().Count;
             Assert.AreEqual(cntAfterInsert, foundAfterInsert);
         }
-
+        
         [TestMethod]
         public void FindAllByPlayer()
         {
