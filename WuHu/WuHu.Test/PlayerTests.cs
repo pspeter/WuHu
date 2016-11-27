@@ -207,6 +207,10 @@ namespace WuHu.Test
             Player foundPlayer = playerDao.FindByUsername(uniqueUsername);
 
             Assert.AreEqual(player.PlayerId, foundPlayer.PlayerId);
+
+            uniqueUsername = TestHelper.GenerateName();
+            Player nullPlayer = playerDao.FindByUsername(uniqueUsername);
+            Assert.IsNull(nullPlayer);
         }
 
         [TestMethod]

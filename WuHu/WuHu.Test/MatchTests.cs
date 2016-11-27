@@ -275,62 +275,36 @@ namespace WuHu.Test
         }
 
         [TestMethod]
-        public void UpdateWithoutPlayerIdFails()
+        public void UpdateWithoutIdFails()
         {
-            Player playerWithoutId = playerDao.FindById(0);
-            if (playerWithoutId == null)
-            {
-                playerWithoutId = new Player("first", "last", "nic2k", "us7er", "pass",
+            Player playerWithoutId = new Player("first", "last", "nic2k", "us7er", "pass",
                     false, false, false, false, false, true, true, true, null);
-                playerDao.Insert(playerWithoutId);
-                playerWithoutId.PlayerId = null;
-            }
-            try
+
+            try // no playerId
             {
-                matchDao.Update(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, playerWithoutId, testPlayer2, testPlayer3, testPlayer4));
+                matchDao.Update(new Match(0, testTournament, new DateTime(2000, 1, 1),
+                    0, 0, 0.5, false, playerWithoutId, testPlayer2, testPlayer3, testPlayer4));
                 Assert.Fail("No ArgumentException thrown.");
             }
             catch (ArgumentException)
             {
             }
-        }
 
-        [TestMethod]
-        public void UpdateWithoutTournamentIdFails()
-        {
-            Tournament tournamentWithoutId = tournamentDao.FindById(0);
-            if (tournamentWithoutId == null)
+            Tournament tournamentWithoutId = new Tournament("name", testPlayer1);
+            try // no tournamentId
             {
-                tournamentWithoutId = new Tournament("name", testPlayer1);
-                tournamentDao.Insert(tournamentWithoutId);
-            }
-            tournamentWithoutId.TournamentId = null;
-
-            Match match = matchDao.FindById(0);
-            if (match == null)
-            {
-                match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
-                matchDao.Insert(match); // inserts Match and gives us a matchId
-            }
-
-            match.Tournament = tournamentWithoutId;
-
-            try
-            {
-                matchDao.Update(match);
+                matchDao.Update(new Match(0, tournamentWithoutId, new DateTime(2000, 1, 1),
+                     0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4));
                 Assert.Fail("No ArgumentException thrown.");
             }
             catch (ArgumentException)
             {
             }
-        }
 
-        [TestMethod]
-        public void UpdateWithoutMatchIdFails()
-        {
-            try
+            try // no matchId
             {
-                matchDao.Update(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4));
+                matchDao.Update(new Match(testTournament, new DateTime(2000, 1, 1),
+                     0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4));
                 Assert.Fail("No ArgumentException thrown.");
             }
             catch (ArgumentException)

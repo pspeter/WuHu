@@ -134,28 +134,30 @@ namespace WuHu.Test
             tournament = tournamentDao.FindById(tournamentId);
             Assert.AreEqual(newName, tournament.Name);
 
-            try
-            {
-                tournamentDao.Update(new Tournament("name", testPlayer));
-                Assert.Fail("No ArgumentException thrown");
-            }
-            catch (ArgumentException) { }
+            
         }
 
         [TestMethod]
-        public void UpdateWithoutPlayerIdFails()
+        public void UpdateWithoutIdFails()
         {
             
             Player player = new Player("first", "last", "nick", "user", "pass",
                 false, false, false, false, false, true, true, true, null);
             
-            try
+            try // no playerId
             {
-                tournamentDao.Update(new Tournament("name", player)); // should throw ArgumentException
+                tournamentDao.Update(new Tournament(0, "name", player)); // should throw ArgumentException
                 Assert.Fail("No ArgumentException thrown");
             }
             catch (ArgumentException)
             { }
+
+            try // no tournamentId
+            {
+                tournamentDao.Update(new Tournament("name", testPlayer));
+                Assert.Fail("No ArgumentException thrown");
+            }
+            catch (ArgumentException) { }
         }
     }
 }
