@@ -14,6 +14,7 @@ namespace WuHu.Dal.Common
             bool thursday = false, bool friday = false, bool saturday = false, bool sunday = false);
         IList<Player> FindAllByString(string name);
         Player FindById(int playerId);
+        Player FindByUsername(string username);
         int Insert(Player player);
         bool Update(Player player);
         int Count();

@@ -18,8 +18,11 @@ namespace WuHu.Dal.SqlServer
             @"SELECT * FROM Player 
                 WHERE firstName LIKE @name
                     OR lastName LIKE @name
-                    OR nickName LIKE @name
-                    OR userName LIKE @name;";
+                    OR nickName LIKE @name;";
+
+        private const string SqlFindByUsername =
+            @"SELECT * FROM Player 
+                WHERE userName LIKE @username;";
 
         private const string SqlFindById =
           @"SELECT * FROM Player 
@@ -231,6 +234,45 @@ namespace WuHu.Dal.SqlServer
             }
         }
 
+        private DbCommand CreateFindByUsernameCmd(string username)
+        {
+            DbCommand findCmd = database.CreateCommand(SqlFindByUsername);
+            database.DefineParameter(findCmd, "username", DbType.String, username);
+            return findCmd;
+        }
+
+        public Player FindByUsername(string username)
+        {
+            using (DbCommand command = CreateFindByUsernameCmd(username))
+            using (IDataReader reader = database.ExecuteReader(command))
+            {
+                if (reader.Read())
+                {
+                    return new Player((int)reader["playerId"],
+                        (string)reader["firstName"],
+                        (string)reader["lastName"],
+                        (string)reader["nickName"],
+                        (string)reader["userName"],
+                        (byte[])reader["password"],
+                        (byte[])reader["salt"],
+                        (bool)reader["isAdmin"],
+                        (bool)reader["playsMondays"],
+                        (bool)reader["playsTuesdays"],
+                        (bool)reader["playsWednesdays"],
+                        (bool)reader["playsThursdays"],
+                        (bool)reader["playsFridays"],
+                        (bool)reader["playsSaturdays"],
+                        (bool)reader["playsSundays"],
+                        reader.IsDBNull(reader.GetOrdinal("picture"))
+                            ? null
+                            : (byte[])reader["picture"]);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
 
         protected DbCommand CreateInsertCmd(string firstName, string lastName, string nickName,
                                             string userName, byte[] password, byte[] salt, bool isAdmin,
