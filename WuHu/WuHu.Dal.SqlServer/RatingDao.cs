@@ -234,7 +234,7 @@ namespace WuHu.Dal.SqlServer
             return cmd;
         }
 
-        public int Insert(Rating rating)
+        public bool Insert(Rating rating)
         {
             if (rating.Player?.PlayerId == null)
             {
@@ -245,7 +245,7 @@ namespace WuHu.Dal.SqlServer
             {
                 var id = database.ExecuteScalar(command); // set the objects id right away
                 rating.RatingId = id;
-                return id;
+                return true;
             }
         }
 

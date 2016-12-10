@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
@@ -298,9 +299,8 @@ namespace WuHu.Dal.SqlServer
             database.DefineParameter(insertCmd, "picture", DbType.Binary, picture ?? SqlBinary.Null);
             return insertCmd;
         }
-        
 
-        public int Insert(Player player)
+        public bool Insert(Player player)
         {
             using (DbCommand command = CreateInsertCmd(player.Firstname, player.Lastname, player.Nickname,
                                                         player.Username, player.Password, player.Salt, player.IsAdmin,
@@ -308,14 +308,19 @@ namespace WuHu.Dal.SqlServer
                                                         player.PlaysThursdays, player.PlaysFridays, player.PlaysSaturdays,
                                                         player.PlaysSundays, player.Picture))
             {
-                int playerId = database.ExecuteScalar(command);
-                player.PlayerId = playerId;
-                return playerId;
+                try
+                {
+                    int playerId = database.ExecuteScalar(command);
+                    player.PlayerId = playerId;
+                }
+                catch (SqlException)
+                {
+                    return false;
+                }
+                return true;
             }
         }
-
-
-        // Update
+        
         protected DbCommand CreateUpdateByIdCmd(int playerId, string firstName, string lastName, string nickName,
                                             string userName, byte[] password, byte[] salt, bool isAdmin,
                                             bool playsMondays, bool playsTuesdays, bool playsWednesdays,
@@ -358,9 +363,6 @@ namespace WuHu.Dal.SqlServer
                 return database.ExecuteNonQuery(command) == 1;
             }
         }
-
-
-        // Count
 
         protected DbCommand CreateCountCmd()
         {

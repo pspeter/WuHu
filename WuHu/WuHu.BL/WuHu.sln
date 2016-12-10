@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuHu.Server", "WuHu.Server.csproj", "{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuHu.Domain", "WuHu.Domain\WuHu.Domain.csproj", "{3B5E2218-2C2F-4995-9B41-E382B34880B4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuHu.Dal.SqlServer", "WuHu.Dal.SqlServer\WuHu.Dal.SqlServer.csproj", "{25DB2BEE-95CF-4F82-B0BF-3C5CE3FCA970}"
@@ -11,11 +13,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuHu.Common", "WuHu.Common\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuHu.Dal.Common", "WuHu.Dal.Common\WuHu.Dal.Common.csproj", "{04F6460D-1635-43D4-8080-F4903B40DB76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuHu.Server.Impl", "WuHu.Server.Impl\WuHu.Server.Impl.csproj", "{07471340-8793-4768-8154-6B9844851FD3}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuHu.Dal.Test", "WuHu.Dal.Test\WuHu.Dal.Test.csproj", "{0F03B446-8BAC-477B-BA40-E367D3A9B5EF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuHu.BL.Impl", "WuHu.BL.Impl\WuHu.BL.Impl.csproj", "{07471340-8793-4768-8154-6B9844851FD3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuHu.BL", "WuHu.BL\WuHu.BL.csproj", "{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +23,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3B5E2218-2C2F-4995-9B41-E382B34880B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B5E2218-2C2F-4995-9B41-E382B34880B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B5E2218-2C2F-4995-9B41-E382B34880B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,18 +43,14 @@ Global
 		{04F6460D-1635-43D4-8080-F4903B40DB76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04F6460D-1635-43D4-8080-F4903B40DB76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04F6460D-1635-43D4-8080-F4903B40DB76}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F03B446-8BAC-477B-BA40-E367D3A9B5EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F03B446-8BAC-477B-BA40-E367D3A9B5EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F03B446-8BAC-477B-BA40-E367D3A9B5EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F03B446-8BAC-477B-BA40-E367D3A9B5EF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{07471340-8793-4768-8154-6B9844851FD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{07471340-8793-4768-8154-6B9844851FD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07471340-8793-4768-8154-6B9844851FD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07471340-8793-4768-8154-6B9844851FD3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F03B446-8BAC-477B-BA40-E367D3A9B5EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F03B446-8BAC-477B-BA40-E367D3A9B5EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F03B446-8BAC-477B-BA40-E367D3A9B5EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F03B446-8BAC-477B-BA40-E367D3A9B5EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

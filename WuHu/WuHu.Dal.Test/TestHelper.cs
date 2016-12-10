@@ -6,7 +6,7 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WuHu.Dal.Common;
 
-namespace WuHu.Test
+namespace WuHu.Dal.Test
 {
     public static class TestHelper
     {

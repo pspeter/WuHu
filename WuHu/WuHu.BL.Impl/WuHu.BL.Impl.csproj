@@ -4,29 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{07471340-8793-4768-8154-6B9844851FD3}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WuHu.Server</RootNamespace>
-    <AssemblyName>WuHu.Server</AssemblyName>
+    <RootNamespace>WuHu.Server.Impl</RootNamespace>
+    <AssemblyName>WuHu.Server.Impl</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -47,11 +32,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,36 +47,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Authenticator.cs" />
+    <Compile Include="PlayerManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="WuHu.Dal.Common\WuHu.Dal.Common.csproj">
+    <ProjectReference Include="..\WuHu.Common\WuHu.Common.csproj">
+      <Project>{B995CB61-A5E2-4149-B397-F7513255CC4A}</Project>
+      <Name>WuHu.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WuHu.Dal.Common\WuHu.Dal.Common.csproj">
       <Project>{04F6460D-1635-43D4-8080-F4903B40DB76}</Project>
       <Name>WuHu.Dal.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="WuHu.Dal.SqlServer\WuHu.Dal.SqlServer.csproj">
+    <ProjectReference Include="..\WuHu.Dal.SqlServer\WuHu.Dal.SqlServer.csproj">
       <Project>{25DB2BEE-95CF-4F82-B0BF-3C5CE3FCA970}</Project>
       <Name>WuHu.Dal.SqlServer</Name>
     </ProjectReference>
-    <ProjectReference Include="WuHu.Test\WuHu.Test.csproj">
-      <Project>{0f03b446-8bac-477b-ba40-e367d3a9b5ef}</Project>
-      <Name>WuHu.Test</Name>
+    <ProjectReference Include="..\WuHu.Domain\WuHu.Domain.csproj">
+      <Project>{3b5e2218-2c2f-4995-9b41-e382b34880b4}</Project>
+      <Name>WuHu.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WuHu.BL\WuHu.BL.csproj">
+      <Project>{133d0de2-f6e3-4bef-b3cd-be74106b54c4}</Project>
+      <Name>WuHu.BL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

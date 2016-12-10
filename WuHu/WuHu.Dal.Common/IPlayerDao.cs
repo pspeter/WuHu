@@ -15,7 +15,7 @@ namespace WuHu.Dal.Common
         IList<Player> FindAllByString(string name);
         Player FindById(int playerId);
         Player FindByUsername(string username);
-        int Insert(Player player);
+        bool Insert(Player player);
         bool Update(Player player);
         int Count();
     }

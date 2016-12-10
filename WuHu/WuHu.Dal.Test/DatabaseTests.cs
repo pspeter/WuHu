@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WuHu.Dal.Common;
 
-namespace WuHu.Test
+namespace WuHu.Dal.Test
 {
     [TestClass]
     public class DatabaseTests

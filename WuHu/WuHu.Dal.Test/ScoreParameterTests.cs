@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WuHu.Dal.Common;
 using WuHu.Domain;
 
-namespace WuHu.Test
+namespace WuHu.Dal.Test
 {
     [TestClass]
     public class ScoreParameterTests

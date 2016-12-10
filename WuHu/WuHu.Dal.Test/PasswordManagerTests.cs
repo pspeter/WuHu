@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WuHu.Common;
 
-namespace WuHu.Test
+namespace WuHu.Dal.Test
 {
     [TestClass]
     public class PasswordManagerTests

@@ -5,7 +5,7 @@ using WuHu.Dal.Common;
 using WuHu.Dal.SqlServer;
 using WuHu.Domain;
 
-namespace WuHu.Test
+namespace WuHu.Dal.Test
 {
     [TestClass]
     public class TournamentTests
@@ -62,8 +62,9 @@ namespace WuHu.Test
         public void FindById()
         {
             Tournament tournament = new Tournament("name", testPlayer);
-            int tournamentId = tournamentDao.Insert(tournament);
-            Tournament foundTournament = tournamentDao.FindById(tournamentId);
+            tournamentDao.Insert(tournament);
+            Assert.IsNotNull(tournament.TournamentId);
+            Tournament foundTournament = tournamentDao.FindById(tournament.TournamentId.Value);
 
             Assert.AreEqual(tournament.TournamentId, foundTournament.TournamentId);
 
@@ -97,12 +98,11 @@ namespace WuHu.Test
         {
             int cnt = tournamentDao.Count();
             var tournament = new Tournament("name", testPlayer);
-            var tournamentId = tournamentDao.Insert(tournament);
+            tournamentDao.Insert(tournament);
+            Assert.IsNotNull(tournament.TournamentId);
             int newCnt = tournamentDao.Count();
             Assert.AreEqual(cnt + 1, newCnt);
-            Assert.IsInstanceOfType(tournamentId, typeof(int));
-            Assert.IsTrue(tournamentId >= 0);
-            Assert.AreEqual(tournamentId, tournament.TournamentId);
+            Assert.IsTrue(tournament.TournamentId.Value >= 0);
         }
 
         [TestMethod]
@@ -125,13 +125,14 @@ namespace WuHu.Test
         {
             var tournament = new Tournament("name", testPlayer);
 
-            int tournamentId = tournamentDao.Insert(tournament);
+            tournamentDao.Insert(tournament);
+            Assert.IsNotNull(tournament.TournamentId);
 
             var newName = "newName";
             tournament.Name = newName;
             tournamentDao.Update(tournament);
 
-            tournament = tournamentDao.FindById(tournamentId);
+            tournament = tournamentDao.FindById(tournament.TournamentId.Value);
             Assert.AreEqual(newName, tournament.Name);
 
             

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -128,7 +129,7 @@ namespace WuHu.Dal.SqlServer
             return cmd;
         }
 
-        public int Insert(Tournament tournament)
+        public bool Insert(Tournament tournament)
         {
             if (tournament.Creator?.PlayerId == null)
             {
@@ -137,9 +138,16 @@ namespace WuHu.Dal.SqlServer
 
             using (DbCommand command = CreateInsertCmd(tournament.Name, tournament.Creator.PlayerId.Value))
             {
-                var id = database.ExecuteScalar(command); // set the objects id right away
-                tournament.TournamentId = id;
-                return id;
+                try
+                {
+                    var id = database.ExecuteScalar(command); // set the objects id right away
+                    tournament.TournamentId = id;
+                }
+                catch (SqlException)
+                {
+                    return false;
+                }
+                return true;
             }
         }
         

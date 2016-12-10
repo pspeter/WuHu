@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 using System.IO;
 using WuHu.Common;
 
-namespace WuHu.Test
+namespace WuHu.Dal.Test
 {
     [TestClass]
     public class PlayerTests
@@ -28,11 +28,11 @@ namespace WuHu.Test
             string uniqueUsername = TestHelper.GenerateName();
             Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
-            int playerId = playerDao.Insert(player);
-            Player foundPlayer = playerDao.FindById(playerId);
+            playerDao.Insert(player);
+            Assert.IsNotNull(player.PlayerId);
+            Player foundPlayer = playerDao.FindById(player.PlayerId.Value);
 
             Assert.AreEqual(player.PlayerId, foundPlayer.PlayerId);
-
 
             Player nullPlayer = playerDao.FindById(-1);
             Assert.IsNull(nullPlayer);
@@ -44,12 +44,18 @@ namespace WuHu.Test
             //generates a random string for our user field
             string uniqueUsername = TestHelper.GenerateName();
             int cnt = playerDao.Count();
-            var playerId = playerDao.Insert(new Player("first", "last", "nick", uniqueUsername, "pass", 
-                false, false, false, false, false, true, true, true, null));
+            var player = new Player("first", "last", "nick", uniqueUsername, "pass",
+                false, false, false, false, false, true, true, true, null);
+            var inserted = playerDao.Insert(player);
+            Assert.IsTrue(inserted);
+
+            inserted = playerDao.Insert(player);
+            Assert.IsFalse(inserted);
+
             int newCnt = playerDao.Count();
             Assert.AreEqual(cnt + 1, newCnt);
-            Assert.IsInstanceOfType(playerId, typeof(int));
-            Assert.IsTrue(playerId >= 0);
+            Assert.IsNotNull(player.PlayerId);
+            Assert.IsTrue(player.PlayerId.Value >= 0);
         }
 
         [TestMethod]
@@ -58,15 +64,9 @@ namespace WuHu.Test
             string uniqueUsername = TestHelper.GenerateName();
             var player = new Player("", "", "", uniqueUsername, "", false, false, 
                                 false, false, false, false, false, false, null);
-
             playerDao.Insert(player);
-            try
-            {
-                playerDao.Insert(player);
-                Assert.Fail("No SqlException thrown.");
-            }
-            catch (SqlException)
-            { }
+            var inserted = playerDao.Insert(player);
+            Assert.IsFalse(inserted);
         }
 
         [TestMethod]
@@ -89,14 +89,15 @@ namespace WuHu.Test
             var player = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
 
-            int playerId = playerDao.Insert(player);
+            playerDao.Insert(player);
+            Assert.IsNotNull(player.PlayerId);
 
             string newFirst = "newFirst";
-            player.PlayerId = playerId;
+            player.PlayerId = player.PlayerId;
             player.Firstname = newFirst;
             playerDao.Update(player);
 
-            player = playerDao.FindById(playerId);
+            player = playerDao.FindById(player.PlayerId.Value);
             Assert.AreEqual(newFirst, player.Firstname);
         }
 
@@ -211,7 +212,7 @@ namespace WuHu.Test
             string uniqueUsername = TestHelper.GenerateName();
             Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
-            int playerId = playerDao.Insert(player);
+            playerDao.Insert(player);
             Player foundPlayer = playerDao.FindByUsername(uniqueUsername);
 
             Assert.AreEqual(player.PlayerId, foundPlayer.PlayerId);

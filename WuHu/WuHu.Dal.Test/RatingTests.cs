@@ -8,7 +8,7 @@ using WuHu.Dal.Common;
 using WuHu.Dal.SqlServer;
 using WuHu.Domain;
 
-namespace WuHu.Test
+namespace WuHu.Dal.Test
 {
     [TestClass]
     public class RatingTests
@@ -30,7 +30,7 @@ namespace WuHu.Test
             {
                 testPlayer = new Player("first", "last", "nic2k", "us7er", "pass",
                     false, false, false, false, false, true, true, true, null);
-                int playerId = playerDao.Insert(testPlayer);
+                playerDao.Insert(testPlayer);
             }
         }
 
@@ -61,8 +61,9 @@ namespace WuHu.Test
         public void FindById()
         {
             Rating rating = new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000);
-            int ratingId = ratingDao.Insert(rating);
-            Rating foundRating = ratingDao.FindById(ratingId);
+            ratingDao.Insert(rating);
+            Assert.IsNotNull(rating.RatingId);
+            Rating foundRating = ratingDao.FindById(rating.RatingId.Value);
 
             Assert.AreEqual(rating.RatingId, foundRating.RatingId);
 
@@ -121,12 +122,11 @@ namespace WuHu.Test
         {
             int cnt = ratingDao.Count();
             var rating = new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000);
-            var ratingId = ratingDao.Insert(rating);
+            ratingDao.Insert(rating);
+            Assert.IsNotNull(rating.RatingId);
             int newCnt = ratingDao.Count();
             Assert.AreEqual(cnt + 1, newCnt);
-            Assert.IsInstanceOfType(ratingId, typeof(int));
-            Assert.IsTrue(ratingId >= 0);
-            Assert.AreEqual(ratingId, rating.RatingId);
+            Assert.IsTrue(rating.RatingId >= 0);
         }
 
         [TestMethod]
@@ -149,15 +149,15 @@ namespace WuHu.Test
         {
             var rating = new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000);
 
-            int ratingId = ratingDao.Insert(rating);
+            ratingDao.Insert(rating);
+            Assert.IsNotNull(rating.RatingId);
 
             var newValue = 3000;
             rating.Value = newValue;
             ratingDao.Update(rating);
 
-            rating = ratingDao.FindById(ratingId);
+            rating = ratingDao.FindById(rating.RatingId.Value);
             Assert.AreEqual(newValue, rating.Value);
-            
         }
 
         [TestMethod]

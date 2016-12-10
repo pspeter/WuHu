@@ -13,7 +13,7 @@ namespace WuHu.Dal.Common
         IList<Rating> FindAllByPlayer(Player player);
         Rating FindById(int ratingId);
         Rating FindCurrentRating(Player player);
-        int Insert(Rating rating);
+        bool Insert(Rating rating);
         bool Update(Rating rating);
         int Count();
     }

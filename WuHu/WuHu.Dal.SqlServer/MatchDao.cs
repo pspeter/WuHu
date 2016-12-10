@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -205,7 +206,7 @@ namespace WuHu.Dal.SqlServer
             return cmd;
         }
 
-        public int Insert(Match match)
+        public bool Insert(Match match)
         {
             if (match.Player1?.PlayerId == null || match.Player2?.PlayerId == null ||
                 match.Player3?.PlayerId == null || match.Player4?.PlayerId == null)
@@ -222,9 +223,16 @@ namespace WuHu.Dal.SqlServer
                 match.IsDone, match.Player1.PlayerId.Value, match.Player2.PlayerId.Value, 
                 match.Player3.PlayerId.Value, match.Player4.PlayerId.Value))
             {
-                var id = database.ExecuteScalar(command); // set the objects id right away
-                match.MatchId = id;
-                return id;
+                try
+                {
+                    var id = database.ExecuteScalar(command); // set the objects id right away
+                    match.MatchId = id;
+                }
+                catch (SqlException)
+                {
+                    return false;
+                }
+                return true;
             }
         }
 

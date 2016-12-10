@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WuHu.Dal.Common;
 using WuHu.Domain;
 
-namespace WuHu.Test
+namespace WuHu.Dal.Test
 {
     [TestClass]
     public class MatchTests
@@ -128,8 +128,9 @@ namespace WuHu.Test
         public void FindById()
         {
             Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
-            int matchId = matchDao.Insert(match);
-            Match foundMatch = matchDao.FindById(matchId);
+            matchDao.Insert(match);
+            Assert.IsNotNull(match.MatchId);
+            Match foundMatch = matchDao.FindById(match.MatchId.Value);
 
             Assert.AreEqual(match.MatchId, foundMatch.MatchId);
         }
@@ -206,12 +207,11 @@ namespace WuHu.Test
         {
             int cnt = matchDao.Count();
             var match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
-            var matchId = matchDao.Insert(match);
+            matchDao.Insert(match);
+            Assert.IsNotNull(match.MatchId);
             int newCnt = matchDao.Count();
             Assert.AreEqual(cnt + 1, newCnt);
-            Assert.IsInstanceOfType(matchId, typeof(int));
-            Assert.IsTrue(matchId >= 0);
-            Assert.AreEqual(matchId, match.MatchId);
+            Assert.IsTrue(match.MatchId.Value >= 0);
         }
 
         [TestMethod]
@@ -266,14 +266,14 @@ namespace WuHu.Test
         public void Update()
         {
             var match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
-
-            int matchId = matchDao.Insert(match);
+            matchDao.Insert(match);
+            Assert.IsNotNull(match.MatchId);
 
             byte newValue = 5;
             match.ScoreTeam1 = newValue;
             matchDao.Update(match);
 
-            match = matchDao.FindById(matchId);
+            match = matchDao.FindById(match.MatchId.Value);
             Assert.AreEqual(newValue, match.ScoreTeam1);
 
             match = matchDao.FindById(-1);
