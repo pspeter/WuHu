@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,8 @@ namespace WuHu.Dal.SqlServer
                 WHERE player1 = @playerId
                     OR player2 = @playerId
                     OR player3 = @playerId
-                    OR player4 = @playerId;";
+                    OR player4 = @playerId
+                ORDER BY datetime DESC;";
 
         private const string SqlFindAllByTournament =
             @"SELECT *
@@ -89,8 +91,12 @@ namespace WuHu.Dal.SqlServer
             return new Match((int)reader["matchId"],
                 tournament,
                (DateTime)reader["datetime"],
-               (byte)reader["scoreTeam1"],
-               (byte)reader["scoreTeam2"],
+               reader.IsDBNull(reader.GetOrdinal("scoreTeam1")) ? 
+                   null : 
+                   (byte?)reader["scoreTeam1"],
+               reader.IsDBNull(reader.GetOrdinal("scoreTeam2")) ?
+                   null :
+                   (byte?)reader["scoreTeam2"],
                (double)reader["estimatedWinChance"],
                (bool)reader["isDone"],
                p1,
@@ -203,8 +209,8 @@ namespace WuHu.Dal.SqlServer
             database.DefineParameter(cmd, "player3", DbType.Int32, player3);
             database.DefineParameter(cmd, "player4", DbType.Int32, player4);
             database.DefineParameter(cmd, "datetime", DbType.DateTime2, datetime);
-            database.DefineParameter(cmd, "scoreTeam1", DbType.Int32, scoreTeam1);
-            database.DefineParameter(cmd, "scoreTeam2", DbType.Int32, scoreTeam2);
+            database.DefineParameter(cmd, "scoreTeam1", DbType.Byte, scoreTeam1 ?? SqlByte.Null);
+            database.DefineParameter(cmd, "scoreTeam2", DbType.Byte, scoreTeam2 ?? SqlByte.Null);
             database.DefineParameter(cmd, "isDone", DbType.Boolean, isDone);
             database.DefineParameter(cmd, "estimatedWinChance", DbType.Double, estimatedWinChance);
             return cmd;
@@ -232,7 +238,7 @@ namespace WuHu.Dal.SqlServer
                     var id = database.ExecuteScalar(command); // set the objects id right away
                     match.MatchId = id;
                 }
-                catch (SqlException)
+                catch (SqlException e)
                 {
                     return false;
                 }

@@ -91,7 +91,7 @@ namespace WuHu.Dal.Test
             _playerDao.Insert(player);
             Assert.IsNotNull(player.PlayerId);
 
-            string newFirst = "newFirst";
+            var newFirst = "newFirst";
             player.PlayerId = player.PlayerId;
             player.Firstname = newFirst;
             _playerDao.Update(player);

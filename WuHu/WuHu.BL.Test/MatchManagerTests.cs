@@ -48,10 +48,16 @@ namespace WuHu.BL.Test
         [TestMethod]
         public void CreateMatches()
         {
+            var amountMatches = 100;
             Player admin = _testPlayers.First();
             Tournament tournament = new Tournament("", admin);
             _tournamentDao.Insert(tournament);
-            _matchMgr.CreateMatches(tournament, _testPlayers, 100, new Credentials(admin.Username, "pass"));
+            var matches = _matchDao.FindAllByTournament(tournament);
+            Assert.AreEqual(0, matches.Count);
+            var success = _matchMgr.CreateMatches(tournament, _testPlayers, amountMatches, new Credentials(admin.Username, "pass"));
+            Assert.IsTrue(success);
+            matches = _matchDao.FindAllByTournament(tournament);
+            Assert.AreEqual(amountMatches, matches.Count);
         }
     }
 }

@@ -14,12 +14,14 @@ namespace WuHu.BL.Impl
         private static RatingManager _instance;
         private Authenticator _authenticator;
         private readonly IRatingDao _ratingDao;
+        private readonly IMatchDao _matchDao;
         private readonly IScoreParameterDao _paramDao;
         protected RatingManager()
         {
             var database = DalFactory.CreateDatabase();
             _ratingDao = DalFactory.CreateRatingDao(database);
             _paramDao = DalFactory.CreateScoreParameterDao(database);
+            _matchDao = DalFactory.CreateMatchDao(database);
             _authenticator = Authenticator.GetInstance();
         }
         public static RatingManager GetInstance()
@@ -29,22 +31,38 @@ namespace WuHu.BL.Impl
 
         public bool AddCurrentRatingFor(Player player, Credentials credentials)
         {
-            throw new NotImplementedException();
+            var kRating = int.Parse(_paramDao.FindById("k-rating").Value);
+            var halflife = int.Parse(_paramDao.FindById("halflife").Value);
+            //var scoredMatches = int.Parse(_paramDao.FindById("scoredMatches").Value);
+            var initialScore = int.Parse(_paramDao.FindById("initialScore").Value);
+
+            if (_ratingDao.FindCurrentRating(player) == null)
+            {
+                _ratingDao.Insert(new Rating(player, DateTime.Now, initialScore));
+                return true;
+            }
+
+            var matches = _matchDao.FindAllByPlayer(player)
+                .Where(m => m.IsDone);
+
+
+
+            return false;
         }
 
         public IList<Rating> GetAllRatings()
         {
-            throw new NotImplementedException();
+            return _ratingDao.FindAll();
         }
 
         public IList<Rating> GetAllRatingsFor(Player player)
         {
-            throw new NotImplementedException();
+            return _ratingDao.FindAllByPlayer(player);
         }
 
         public Rating GetCurrentRatingFor(Player player)
         {
-            throw new NotImplementedException();
+            return _ratingDao.FindCurrentRating(player);
         }
     }
 }

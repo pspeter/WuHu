@@ -60,7 +60,7 @@ namespace WuHu.BL.Impl
             CancelMatches(tournament);
 
             var playersCopy = new List<Player>(players);
-            for (int matchNr = 0; matchNr < amount; ++matchNr)
+            for (var matchNr = 0; matchNr < amount; ++matchNr)
             {
                 // first, pick a random player
                 if (players.Count == 0)
@@ -110,15 +110,19 @@ namespace WuHu.BL.Impl
                 var newMatch = new Match(tournament, DateTime.Now, null, null, estimatedWinChance,
                     false, player1, player2, player3, player4);
 
-                _matchDao.Insert(newMatch);
+                if (!_matchDao.Insert(newMatch))
+                {
+                    Unlock();
+                    return false;
+                };
             }
-
-            return false;
+            Unlock();
+            return true;
         }
 
-        private Player PickPlayer(IList<Player> players, int fromScore)
+        private Player PickPlayer(ICollection<Player> players, int fromScore)
         {
-            var playerCount = players.Count;
+            var playerCount = players.Count; // faster than LINQ Count() on sortedPlayers
             var sortedPlayers = players.OrderBy(p => Math.Abs(_ratingDao.FindCurrentRating(p).Value - fromScore));
 
             var cutoff = 1/(Math.Log(playerCount) + 1);
