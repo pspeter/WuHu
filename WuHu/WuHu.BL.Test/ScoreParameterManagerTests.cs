@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace WuHu.BL.Test
     {
         private static IScoreParameterManager _paramMgr;
         private static IScoreParameterDao _paramDao;
+        private static Credentials _creds;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
@@ -25,6 +27,7 @@ namespace WuHu.BL.Test
             var user = TestHelper.GenerateName();
             var admin = new Player("admin", "last", "nick", user, "pass",
                     true, false, false, false, false, true, true, true, null);
+
         }
 
         [TestMethod]
@@ -52,7 +55,15 @@ namespace WuHu.BL.Test
         [TestMethod]
         public void Add()
         {
-            
+            var initCnt = _paramDao.FindAll().Count;
+            var key = TestHelper.GenerateName();
+            for (var i = 0; i < 5; ++i)
+            {
+                _paramMgr.AddParameter(new ScoreParameter(key, ""), _creds);
+            }
+
+            var newCnt = _paramDao.FindAll().Count;
+            Assert.AreEqual(initCnt + 5, newCnt);
         }
     }
 }
