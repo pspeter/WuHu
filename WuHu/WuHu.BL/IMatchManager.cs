@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using WuHu.Domain;
 
-namespace WuHu.Server
+namespace WuHu.BL
 {
     public interface IMatchManager
     {
-        bool AddMatch(Match match, Credentials credentials);
-        bool UpdateMatch(Match match, Credentials credentials);
+        bool CreateMatches(Tournament tournament, IList<Player> players, int amount, Credentials credentials);
+        bool SetScore(Match match, Credentials credentials);
+        IList<Match> GetAllMatches();
+        IList<Match> GetAllMatchesFor(Player player);
     }
 }

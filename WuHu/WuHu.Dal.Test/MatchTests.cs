@@ -317,5 +317,19 @@ namespace WuHu.Dal.Test
             {
             }
         }
+
+        [TestMethod]
+        public void Delete()
+        {
+            var match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+            matchDao.Insert(match);
+            Assert.IsNotNull(match.MatchId);
+            var deleted = matchDao.Delete(match);
+            Assert.IsTrue(deleted);
+            var foundMatch = matchDao.FindById(match.MatchId.Value);
+            Assert.IsNull(foundMatch);
+            deleted = matchDao.Delete(match);
+            Assert.IsFalse(deleted);
+        }
     }
 }

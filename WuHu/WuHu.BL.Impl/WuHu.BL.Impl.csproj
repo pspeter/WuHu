@@ -7,8 +7,8 @@
     <ProjectGuid>{07471340-8793-4768-8154-6B9844851FD3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WuHu.Server.Impl</RootNamespace>
-    <AssemblyName>WuHu.Server.Impl</AssemblyName>
+    <RootNamespace>WuHu.BL.Impl</RootNamespace>
+    <AssemblyName>WuHu.BL.Impl</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -48,8 +48,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authenticator.cs" />
+    <Compile Include="MatchManager.cs" />
     <Compile Include="PlayerManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RatingManager.cs" />
+    <Compile Include="ScoreParameterManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

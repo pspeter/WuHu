@@ -7,8 +7,8 @@
     <ProjectGuid>{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WuHu.Server</RootNamespace>
-    <AssemblyName>WuHu.Server</AssemblyName>
+    <RootNamespace>WuHu.BL</RootNamespace>
+    <AssemblyName>WuHu.BL</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -63,7 +63,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IMatchManager.cs" />
     <Compile Include="IPlayerManager.cs" />
+    <Compile Include="IRatingManager.cs" />
+    <Compile Include="IScoreParameterManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

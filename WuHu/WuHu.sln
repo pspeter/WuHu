@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuHu.BL.Impl", "WuHu.BL.Imp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuHu.BL", "WuHu.BL\WuHu.BL.csproj", "{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuHu.BL.Test", "WuHu.BL.Test\WuHu.BL.Test.csproj", "{A90E3A79-0E7F-4C98-B507-A81D2C6E5866}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A90E3A79-0E7F-4C98-B507-A81D2C6E5866}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A90E3A79-0E7F-4C98-B507-A81D2C6E5866}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A90E3A79-0E7F-4C98-B507-A81D2C6E5866}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A90E3A79-0E7F-4C98-B507-A81D2C6E5866}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

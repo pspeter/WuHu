@@ -15,6 +15,7 @@ namespace WuHu.Dal.Common
         Match FindById(int matchId);
         bool Insert(Match match);
         bool Update(Match match);
+        bool Delete(Match match);
         int Count();
     }
 }

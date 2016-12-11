@@ -61,6 +61,10 @@ namespace WuHu.Dal.SqlServer
                     player4 = @player4
                 WHERE MatchId = @MatchId";
 
+        private const string SqlDelete =
+            @"DELETE FROM Match
+                WHERE MatchId = @MatchId";
+
 
         private readonly IDatabase database;
 
@@ -277,6 +281,26 @@ namespace WuHu.Dal.SqlServer
                 match.Player3.PlayerId.Value, match.Player4.PlayerId.Value))
             {
                 return database.ExecuteNonQuery(command) == 1; 
+            }
+        }
+
+        protected DbCommand CreateDeleteCmd(int matchId)
+        {
+            DbCommand cmd = database.CreateCommand(SqlDelete);
+            database.DefineParameter(cmd, "matchId", DbType.Int32, matchId);
+            return cmd;
+        }
+
+        public bool Delete(Match match)
+        {
+            if (match.MatchId == null)
+            {
+                throw new ArgumentException("MatchId for Delete on Match missing.");
+            }
+
+            using (DbCommand command = CreateDeleteCmd(match.MatchId.Value))
+            {
+                return database.ExecuteNonQuery(command) == 1;
             }
         }
 

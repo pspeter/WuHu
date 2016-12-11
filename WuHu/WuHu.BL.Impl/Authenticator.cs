@@ -17,19 +17,15 @@ namespace WuHu.BL.Impl
         private readonly IPlayerDao _playerDao;
         private static Authenticator _instance;
 
-        private Authenticator()
+        protected Authenticator()
         {
             var database = DalFactory.CreateDatabase();
             _playerDao = DalFactory.CreatePlayerDao(database);
         }
 
-        public static Authenticator GetAuthenticator()
+        public static Authenticator GetInstance()
         {
-            if (_instance == null)
-            {
-                _instance = new Authenticator();
-            }
-            return _instance;
+            return _instance ?? (_instance = new Authenticator());
         }
 
         public bool Authenticate(Credentials credentials, bool adminRequired = true)

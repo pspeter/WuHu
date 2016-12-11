@@ -12,14 +12,13 @@ namespace WuHu.Dal.Test
     [TestClass]
     public class PlayerTests
     {
-        private static IDatabase database;
-        private static IPlayerDao playerDao;
+        private static IPlayerDao _playerDao;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            database = DalFactory.CreateDatabase();
-            playerDao = DalFactory.CreatePlayerDao(database);
+            var database = DalFactory.CreateDatabase();
+            _playerDao = DalFactory.CreatePlayerDao(database);
         }
         
         [TestMethod]
@@ -28,13 +27,13 @@ namespace WuHu.Dal.Test
             string uniqueUsername = TestHelper.GenerateName();
             Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
-            playerDao.Insert(player);
+            _playerDao.Insert(player);
             Assert.IsNotNull(player.PlayerId);
-            Player foundPlayer = playerDao.FindById(player.PlayerId.Value);
+            Player foundPlayer = _playerDao.FindById(player.PlayerId.Value);
 
             Assert.AreEqual(player.PlayerId, foundPlayer.PlayerId);
 
-            Player nullPlayer = playerDao.FindById(-1);
+            Player nullPlayer = _playerDao.FindById(-1);
             Assert.IsNull(nullPlayer);
         }
 
@@ -43,16 +42,16 @@ namespace WuHu.Dal.Test
         {
             //generates a random string for our user field
             string uniqueUsername = TestHelper.GenerateName();
-            int cnt = playerDao.Count();
+            int cnt = _playerDao.Count();
             var player = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
-            var inserted = playerDao.Insert(player);
+            var inserted = _playerDao.Insert(player);
             Assert.IsTrue(inserted);
 
-            inserted = playerDao.Insert(player);
+            inserted = _playerDao.Insert(player);
             Assert.IsFalse(inserted);
 
-            int newCnt = playerDao.Count();
+            int newCnt = _playerDao.Count();
             Assert.AreEqual(cnt + 1, newCnt);
             Assert.IsNotNull(player.PlayerId);
             Assert.IsTrue(player.PlayerId.Value >= 0);
@@ -64,21 +63,21 @@ namespace WuHu.Dal.Test
             string uniqueUsername = TestHelper.GenerateName();
             var player = new Player("", "", "", uniqueUsername, "", false, false, 
                                 false, false, false, false, false, false, null);
-            playerDao.Insert(player);
-            var inserted = playerDao.Insert(player);
+            _playerDao.Insert(player);
+            var inserted = _playerDao.Insert(player);
             Assert.IsFalse(inserted);
         }
 
         [TestMethod]
         public void Count()
         {
-            int cnt1 = playerDao.Count();
+            int cnt1 = _playerDao.Count();
             Assert.IsTrue(cnt1 >= 0);
             string uniqueUsername = TestHelper.GenerateName();
-            playerDao.Insert(new Player("first", "last", "nick", uniqueUsername, "pass",
+            _playerDao.Insert(new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null));
 
-            int cnt2 = playerDao.Count();
+            int cnt2 = _playerDao.Count();
             Assert.AreEqual(cnt1 + 1, cnt2);
         }
 
@@ -89,15 +88,15 @@ namespace WuHu.Dal.Test
             var player = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
 
-            playerDao.Insert(player);
+            _playerDao.Insert(player);
             Assert.IsNotNull(player.PlayerId);
 
             string newFirst = "newFirst";
             player.PlayerId = player.PlayerId;
             player.Firstname = newFirst;
-            playerDao.Update(player);
+            _playerDao.Update(player);
 
-            player = playerDao.FindById(player.PlayerId.Value);
+            player = _playerDao.FindById(player.PlayerId.Value);
             Assert.AreEqual(newFirst, player.Firstname);
         }
 
@@ -109,7 +108,7 @@ namespace WuHu.Dal.Test
                 false, false, false, false, false, true, true, true, null);
             try
             {
-                playerDao.Update(player); // should throw ArgumentException
+                _playerDao.Update(player); // should throw ArgumentException
                 Assert.Fail("ArgumentException not thrown for invalid Player.Update()");
             }
             catch (ArgumentException)
@@ -148,7 +147,7 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void FindAll()
         {
-            int cntInital = playerDao.Count();
+            int cntInital = _playerDao.Count();
 
             const int insertAmount = 10;
 
@@ -157,13 +156,13 @@ namespace WuHu.Dal.Test
                 string uniqueUsername = TestHelper.GenerateName();
                 Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
                     false, false, false, false, false, true, true, true, null);
-                playerDao.Insert(player);
+                _playerDao.Insert(player);
             }
 
-            int cntAfterInsert = playerDao.Count();
+            int cntAfterInsert = _playerDao.Count();
             Assert.AreEqual(insertAmount + cntInital, cntAfterInsert);
 
-            var players = playerDao.FindAll();
+            var players = _playerDao.FindAll();
             Assert.AreEqual(players.Count, insertAmount + cntInital);
         }
 
@@ -172,8 +171,8 @@ namespace WuHu.Dal.Test
         {
             string uniqueFirstName = TestHelper.GenerateName();
 
-            int totalInital = playerDao.Count();
-            int foundInitial = playerDao.FindAllByString(uniqueFirstName).Count;
+            int totalInital = _playerDao.Count();
+            int foundInitial = _playerDao.FindAllByString(uniqueFirstName).Count;
 
             const int insertAmount = 10;
 
@@ -182,13 +181,13 @@ namespace WuHu.Dal.Test
                 string uniqueUsername = TestHelper.GenerateName();
                 Player player = new Player(uniqueFirstName, "last", "nick", uniqueUsername, "pass",
                     false, false, false, false, false, true, true, true, null);
-                playerDao.Insert(player);
+                _playerDao.Insert(player);
             }
 
 
-            int totalAfterFirstInsert = playerDao.Count();
+            int totalAfterFirstInsert = _playerDao.Count();
             Assert.AreEqual(insertAmount + totalInital, totalAfterFirstInsert);
-            int foundAfterFirstInsert = playerDao.FindAllByString(uniqueFirstName).Count;
+            int foundAfterFirstInsert = _playerDao.FindAllByString(uniqueFirstName).Count;
             Assert.AreEqual(foundInitial + insertAmount, foundAfterFirstInsert);
 
             for (var i = 0; i < insertAmount; ++i)
@@ -196,13 +195,13 @@ namespace WuHu.Dal.Test
                 string uniqueUsername = TestHelper.GenerateName();
                 Player player = new Player("other", "other", "other", uniqueUsername, "pass",
                     false, false, false, false, false, true, true, true, null);
-                playerDao.Insert(player);
+                _playerDao.Insert(player);
             }
 
-            int totalAfterSecondInsert = playerDao.Count();
+            int totalAfterSecondInsert = _playerDao.Count();
             Assert.AreEqual(insertAmount * 2 + totalInital, totalAfterSecondInsert);
 
-            var foundAfterSecondInsert = playerDao.FindAllByString(uniqueFirstName).Count;
+            var foundAfterSecondInsert = _playerDao.FindAllByString(uniqueFirstName).Count;
             Assert.AreEqual(foundInitial + insertAmount, foundAfterSecondInsert);
         }
 
@@ -212,20 +211,20 @@ namespace WuHu.Dal.Test
             string uniqueUsername = TestHelper.GenerateName();
             Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
                 false, false, false, false, false, true, true, true, null);
-            playerDao.Insert(player);
-            Player foundPlayer = playerDao.FindByUsername(uniqueUsername);
+            _playerDao.Insert(player);
+            Player foundPlayer = _playerDao.FindByUsername(uniqueUsername);
 
             Assert.AreEqual(player.PlayerId, foundPlayer.PlayerId);
 
             uniqueUsername = TestHelper.GenerateName();
-            Player nullPlayer = playerDao.FindByUsername(uniqueUsername);
+            Player nullPlayer = _playerDao.FindByUsername(uniqueUsername);
             Assert.IsNull(nullPlayer);
         }
 
         [TestMethod]
         public void FindAllByDay()
         {
-            int cntInital = playerDao.FindAllOnDays(monday: true).Count;
+            int cntInital = _playerDao.FindAllOnDays(monday: true).Count;
 
             const int insertAmount = 10;
 
@@ -234,11 +233,11 @@ namespace WuHu.Dal.Test
                 string uniqueUsername = TestHelper.GenerateName();
                 Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
                     false, false, false, false, false, false, false, false, null);
-                playerDao.Insert(player);
+                _playerDao.Insert(player);
             }
 
 
-            int cntAfterFirstInsert = playerDao.FindAllOnDays(monday: true).Count;
+            int cntAfterFirstInsert = _playerDao.FindAllOnDays(monday: true).Count;
             Assert.AreEqual(cntInital, cntAfterFirstInsert);
 
             for (var i = 0; i < insertAmount; ++i)
@@ -246,10 +245,10 @@ namespace WuHu.Dal.Test
                 string uniqueUsername = TestHelper.GenerateName();
                 Player player = new Player("first", "last", "nick", uniqueUsername, "pass",
                     false, true, true, true, true, true, true, true, null);
-                playerDao.Insert(player);
+                _playerDao.Insert(player);
             }
 
-            int cntAfterSecondInsert = playerDao.FindAllOnDays(monday: true).Count;
+            int cntAfterSecondInsert = _playerDao.FindAllOnDays(monday: true).Count;
             Assert.AreEqual(insertAmount + cntInital, cntAfterSecondInsert);
         }
 
