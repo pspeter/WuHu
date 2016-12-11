@@ -13,7 +13,7 @@ namespace WuHu.BL.Impl
     public class PlayerManager : IPlayerManager
     {
         private static PlayerManager _instance;
-        private Authenticator _authenticator;
+        private readonly Authenticator _authenticator;
         private readonly IPlayerDao _playerDao;
 
         protected PlayerManager()
@@ -34,7 +34,12 @@ namespace WuHu.BL.Impl
             {
                 return false;
             }
-            return _playerDao.Insert(player);
+            var inserted = _playerDao.Insert(player);
+            if (inserted)
+            {
+                RatingManager.GetInstance().AddCurrentRatingFor(player, credentials);
+            }
+            return inserted;
         }
 
         public bool UpdatePlayer(Player player, Credentials credentials)
@@ -44,25 +49,18 @@ namespace WuHu.BL.Impl
                 return false;
             }
 
-            if (credentials.Username != player.Username || player.IsAdmin) //only admins can update other players and users can't make themselves admin
+            // only admins can update other players and users can't make themselves admin
+            if (credentials.Username != player.Username || player.IsAdmin) 
             {
-                if (!Authenticate(credentials, true))
-                {
-                    return false;
-                }
-                return _playerDao.Update(player);
+                return Authenticate(credentials, true) && _playerDao.Update(player);
             }
-
-            if (!Authenticate(credentials, false))
-            {
-                return false;
-            }
-            return _playerDao.Update(player);
+            // normal users can edit themselves
+            return Authenticate(credentials, false) && _playerDao.Update(player);
         }
 
         public IList<Player> GetAllPlayers()
         {
-            throw new NotImplementedException();
+            return _playerDao.FindAll();
         }
 
         private bool Authenticate(Credentials credentials, bool adminRequired)

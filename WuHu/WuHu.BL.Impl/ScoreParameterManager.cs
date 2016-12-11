@@ -11,7 +11,7 @@ namespace WuHu.BL.Impl
     public class ScoreParameterManager : IScoreParameterManager
     {
         private static ScoreParameterManager _instance;
-        private Authenticator _authenticator;
+        private readonly Authenticator _authenticator;
         private readonly IScoreParameterDao _paramDao;
 
         protected ScoreParameterManager()
@@ -31,19 +31,31 @@ namespace WuHu.BL.Impl
             return _paramDao.FindAll();
         }
 
-        public bool AddParameter(ScoreParameter param)
+        public bool AddParameter(ScoreParameter param, Credentials credentials)
         {
-            throw new NotImplementedException();
+            if (!Authenticate(credentials, true))
+            {
+                return false;
+            }
+            return _paramDao.Insert(param);
         }
 
-        public ScoreParameter UpdateParameter(ScoreParameter param)
+        public bool UpdateParameter(ScoreParameter param, Credentials credentials)
         {
-            throw new NotImplementedException();
+            if (!Authenticate(credentials, true)) 
+            {
+                return false;
+            }
+            return _paramDao.Update(param);
         }
 
         public ScoreParameter GetParameterFor(string key)
         {
             return _paramDao.FindById(key);
+        }
+        private bool Authenticate(Credentials credentials, bool adminRequired)
+        {
+            return _authenticator.Authenticate(credentials, adminRequired);
         }
     }
 }

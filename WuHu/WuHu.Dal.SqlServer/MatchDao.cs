@@ -238,7 +238,7 @@ namespace WuHu.Dal.SqlServer
                     var id = database.ExecuteScalar(command); // set the objects id right away
                     match.MatchId = id;
                 }
-                catch (SqlException e)
+                catch (SqlException)
                 {
                     return false;
                 }

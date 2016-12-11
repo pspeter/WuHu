@@ -55,6 +55,8 @@
     <Compile Include="MatchManagerTests.cs" />
     <Compile Include="PlayerManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RatingManagerTests.cs" />
+    <Compile Include="TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WuHu.BL.Impl\WuHu.BL.Impl.csproj">

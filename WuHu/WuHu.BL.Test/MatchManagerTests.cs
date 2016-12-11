@@ -18,11 +18,6 @@ namespace WuHu.BL.Test
         private static IRatingDao _ratingDao;
         private static IList<Player> _testPlayers;
 
-        internal static string GenerateName()
-        {
-            return Guid.NewGuid().ToString().Substring(0, 20); //random 20 character string
-        }
-
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
@@ -34,9 +29,9 @@ namespace WuHu.BL.Test
             _matchMgr = MatchManager.GetInstance();
             var rand = new Random(42);
             _testPlayers = new List<Player>();
-            for (int i = 0; i < 100; ++i)
+            for (int i = 0; i < 10; ++i)
             {
-                var user = GenerateName();
+                var user = TestHelper.GenerateName();
                 var player = new Player(i.ToString(), "last", "nick", user, "pass",
                     true, false, false, false, false, true, true, true, null);
                 _playerDao.Insert(player);
@@ -46,11 +41,19 @@ namespace WuHu.BL.Test
         }
 
         [TestMethod]
+        public void Constructor()
+        {
+            var mgr = MatchManager.GetInstance();
+            Assert.IsNotNull(mgr);
+            Assert.AreEqual(mgr, _matchMgr);
+        }
+
+        [TestMethod]
         public void CreateMatches()
         {
-            var amountMatches = 100;
-            Player admin = _testPlayers.First();
-            Tournament tournament = new Tournament("", admin);
+            var amountMatches = 3;
+            var admin = _testPlayers.First();
+            var tournament = new Tournament("", admin);
             _tournamentDao.Insert(tournament);
             var matches = _matchDao.FindAllByTournament(tournament);
             Assert.AreEqual(0, matches.Count);

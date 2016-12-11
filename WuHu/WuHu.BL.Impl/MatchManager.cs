@@ -12,12 +12,12 @@ namespace WuHu.BL.Impl
     public class MatchManager : IMatchManager
     {
         private static MatchManager _instance;
-        private Authenticator _authenticator;
+        private readonly Authenticator _authenticator;
         private readonly IMatchDao _matchDao;
         private readonly IRatingDao _ratingDao;
         private readonly IScoreParameterDao _paramDao;
         private bool _isLocked;
-        private Random _rand;
+        private readonly Random _rand;
 
         protected MatchManager()
         {

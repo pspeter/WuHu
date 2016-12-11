@@ -12,7 +12,7 @@ namespace WuHu.BL.Impl
     public class RatingManager : IRatingManager
     {
         private static RatingManager _instance;
-        private Authenticator _authenticator;
+        private readonly Authenticator _authenticator;
         private readonly IRatingDao _ratingDao;
         private readonly IMatchDao _matchDao;
         private readonly IScoreParameterDao _paramDao;
@@ -31,10 +31,17 @@ namespace WuHu.BL.Impl
 
         public bool AddCurrentRatingFor(Player player, Credentials credentials)
         {
-            var kRating = int.Parse(_paramDao.FindById("k-rating").Value);
-            var halflife = int.Parse(_paramDao.FindById("halflife").Value);
-            //var scoredMatches = int.Parse(_paramDao.FindById("scoredMatches").Value);
-            var initialScore = int.Parse(_paramDao.FindById("initialScore").Value);
+            if (!Authenticate(credentials, true)) // only admins can add players
+            {
+                return false;
+            }
+
+            var kRating = int.Parse(_paramDao.FindById("kRating")
+                ?.Value ?? DefaultParameter.KRating);
+            var halflife = int.Parse(_paramDao.FindById("halflife")
+                ?.Value ?? DefaultParameter.Halflife);
+            var initialScore = int.Parse(_paramDao.FindById("initialScore")
+                ?.Value ?? DefaultParameter.InitialScore);
 
             if (_ratingDao.FindCurrentRating(player) == null)
             {
@@ -45,9 +52,38 @@ namespace WuHu.BL.Impl
             var matches = _matchDao.FindAllByPlayer(player)
                 .Where(m => m.IsDone);
 
+            var rating = initialScore;
+            var matchNr = 0;
+            foreach (var match in matches)
+            {
+                if (match.ScoreTeam1 == null || match.ScoreTeam2 == null)
+                {
+                    throw new ArgumentException("Player has finished matches without a score");
+                }
 
+                var multiplier = Math.Pow(0.5, (double)matchNr / halflife);
+                
+                int playerWon;
+                double winChance;
 
-            return false;
+                if (player.Username == match.Player1.Username ||
+                    player.Username == match.Player2.Username)
+                {
+                    playerWon = match.ScoreTeam1.Value > match.ScoreTeam2.Value ? 1 : 0;
+                    winChance = match.EstimatedWinChance;
+                }
+                else
+                {
+                    playerWon = match.ScoreTeam1.Value < match.ScoreTeam2.Value ? 1 : 0;
+                    winChance = 1 - match.EstimatedWinChance;
+                }
+                
+                var deltaScore = kRating*(playerWon - winChance);
+                rating += (int) Math.Floor(multiplier * deltaScore);
+                ++matchNr;
+            }
+            
+            return _ratingDao.Insert(new Rating(player, DateTime.Now, rating));
         }
 
         public IList<Rating> GetAllRatings()
@@ -63,6 +99,11 @@ namespace WuHu.BL.Impl
         public Rating GetCurrentRatingFor(Player player)
         {
             return _ratingDao.FindCurrentRating(player);
+        }
+
+        private bool Authenticate(Credentials credentials, bool adminRequired)
+        {
+            return _authenticator.Authenticate(credentials, adminRequired);
         }
     }
 }

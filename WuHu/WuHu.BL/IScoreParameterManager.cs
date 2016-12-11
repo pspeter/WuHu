@@ -7,8 +7,8 @@ namespace WuHu.BL
     public interface IScoreParameterManager
     {
         IList<ScoreParameter> GetAllParameters();
-        bool AddParameter(ScoreParameter param);
-        ScoreParameter UpdateParameter(ScoreParameter param);
+        bool AddParameter(ScoreParameter param, Credentials credentials);
+        bool UpdateParameter(ScoreParameter param, Credentials credentials);
         ScoreParameter GetParameterFor(string key);
     }
 }
