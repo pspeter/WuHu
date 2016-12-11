@@ -34,7 +34,7 @@ namespace WuHu.BL.Test
             _matchMgr = MatchManager.GetInstance();
             var rand = new Random(42);
             _testPlayers = new List<Player>();
-            for (int i = 0; i < 500; ++i)
+            for (int i = 0; i < 100; ++i)
             {
                 var user = GenerateName();
                 var player = new Player(i.ToString(), "last", "nick", user, "pass",
@@ -51,7 +51,7 @@ namespace WuHu.BL.Test
             Player admin = _testPlayers.First();
             Tournament tournament = new Tournament("", admin);
             _tournamentDao.Insert(tournament);
-            _matchMgr.CreateMatches(tournament, _testPlayers, 5, new Credentials(admin.Username, "pass"));
+            _matchMgr.CreateMatches(tournament, _testPlayers, 100, new Credentials(admin.Username, "pass"));
         }
     }
 }

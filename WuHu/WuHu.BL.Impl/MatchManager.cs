@@ -26,6 +26,7 @@ namespace WuHu.BL.Impl
             _ratingDao = DalFactory.CreateRatingDao(database);
             _paramDao = DalFactory.CreateScoreParameterDao(database);
             _authenticator = Authenticator.GetInstance();
+            _rand = new Random();
         }
 
         public static MatchManager GetInstance()
@@ -58,20 +59,16 @@ namespace WuHu.BL.Impl
             // if any matches that haven't been played exist, cancel them
             CancelMatches(tournament);
 
-            var kRating = int.Parse(_paramDao.FindById("k-rating").Value);
-            _rand = new Random();
-
             var playersCopy = new List<Player>(players);
             for (int matchNr = 0; matchNr < amount; ++matchNr)
             {
-                Player player1, player2, player3, player4;
                 // first, pick a random player
                 if (players.Count == 0)
                 {
                     players = new List<Player>(playersCopy);
                 }
                 var playerIndex1 = _rand.Next(players.Count());
-                player1 = players[playerIndex1];
+                var player1 = players.ElementAt(playerIndex1);
                 players.RemoveAt(playerIndex1);
                 var player1Rating = _ratingDao.FindCurrentRating(player1).Value;
 
@@ -81,7 +78,7 @@ namespace WuHu.BL.Impl
                     players = new List<Player>(playersCopy);
                     players.Remove(player1);
                 }
-                player3 = PickPlayer(players, player1Rating);
+                var player3 = PickPlayer(players, player1Rating);
                 var player3Rating = _ratingDao.FindCurrentRating(player3).Value;
 
                 // as his teammate, pick somebody who would even out their score difference
@@ -91,7 +88,7 @@ namespace WuHu.BL.Impl
                     players.Remove(player1);
                     players.Remove(player3);
                 }
-                player2 = PickPlayer(players, 2*player3Rating - player1Rating);
+                var player2 = PickPlayer(players, 2*player3Rating - player1Rating);
                 var player2Rating = _ratingDao.FindCurrentRating(player2).Value;
 
                 // as his second opponent, again try to cancel out the rating difference between the teams
@@ -102,7 +99,7 @@ namespace WuHu.BL.Impl
                     players.Remove(player2);
                     players.Remove(player3);
                 }
-                player4 = PickPlayer(players, player1Rating + player2Rating - player3Rating);
+                var player4 = PickPlayer(players, player1Rating + player2Rating - player3Rating);
                 var player4Rating = _ratingDao.FindCurrentRating(player4).Value;
 
                 var team1Rating = ((double) player1Rating + player2Rating)/2;
@@ -121,38 +118,27 @@ namespace WuHu.BL.Impl
 
         private Player PickPlayer(IList<Player> players, int fromScore)
         {
-            var chances = CalculatePickChances(players, fromScore);
-            double randChance = _rand.NextDouble() * chances.Sum(); // second player random Nr
+            var playerCount = players.Count;
+            var sortedPlayers = players.OrderBy(p => Math.Abs(_ratingDao.FindCurrentRating(p).Value - fromScore));
 
-            int playerIndex2 = 0;
-            foreach (var chance in chances)
-            {
-                randChance -= chance;
-                if (randChance <= 0)
+            var cutoff = 1/(Math.Log(playerCount) + 1);
+
+            foreach (var player in sortedPlayers)
+            { 
+                if (_rand.NextDouble() < cutoff)
                 {
-                    players.RemoveAt(playerIndex2);
-                    return players[playerIndex2];
+                    players.Remove(player);
+                    return player;
                 }
             }
-            return players.Last();
+            var returnPlayer = sortedPlayers.First();
+            players.Remove(returnPlayer);
+            return returnPlayer;
         } 
-
-        private IEnumerable<double> CalculatePickChances(IList<Player> players, int fromScore)
-        {
-            var ratings = players.Select(p => _ratingDao.FindCurrentRating(p).Value);
-
-            var scoreDifferences = ratings.Select(rating => Math.Abs(rating - fromScore));
-
-            var minDiff = scoreDifferences.Min();
-            var maxDiff = scoreDifferences.Max();
-            var k = 1/Math.Log(maxDiff - minDiff + 1);
-            
-            return scoreDifferences.Select(s => 1 - Math.Log(s - minDiff + 1)*k);
-        }
 
         private void CancelMatches(Tournament tournament)
         {
-            IEnumerable<Match> matchesToCancel = _matchDao
+            var matchesToCancel = _matchDao
                 .FindAllByTournament(tournament)
                 .Where(match => !match.IsDone);
 
