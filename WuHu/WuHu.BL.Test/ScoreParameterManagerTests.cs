@@ -27,7 +27,7 @@ namespace WuHu.BL.Test
             var user = TestHelper.GenerateName();
             var admin = new Player("admin", "last", "nick", user, "pass",
                     true, false, false, false, false, true, true, true, null);
-
+            _creds = new Credentials(user, "pass");
         }
 
         [TestMethod]

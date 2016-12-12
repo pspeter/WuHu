@@ -33,7 +33,7 @@ namespace WuHu.BL.Test
             var rand = new Random(42);
 
             _testPlayers = new List<Player>();
-            for (int i = 0; i < 10; ++i)
+            for (int i = 0; i < 3; ++i)
             {
                 var user = TestHelper.GenerateName();
                 var player = new Player(i.ToString(), "last", "nick", user, "pass",
@@ -68,8 +68,8 @@ namespace WuHu.BL.Test
 
             var tournament = new Tournament("", player);
             Assert.IsTrue(_tournamentDao.Insert(tournament));
-            var wonMatch = new Match(tournament, DateTime.Now, 10, 0, 0.5, true, 
-                _testPlayers[1], _testPlayers[0], player, _testPlayers[2]);
+            var wonMatch = new Match(tournament, DateTime.Now, 0, 10, 0.5, true, 
+                _testPlayers[0], _testPlayers[1], player, _testPlayers[2]);
             Assert.IsTrue(_matchDao.Insert(wonMatch));
             _ratingMgr.AddCurrentRatingFor(player, _creds);
 
