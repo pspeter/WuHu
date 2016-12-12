@@ -51,7 +51,7 @@ namespace WuHu.BL.Test
         [TestMethod]
         public void CreateMatches()
         {
-            var amountMatches = 3;
+            const int amountMatches = 3;
             var admin = _testPlayers.First();
             var tournament = new Tournament("", admin);
             _tournamentDao.Insert(tournament);
@@ -61,6 +61,12 @@ namespace WuHu.BL.Test
             Assert.IsTrue(success);
             matches = _matchDao.FindAllByTournament(tournament);
             Assert.AreEqual(amountMatches, matches.Count);
+        }
+
+        [TestMethod]
+        public void SetScore()
+        {
+            
         }
     }
 }
