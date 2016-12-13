@@ -9,7 +9,6 @@ namespace WuHu.BL
 {
     public interface IMatchManager
     {
-        bool CreateMatches(Tournament tournament, IList<Player> players, int amount, Credentials credentials);
         bool SetScore(Match match, Credentials credentials);
         IList<Match> GetAllMatches();
         IList<Match> GetAllMatchesFor(Player player);

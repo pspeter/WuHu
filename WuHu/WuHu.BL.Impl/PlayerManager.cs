@@ -58,6 +58,16 @@ namespace WuHu.BL.Impl
             return Authenticate(credentials, false) && _playerDao.Update(player);
         }
 
+        public Player GetPlayer(int playerId)
+        {
+            return _playerDao.FindById(playerId);
+        }
+
+        public Player GetPlayer(string username)
+        {
+            return _playerDao.FindByUsername(username);
+        }
+
         public IList<Player> GetAllPlayers()
         {
             return _playerDao.FindAll();

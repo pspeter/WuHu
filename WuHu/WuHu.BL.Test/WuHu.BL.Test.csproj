@@ -58,6 +58,7 @@
     <Compile Include="RatingManagerTests.cs" />
     <Compile Include="ScoreParameterManagerTests.cs" />
     <Compile Include="TestHelper.cs" />
+    <Compile Include="TournamentManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WuHu.BL.Impl\WuHu.BL.Impl.csproj">

@@ -49,7 +49,7 @@ namespace WuHu.BL.Impl
             return _paramDao.Update(param);
         }
 
-        public ScoreParameter GetParameterFor(string key)
+        public ScoreParameter GetParameter(string key)
         {
             return _paramDao.FindById(key);
         }

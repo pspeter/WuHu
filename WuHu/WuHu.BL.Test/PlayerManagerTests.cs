@@ -11,6 +11,7 @@ namespace WuHu.BL.Test
     {
         private static IPlayerManager _playerMgr;
         private static IPlayerDao _playerDao;
+        private static Credentials _creds;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
@@ -18,6 +19,12 @@ namespace WuHu.BL.Test
             var database = DalFactory.CreateDatabase();
             _playerDao = DalFactory.CreatePlayerDao(database);
             _playerMgr = PlayerManager.GetInstance();
+
+            var user = TestHelper.GenerateName();
+            var admin = new Player("admin", "last", "nick", user, "pass",
+                    true, false, false, false, false, true, true, true, null);
+            DalFactory.CreatePlayerDao(database).Insert(admin);
+            _creds = new Credentials(user, "pass");
         }
 
         [TestMethod]
@@ -29,12 +36,55 @@ namespace WuHu.BL.Test
         }
 
         [TestMethod]
-        public void Create()
+        public void GetAll()
+        {
+            var initCnt = _playerMgr.GetAllPlayers().Count;
+            var key = TestHelper.GenerateName();
+            for (var i = 0; i < 5; ++i)
+            {
+                var user = TestHelper.GenerateName();
+                var player = new Player("admin", "last", "nick", user, "pass",
+                        true, false, false, false, false, true, true, true, null);
+                _playerDao.Insert(player);
+            }
+
+            var newCnt = _playerMgr.GetAllPlayers().Count;
+            Assert.AreEqual(initCnt + 5, newCnt);
+        }
+
+        [TestMethod]
+        public void GetById()
+        {
+            var user = TestHelper.GenerateName();
+            var player = new Player("admin", "last", "nick", user, "pass",
+                        true, false, false, false, false, true, true, true, null);
+            _playerDao.Insert(player);
+            Assert.IsNotNull(player.PlayerId);
+            var foundPlayer = _playerMgr.GetPlayer(player.PlayerId.Value);
+            Assert.AreEqual(player.PlayerId, foundPlayer.PlayerId);
+            Assert.AreEqual(player.Username, foundPlayer.Username);
+        }
+
+        [TestMethod]
+        public void GetByUser()
+        {
+            var user = TestHelper.GenerateName();
+            var player = new Player("admin", "last", "nick", user, "pass",
+                        true, false, false, false, false, true, true, true, null);
+            _playerDao.Insert(player);
+            Assert.IsNotNull(player.PlayerId);
+            var foundPlayer = _playerMgr.GetPlayer(player.Username);
+            Assert.AreEqual(player.PlayerId, foundPlayer.PlayerId);
+            Assert.AreEqual(player.Username, foundPlayer.Username);
+        }
+
+        [TestMethod]
+        public void Add()
         {
             var user = TestHelper.GenerateName();
             var admin = new Player("admin", "last", "nick", user, "pass",
                     true, false, false, false, false, true, true, true, null);
-            var success = _playerDao.Insert(admin);
+            var success = _playerMgr.AddPlayer(admin, _creds);
             Assert.IsTrue(success);
             var creds = new Credentials(user, "pass");
 
@@ -43,6 +93,53 @@ namespace WuHu.BL.Test
             success = _playerMgr.AddPlayer(player, creds);
             Assert.IsFalse(success);
 
+
+            Assert.IsFalse(_playerMgr.AddPlayer(player, new Credentials("", "1234")));
+        }
+
+        [TestMethod]
+        public void Update()
+        {
+            var user = TestHelper.GenerateName();
+            var player = new Player("first", "last", "nick", user, "pass",
+                    false, false, false, false, false, true, true, true, null);
+            var creds = new Credentials(user, "pass");
+
+            user = TestHelper.GenerateName();
+            var otherPlayer = new Player("first", "last", "nick", user, "pass",
+                    false, false, false, false, false, true, true, true, null);
+
+            Assert.IsTrue(_playerDao.Insert(player));
+            Assert.IsTrue(_playerDao.Insert(otherPlayer));
+
+            // players can change their own values
+            player.Nickname = "newNick";
+            var success = _playerMgr.UpdatePlayer(player, creds);
+            Assert.IsTrue(success);
+
+            // normal players can't change other players' values
+            otherPlayer.Nickname = "newNick";
+            success = _playerMgr.UpdatePlayer(otherPlayer, creds);
+            Assert.IsFalse(success);
+
+            // normal players can't make themselves admin
+            player.IsAdmin = true;
+            success = _playerMgr.UpdatePlayer(player, creds);
+            Assert.IsFalse(success);
+            
+            // other admins can change other players and even make them admin
+            success = _playerMgr.UpdatePlayer(player, _creds);
+            Assert.IsTrue(success);
+
+
+            user = TestHelper.GenerateName();
+            var notInsertedPlayer = new Player("first", "last", "nick", user, "pass",
+                    false, false, false, false, false, true, true, true, null);
+            // can't update players that aren't inserted
+            success = _playerMgr.UpdatePlayer(notInsertedPlayer, _creds);
+            Assert.IsFalse(success);
+        
+            Assert.IsFalse(_playerMgr.UpdatePlayer(player, new Credentials("", "1234")));
         }
     }
 }

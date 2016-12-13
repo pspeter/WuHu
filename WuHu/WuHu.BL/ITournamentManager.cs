@@ -11,5 +11,7 @@ namespace WuHu.BL
     {
         bool CreateTournament(Tournament tournament, IList<Player> players, int amountMatches, Credentials credentials);
         bool UpdateTournament(Tournament tournament, IList<Player> players, int amountMatches, Credentials credentials);
+        bool Lock(Credentials credentials);
+        void Unlock(Credentials credentials);
     }
 }

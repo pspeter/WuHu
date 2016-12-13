@@ -9,6 +9,6 @@ namespace WuHu.BL
         IList<ScoreParameter> GetAllParameters();
         bool AddParameter(ScoreParameter param, Credentials credentials);
         bool UpdateParameter(ScoreParameter param, Credentials credentials);
-        ScoreParameter GetParameterFor(string key);
+        ScoreParameter GetParameter(string key);
     }
 }

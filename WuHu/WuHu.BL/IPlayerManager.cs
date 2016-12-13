@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using WuHu.Domain;
 
 namespace WuHu.BL
@@ -11,6 +7,8 @@ namespace WuHu.BL
     {
         bool AddPlayer(Player player, Credentials credentials);
         bool UpdatePlayer(Player player, Credentials credentials);
+        Player GetPlayer(int playerId);
+        Player GetPlayer(string username);
         IList<Player> GetAllPlayers();
     }
 }
