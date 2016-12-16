@@ -50,10 +50,11 @@ namespace WuHu.BL.Impl
             }
 
             var matches = _matchDao.FindAllByPlayer(player)
-                .Where(m => m.IsDone);
+                .Where(m => m.IsDone)
+                .OrderBy(m => m.Datetime);
 
             var rating = initialScore;
-            var matchNr = 0;
+            var matchNr = matches.Count() - 1;
             foreach (var match in matches)
             {
                 if (match.ScoreTeam1 == null || match.ScoreTeam2 == null)
@@ -80,7 +81,7 @@ namespace WuHu.BL.Impl
                 
                 var deltaScore = kRating*(playerWon - winChance);
                 rating += (int) Math.Floor(multiplier * deltaScore);
-                ++matchNr;
+                --matchNr;
             }
             
             return _ratingDao.Insert(new Rating(player, DateTime.Now, rating));

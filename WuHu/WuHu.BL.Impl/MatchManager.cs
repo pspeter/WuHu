@@ -69,6 +69,16 @@ namespace WuHu.BL.Impl
             return _matchDao.FindAllByPlayer(player);
         }
 
+        public IList<Match> GetAllMatchesFor(Tournament tournament)
+        {
+            return _matchDao.FindAllByTournament(tournament);
+        }
+
+        public IList<Match> GetAllUnfinishedMatches()
+        {
+            return new List<Match>(_matchDao.FindAll().Where(m => !m.IsDone));
+        }
+
         private bool Authenticate(Credentials credentials, bool adminRequired)
         {
             return _authenticator.Authenticate(credentials, adminRequired);

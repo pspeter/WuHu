@@ -15,11 +15,13 @@ namespace WuHu.BL.Impl
         private static PlayerManager _instance;
         private readonly Authenticator _authenticator;
         private readonly IPlayerDao _playerDao;
+        private readonly IRatingDao _ratingDao;
 
         protected PlayerManager()
         {
             var database = DalFactory.CreateDatabase();
             _playerDao = DalFactory.CreatePlayerDao(database);
+            _ratingDao = DalFactory.CreateRatingDao(database);
             _authenticator = Authenticator.GetInstance();
         }
 
@@ -71,6 +73,13 @@ namespace WuHu.BL.Impl
         public IList<Player> GetAllPlayers()
         {
             return _playerDao.FindAll();
+        }
+
+        public IList<Player> GetRanklist()
+        {
+            return new List<Player>(
+                _playerDao.FindAll()
+                .OrderByDescending(p => _ratingDao.FindCurrentRating(p)));
         }
 
         private bool Authenticate(Credentials credentials, bool adminRequired)
