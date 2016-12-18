@@ -67,11 +67,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Login\LoginWindow.xaml.cs">
+    <Compile Include="ViewModels\BaseVm.cs" />
+    <Compile Include="ViewModels\LoginVm.cs" />
+    <Compile Include="ViewModels\PlayerCollectionVm.cs" />
+    <Compile Include="ViewModels\PlayerVm.cs" />
+    <Compile Include="ViewModels\RelayCommand.cs" />
+    <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Terminal.xaml.cs">
-      <DependentUpon>Terminal.xaml</DependentUpon>
+    <Compile Include="Views\PlayerPage.xaml.cs">
+      <DependentUpon>PlayerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TerminalWindow.xaml.cs">
+      <DependentUpon>TerminalWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -103,16 +111,29 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModels\CredentialsVM\" />
-    <Folder Include="ViewModels\PlayerVM\" />
-    <Folder Include="Views\PlayerMenu\" />
+    <ProjectReference Include="..\WuHu.BL.Impl\WuHu.BL.Impl.csproj">
+      <Project>{07471340-8793-4768-8154-6B9844851FD3}</Project>
+      <Name>WuHu.BL.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WuHu.BL\WuHu.BL.csproj">
+      <Project>{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}</Project>
+      <Name>WuHu.BL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WuHu.Domain\WuHu.Domain.csproj">
+      <Project>{3b5e2218-2c2f-4995-9b41-e382b34880b4}</Project>
+      <Name>WuHu.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\Login\LoginWindow.xaml">
+    <Page Include="Views\LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Terminal.xaml">
+    <Page Include="Views\PlayerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TerminalWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

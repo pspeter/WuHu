@@ -1,43 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using WuHu.BL.Impl;
-using WuHu.Domain;
 
 namespace WuHu.Terminal.ViewModels
 {
-    class LoginVm : INotifyPropertyChanged
+    internal class LoginVm : BaseVm
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private bool _isAuthenticated;
         private string _username;
         private string _password;
-        private Authenticator _authenticator;
 
-        public LoginVm(Authenticator authenticator)
+        public ICommand LoginCommand { get; private set; }
+        public ICommand LogoutCommand { get; private set; }
+
+        public LoginVm()
         {
-            _authenticator = authenticator;
-            LoginCommand = new RelayCommand(c => _authenticator.Authenticate((Credentials) c, false));
+            LoginCommand = new RelayCommand(p => Manager.Login(Username, Password));
+            LogoutCommand = new RelayCommand(p => Manager.Logout(), p => Manager.IsUserAuthenticated());
         }
-
-
-        public bool IsAuthenticated
-        {
-            get { return _isAuthenticated; }
-            set
-            {
-                if (value != _isAuthenticated)
-                {
-                    _isAuthenticated = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        
         public string Username
         {
             get { return _username; }
@@ -46,7 +25,7 @@ namespace WuHu.Terminal.ViewModels
                 if (value != _username)
                 {
                     _username = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(this);
                 }
             }
         }
@@ -59,17 +38,24 @@ namespace WuHu.Terminal.ViewModels
                 if (value != _password)
                 {
                     _password = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(this);
                 }
             }
         }
 
-        public ICommand LoginCommand { get; private set; }
-        
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void Login(object param)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            var success = Manager.Login(Username, Password);
+
+            if (success)
+            {
+                OnPropertyChanged(nameof(IsAuthenticated));
+            }
+        }
+
+        private void Logout(object param)
+        {
+            
         }
     }
 }

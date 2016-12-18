@@ -18,23 +18,8 @@ namespace WuHu.Terminal
 
         private void ApplicationStart(object sender, StartupEventArgs e)
         {
-            Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
-            
-            var dialog = new LoginWindow();
-
-            if (dialog.ShowDialog() == true)
-            {
-                Console.WriteLine("yay");
-            }
-            else
-            {
-                //MessageBox.Show("Login failed", "Error", MessageBoxButton.OK);
-                var context = new PlayerVM();
-                var app = new Terminal {DataContext = context};
-                app.ShowDialog();
-
-                Current.Shutdown(-1);
-            }
+            var dialog = new TerminalWindow();
+            dialog.Show();
         }
     }
 }

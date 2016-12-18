@@ -12,11 +12,7 @@ namespace WuHu.BL.Impl
 
         public static ITerminalManager GetTerminalManager()
         {
-            if (_terminalManager == null)
-            {
-                _terminalManager = new TerminalManager();
-            }
-            return _terminalManager;
+            return _terminalManager ?? (_terminalManager = new TerminalManager());
         }
     }
 }

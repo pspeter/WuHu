@@ -251,20 +251,5 @@ namespace WuHu.Dal.Test
             int cntAfterSecondInsert = _playerDao.FindAllOnDays(monday: true).Count;
             Assert.AreEqual(insertAmount + cntInital, cntAfterSecondInsert);
         }
-
-        [TestMethod]
-        public void ChangePassword()
-        {
-            string newPw = "newPw";
-
-            string uniqueUsername = TestHelper.GenerateName();
-            var player = new Player("first", "last", "nick", uniqueUsername, "pass",
-                    false, true, true, true, true, true, true, true, null);
-            player.ChangePassword(newPw);
-
-            bool success = PasswordManager.CheckPassword(newPw, player.Password, player.Salt);
-
-            Assert.IsTrue(success);
-        }
     }
 }

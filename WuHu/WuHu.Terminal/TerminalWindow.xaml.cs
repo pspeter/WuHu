@@ -14,9 +14,9 @@ using System.Windows.Shapes;
 
 namespace WuHu.Terminal
 {
-    public partial class Terminal : Window
+    public partial class TerminalWindow : Window
     {
-        public Terminal()
+        public TerminalWindow()
         {
             InitializeComponent();
         }

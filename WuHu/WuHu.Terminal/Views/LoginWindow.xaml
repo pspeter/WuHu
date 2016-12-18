@@ -12,8 +12,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WuHu.Terminal.Views.Login"
+        xmlns:vm="clr-namespace:WuHu.Terminal.ViewModels"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="300" Width="400">
+        Title="Login - WuHu" Height="300" Width="400">
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -54,7 +55,8 @@
                 <TextBox Name="TxtUsername"
                          Grid.Column="1" Grid.Row="0"
                          VerticalAlignment="Center"
-                         Margin="10, 0"></TextBox>
+                         Margin="10, 0"
+                         Text="{Binding Path=Username}"></TextBox>
 
                 <TextBlock Grid.Column="0" Grid.Row="1"
                        FontSize="14" 

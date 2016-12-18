@@ -67,15 +67,9 @@ namespace WuHu.Domain
 
         public string Username { get; }
 
-        public byte[] Password { get; private set; }
+        public byte[] Password { get; set; }
 
-        public void ChangePassword (string password)
-        {
-            this.Salt = PasswordManager.GenerateSalt();
-            this.Password = PasswordManager.HashPassword(password, this.Salt);
-        }
-
-        public byte[] Salt { get; private set; }
+        public byte[] Salt { get; set; }
 
         public bool IsAdmin { get; set; }
         public bool PlaysMondays { get; set; }

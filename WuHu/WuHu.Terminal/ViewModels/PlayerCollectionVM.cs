@@ -1,27 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using WuHu.BL;
+﻿using System.Collections.ObjectModel;
 
 namespace WuHu.Terminal.ViewModels
 {
-    public class PlayerCollectionVm : INotifyCollectionChanged, INotifyPropertyChanged
+    public class PlayerCollectionVm : BaseVm
     {
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-        
         private PlayerVm _currentPlayer;
-        private IPlayerManager _playerManager;
 
-        public PlayerCollectionVm(IPlayerManager playerManager)
+        public PlayerCollectionVm()
         {
-            this._playerManager = playerManager;
-            this.Players = new ObservableCollection<PlayerVm>();
+            Players = new ObservableCollection<PlayerVm>();
             LoadPlayers();
         }
 
@@ -29,7 +16,12 @@ namespace WuHu.Terminal.ViewModels
 
         private void LoadPlayers()
         {
-            throw new NotImplementedException();
+            Players.Clear();
+            var players = Manager.GetAllPlayers();
+
+            foreach (var player in players) { 
+                Players.Add(new PlayerVm(player));
+            }
         }
 
         public PlayerVm CurrentFolder
@@ -39,20 +31,8 @@ namespace WuHu.Terminal.ViewModels
             {
                 if (Equals(value, _currentPlayer)) return;
                 _currentPlayer = value;
-                OnPropertyChanged();
+                OnPropertyChanged(this);
             }
-        }
-        
-        protected virtual void OnCollectionChanged(NotifyCollectionChangedAction action, IList<PlayerVm> items)
-        {
-            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action, items));
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -12,7 +12,7 @@ namespace WuHu.BL.Impl
 {
     public class CommonManager : ICommonManager
     {
-        protected readonly Authenticator Authenticator;
+        protected readonly Authenticator Authentication;
         protected readonly IMatchDao MatchDao;
         protected readonly IPlayerDao PlayerDao;
         protected readonly ITournamentDao TournamentDao;
@@ -29,7 +29,7 @@ namespace WuHu.BL.Impl
             RatingDao = DalFactory.CreateRatingDao(database);
             TournamentDao = DalFactory.CreateTournamentDao(database);
             ParamDao = DalFactory.CreateScoreParameterDao(database);
-            Authenticator = Authenticator.GetInstance();
+            Authentication = Authenticator.GetInstance();
         }
 
         // Match
@@ -400,7 +400,7 @@ namespace WuHu.BL.Impl
 
         private bool Authenticate(Credentials credentials, bool adminRequired)
         {
-            return Authenticator.Authenticate(credentials, adminRequired);
+            return Authentication.Authenticate(credentials, adminRequired);
         }
     }
 }

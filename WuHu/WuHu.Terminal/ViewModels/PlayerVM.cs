@@ -1,30 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using WuHu.BL;
-using WuHu.Domain;
+﻿using WuHu.Domain;
 
 namespace WuHu.Terminal.ViewModels
 {
-    public class PlayerVm : INotifyPropertyChanged
+    public class PlayerVm : BaseVm
     {
-        private IPlayerManager _playerManager;
         private Player _player;
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public PlayerVm(Player player = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public PlayerVm(Player player, IPlayerManager playerManager)
-        {
-            _playerManager = playerManager;
             _player = player;
         }
 
@@ -36,7 +19,7 @@ namespace WuHu.Terminal.ViewModels
                 if (_player.Firstname != value)
                 {
                     _player.Firstname = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Firstname)));
+                    OnPropertyChanged(this);
                 }
             }
         }
@@ -49,7 +32,7 @@ namespace WuHu.Terminal.ViewModels
                 if (_player.Nickname != value)
                 {
                     _player.Nickname = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Nickname)));
+                    OnPropertyChanged(this);
                 }
             }
         }
@@ -62,11 +45,15 @@ namespace WuHu.Terminal.ViewModels
                 if (_player.Lastname != value)
                 {
                     _player.Lastname = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Lastname)));
+                    OnPropertyChanged(this);
                 }
             }
         }
 
-        public ChangePassword()
+        private bool ChangePassword(string newPassword)
+        {
+            return Manager.ChangePassword(
+                _player.Username, newPassword, Manager.GetUserCredentials());
+        }
     }
 }
