@@ -11,7 +11,7 @@ namespace WuHu.BL.Test
     [TestClass]
     public class MatchManagerTests
     {
-        private static IMatchManager _matchMgr;
+        private static ITerminalManager _mgr;
         private static IMatchDao _matchDao;
         private static ITournamentDao _tournamentDao;
         private static IPlayerDao _playerDao;
@@ -26,7 +26,7 @@ namespace WuHu.BL.Test
             _ratingDao = DalFactory.CreateRatingDao(database);
             _tournamentDao = DalFactory.CreateTournamentDao(database);
             _playerDao = DalFactory.CreatePlayerDao(database);
-            _matchMgr = MatchManager.GetInstance();
+            _mgr = ManagerFactory.GetTerminalManager();
             var rand = new Random(42);
             _testPlayers = new List<Player>();
             for (int i = 0; i < 10; ++i)
@@ -43,9 +43,7 @@ namespace WuHu.BL.Test
         [TestMethod]
         public void Constructor()
         {
-            var mgr = MatchManager.GetInstance();
-            Assert.IsNotNull(mgr);
-            Assert.AreEqual(mgr, _matchMgr);
+            Assert.IsNotNull(_mgr);
         }
         
         [TestMethod]

@@ -11,7 +11,7 @@ namespace WuHu.BL.Test
     [TestClass]
     public class RatingManagerTests
     {
-        private static IRatingManager _ratingMgr;
+        private static ICommonManager _mgr;
         private static IMatchDao _matchDao;
         private static ITournamentDao _tournamentDao;
         private static IPlayerDao _playerDao;
@@ -29,7 +29,7 @@ namespace WuHu.BL.Test
             _tournamentDao = DalFactory.CreateTournamentDao(database);
             _playerDao = DalFactory.CreatePlayerDao(database);
             _paramDao = DalFactory.CreateScoreParameterDao(database);
-            _ratingMgr = RatingManager.GetInstance();
+            _mgr = ManagerFactory.GetTerminalManager();
             var rand = new Random(42);
 
             _testPlayers = new List<Player>();
@@ -48,9 +48,7 @@ namespace WuHu.BL.Test
         [TestMethod]
         public void Constructor()
         {
-            var mgr = RatingManager.GetInstance();
-            Assert.IsNotNull(mgr);
-            Assert.AreEqual(mgr, _ratingMgr);
+            Assert.IsNotNull(_mgr);
         }
         
         [TestMethod]
@@ -60,7 +58,7 @@ namespace WuHu.BL.Test
             Player player = new Player("first", "last", "nick", user, "pass",
                 true, false, false, false, false, true, true, true, null);
             _playerDao.Insert(player);
-            _ratingMgr.AddCurrentRatingFor(player, _creds);
+            _mgr.AddCurrentRatingFor(player, _creds);
 
             var rating = _ratingDao.FindCurrentRating(player);
             Assert.AreEqual(rating.Value, int.Parse(_paramDao.FindById("initialScore")
@@ -71,7 +69,7 @@ namespace WuHu.BL.Test
             var wonMatch = new Match(tournament, DateTime.Now, 0, 10, 0.5, true, 
                 _testPlayers[0], _testPlayers[1], player, _testPlayers[2]);
             Assert.IsTrue(_matchDao.Insert(wonMatch));
-            _ratingMgr.AddCurrentRatingFor(player, _creds);
+            _mgr.AddCurrentRatingFor(player, _creds);
 
             var higherRating = _ratingDao.FindCurrentRating(player);
             Assert.IsTrue(higherRating.Value > rating.Value);
@@ -79,7 +77,7 @@ namespace WuHu.BL.Test
             var lostMatch = new Match(tournament, DateTime.Now, 0, 10, 0.5, true,
                 player, _testPlayers[0], _testPlayers[1], _testPlayers[2]);
             Assert.IsTrue(_matchDao.Insert(lostMatch));
-            _ratingMgr.AddCurrentRatingFor(player, _creds);
+            _mgr.AddCurrentRatingFor(player, _creds);
 
             var lowerRating = _ratingDao.FindCurrentRating(player);
             Assert.IsTrue(higherRating.Value > lowerRating.Value);
@@ -90,7 +88,7 @@ namespace WuHu.BL.Test
             Assert.IsTrue(_matchDao.Insert(lostMatch));
             try
             {
-                _ratingMgr.AddCurrentRatingFor(player, _creds);
+                _mgr.AddCurrentRatingFor(player, _creds);
                 Assert.Fail("No Exception thrown");
             }
             catch (ArgumentException) { }
@@ -98,7 +96,7 @@ namespace WuHu.BL.Test
             matchWithoutScores.ScoreTeam2 = 10;
             _matchDao.Update(matchWithoutScores);
 
-            Assert.IsFalse(_ratingMgr.AddCurrentRatingFor(player, new Credentials("", "1234")));
+            Assert.IsFalse(_mgr.AddCurrentRatingFor(player, new Credentials("", "1234")));
         }
 
         [TestMethod]
@@ -107,33 +105,33 @@ namespace WuHu.BL.Test
             var rating = 623;
             var datetime = DateTime.Now;
             _ratingDao.Insert(new Rating(_testPlayers[0], datetime, rating));
-            var foundRating = _ratingMgr.GetCurrentRatingFor(_testPlayers[0]);
+            var foundRating = _mgr.GetCurrentRatingFor(_testPlayers[0]);
             Assert.AreEqual(rating, foundRating.Value);
         }
 
         [TestMethod]
         public void GetAll()
         {
-            var initCnt = _ratingMgr.GetAllRatings().Count;
+            var initCnt = _mgr.GetAllRatings().Count;
             for (var i = 0; i < 5; ++i)
             {
                 _ratingDao.Insert(new Rating(_testPlayers[0], DateTime.Now, 0));
             }
 
-            var newCnt = _ratingMgr.GetAllRatings().Count;
+            var newCnt = _mgr.GetAllRatings().Count;
             Assert.AreEqual(initCnt + 5, newCnt);
         }
 
         [TestMethod]
         public void GetAllFor()
         {
-            var initCnt = _ratingMgr.GetAllRatingsFor(_testPlayers[0]).Count;
+            var initCnt = _mgr.GetAllRatingsFor(_testPlayers[0]).Count;
             for (var i = 0; i < 5; ++i)
             {
                 _ratingDao.Insert(new Rating(_testPlayers[0], DateTime.Now, 0));
             }
 
-            var newCnt = _ratingMgr.GetAllRatingsFor(_testPlayers[0]).Count;
+            var newCnt = _mgr.GetAllRatingsFor(_testPlayers[0]).Count;
             Assert.AreEqual(initCnt + 5, newCnt);
         }
 
@@ -143,7 +141,7 @@ namespace WuHu.BL.Test
             var initCnt = _ratingDao.FindAll().Count;
             for (var i = 0; i < 5; ++i)
             {
-                _ratingMgr.AddCurrentRatingFor(_testPlayers[0], _creds);
+                _mgr.AddCurrentRatingFor(_testPlayers[0], _creds);
             }
 
             var newCnt = _ratingDao.FindAll().Count;

@@ -13,7 +13,7 @@ namespace WuHu.BL.Test
     [TestClass]
     public class TournamentManagerTests
     {
-        private static ITournamentManager _tournamentMgr;
+        private static ICommonManager _mgr;
         private static IMatchDao _matchDao;
         private static ITournamentDao _tournamentDao;
         private static IPlayerDao _playerDao;
@@ -31,7 +31,7 @@ namespace WuHu.BL.Test
             _tournamentDao = DalFactory.CreateTournamentDao(database);
             _playerDao = DalFactory.CreatePlayerDao(database);
             _paramDao = DalFactory.CreateScoreParameterDao(database);
-            _tournamentMgr = TournamentManager.GetInstance();
+            _mgr = ManagerFactory.GetTerminalManager();
             var rand = new Random(42);
 
             _testPlayers = new List<Player>();
@@ -50,9 +50,7 @@ namespace WuHu.BL.Test
         [TestMethod]
         public void Constructor()
         {
-            var mgr = TournamentManager.GetInstance();
-            Assert.IsNotNull(mgr);
-            Assert.AreEqual(mgr, _tournamentMgr);
+            Assert.IsNotNull(_mgr);
         }
 
         [TestMethod]
@@ -64,9 +62,9 @@ namespace WuHu.BL.Test
             _tournamentDao.Insert(tournament);
             var matches = _matchDao.FindAllByTournament(tournament);
             Assert.AreEqual(0, matches.Count);
-            _tournamentMgr.Lock(_creds);
-            var success = _tournamentMgr.CreateTournament(tournament, _testPlayers, amountMatches, new Credentials(admin.Username, "pass"));
-            _tournamentMgr.Unlock(_creds);
+            _mgr.LockTournament(_creds);
+            var success = _mgr.CreateTournament(tournament, _testPlayers, amountMatches, new Credentials(admin.Username, "pass"));
+            _mgr.UnlockTournament(_creds);
             Assert.IsTrue(success);
             matches = _matchDao.FindAllByTournament(tournament);
             Assert.AreEqual(amountMatches, matches.Count);

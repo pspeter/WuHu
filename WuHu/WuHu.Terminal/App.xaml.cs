@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using WuHu.Terminal.ViewModels;
 using WuHu.Terminal.Views.Login;
 
 namespace WuHu.Terminal
@@ -28,8 +29,10 @@ namespace WuHu.Terminal
             else
             {
                 //MessageBox.Show("Login failed", "Error", MessageBoxButton.OK);
+                var context = new PlayerVM();
+                var app = new Terminal {DataContext = context};
+                app.ShowDialog();
 
-                new Terminal().ShowDialog();
                 Current.Shutdown(-1);
             }
         }

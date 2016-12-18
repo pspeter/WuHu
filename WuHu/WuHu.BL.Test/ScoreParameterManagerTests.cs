@@ -9,7 +9,7 @@ namespace WuHu.BL.Test
     [TestClass]
     public class ScoreParameterManagerTests
     {
-        private static IScoreParameterManager _paramMgr;
+        private static ICommonManager _mgr;
         private static IScoreParameterDao _paramDao;
         private static Credentials _creds;
 
@@ -18,7 +18,7 @@ namespace WuHu.BL.Test
         {
             var database = DalFactory.CreateDatabase();
             _paramDao = DalFactory.CreateScoreParameterDao(database);
-            _paramMgr = ScoreParameterManager.GetInstance();
+            _mgr = ManagerFactory.GetTerminalManager();
             var user = TestHelper.GenerateName();
             var admin = new Player("admin", "last", "nick", user, "pass",
                     true, false, false, false, false, true, true, true, null);
@@ -29,22 +29,20 @@ namespace WuHu.BL.Test
         [TestMethod]
         public void Constructor()
         {
-            var mgr = ScoreParameterManager.GetInstance();
-            Assert.IsNotNull(mgr);
-            Assert.AreEqual(mgr, _paramMgr);
+            Assert.IsNotNull(_mgr);
         }
 
         [TestMethod]
         public void GetAll()
         {
-            var initCnt = _paramMgr.GetAllParameters().Count;
+            var initCnt = _mgr.GetAllParameters().Count;
             for (var i = 0; i < 5; ++i)
             {
                 var key = TestHelper.GenerateName();
                 _paramDao.Insert(new ScoreParameter(key, ""));
             }
 
-            var newCnt = _paramMgr.GetAllParameters().Count;
+            var newCnt = _mgr.GetAllParameters().Count;
             Assert.AreEqual(initCnt + 5, newCnt);
         }
 
@@ -56,14 +54,14 @@ namespace WuHu.BL.Test
             for (var i = 0; i < 5; ++i)
             {
                 key = TestHelper.GenerateName();
-                Assert.IsTrue(_paramMgr.AddParameter(new ScoreParameter(key, ""), _creds));
+                Assert.IsTrue(_mgr.AddParameter(new ScoreParameter(key, ""), _creds));
             }
 
             var newCnt = _paramDao.FindAll().Count;
             Assert.AreEqual(initCnt + 5, newCnt);
 
             key = TestHelper.GenerateName();
-            Assert.IsFalse(_paramMgr.AddParameter(
+            Assert.IsFalse(_mgr.AddParameter(
                 new ScoreParameter(key, ""), new Credentials("", "1234")));
         }
 
@@ -73,7 +71,7 @@ namespace WuHu.BL.Test
             var key = TestHelper.GenerateName();
             var param = new ScoreParameter(key, "");
             _paramDao.Insert(param);
-            var foundParam = _paramMgr.GetParameter(key);
+            var foundParam = _mgr.GetParameter(key);
             Assert.AreEqual(param.Key, foundParam.Key);
             Assert.AreEqual(param.Value, foundParam.Value);
         }
@@ -85,11 +83,11 @@ namespace WuHu.BL.Test
             var param = new ScoreParameter(key, "");
             _paramDao.Insert(param);
             param.Value = "newValue";
-            Assert.IsTrue(_paramMgr.UpdateParameter(param, _creds));
+            Assert.IsTrue(_mgr.UpdateParameter(param, _creds));
             var foundParam = _paramDao.FindById(param.Key);
             Assert.AreEqual(param.Key, foundParam.Key);
             Assert.AreEqual(param.Value, foundParam.Value);
-            Assert.IsFalse(_paramMgr.UpdateParameter(param, new Credentials("", "1234")));
+            Assert.IsFalse(_mgr.UpdateParameter(param, new Credentials("", "1234")));
         }
     }
 }
