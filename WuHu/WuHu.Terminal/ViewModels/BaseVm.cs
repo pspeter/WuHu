@@ -14,10 +14,14 @@ namespace WuHu.Terminal.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected ITerminalManager Manager;
-        private bool _isAuthenticated;
 
         public bool IsAuthenticated => Manager.IsUserAuthenticated();
         public bool IsNotAuthenticated => !Manager.IsUserAuthenticated();
+        public void IsAuthenticatedChanged()
+        {
+            OnPropertyChanged(IsAuthenticated);
+            OnPropertyChanged(IsNotAuthenticated);
+        }
 
         protected virtual void OnPropertyChanged(object context, [CallerMemberName] string propertyName = null)
         {

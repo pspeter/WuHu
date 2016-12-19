@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using WuHu.Terminal.ViewModels;
+using WuHu.Terminal.Views;
 using WuHu.Terminal.Views.Login;
 
 namespace WuHu.Terminal

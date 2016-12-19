@@ -55,6 +55,7 @@
                 <TextBox Name="TxtUsername"
                          Grid.Column="1" Grid.Row="0"
                          VerticalAlignment="Center"
+                         materialDesign:HintAssist.Hint="Dein Benutzername"
                          Margin="10, 0"
                          Text="{Binding Path=Username}"></TextBox>
 
@@ -68,6 +69,7 @@
                          Grid.Column="1"
                          Grid.Row="1"
                          VerticalAlignment="Center"
+                         materialDesign:HintAssist.Hint="Dein Passwort"
                          Margin="10, 0"></PasswordBox>
                 
                 <StackPanel Grid.Column="1" Grid.Row="2" 

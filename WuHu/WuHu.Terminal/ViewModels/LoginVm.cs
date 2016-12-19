@@ -43,19 +43,21 @@ namespace WuHu.Terminal.ViewModels
             }
         }
 
+
         private void Login(object param)
         {
             var success = Manager.Login(Username, Password);
 
             if (success)
             {
-                OnPropertyChanged(nameof(IsAuthenticated));
+                IsAuthenticatedChanged();
             }
         }
 
         private void Logout(object param)
         {
-            
+            Manager.Logout();
+            IsAuthenticatedChanged();
         }
     }
 }

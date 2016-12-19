@@ -13,17 +13,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WuHu.Terminal"
         xmlns:vm="clr-namespace:WuHu.Terminal.ViewModels"
+        xmlns:views="clr-namespace:WuHu.Terminal.Views"
         mc:Ignorable="d"
         Title="Terminal - WuHu" 
-        Height="900" Width="800" SizeToContent="Width">
+        Height="600" Width="770" 
+        MinWidth="770" MinHeight="300">
 
-    <Window.DataContext>
-        <vm:TerminalVm/>
-    </Window.DataContext>
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:PlayerCollectionVm}">
+            <views:PlayerPage/>
+        </DataTemplate>
+    </Window.Resources>
 
     <DockPanel Name="MenuList">
         <Menu IsMainMenu="True" DockPanel.Dock="Top">
-            <MenuItem Header="_Rangliste" IsEnabled="{Binding IsAuthenticated}">
+            <MenuItem Header="_Rangliste">
                 <MenuItem.Icon>
                     <materialDesign:PackIcon Kind="Trophy"></materialDesign:PackIcon>
                 </MenuItem.Icon>
@@ -33,27 +38,27 @@
                     <materialDesign:PackIcon Kind="FormatListBulleted"></materialDesign:PackIcon>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="_Rangliste">
+            <MenuItem Header="_Rangliste" IsEnabled="{Binding IsAuthenticated}">
                 <MenuItem.Icon>
                     <materialDesign:PackIcon Kind="Trophy"></materialDesign:PackIcon>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="_Spieler">
+            <MenuItem Header="_Spieler" IsEnabled="{Binding IsAuthenticated}">
                 <MenuItem.Icon>
                     <materialDesign:PackIcon Kind="Account"></materialDesign:PackIcon>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="_Statistik">
+            <MenuItem Header="_Statistik" IsEnabled="{Binding IsAuthenticated}">
                 <MenuItem.Icon>
                     <materialDesign:PackIcon Kind="TrendingUp"></materialDesign:PackIcon>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem>
+            <MenuItem Visibility="{Binding IsNotAuthenticated}">
                 <MenuItem.Icon>
-                    <materialDesign:PackIcon Kind="{Binding}"></materialDesign:PackIcon>
+                    <materialDesign:PackIcon Kind="Login"></materialDesign:PackIcon>
                 </MenuItem.Icon>
             </MenuItem>
         </Menu>
-        <ContentControl DockPanel.Dock="Left" Content="{Binding}"></ContentControl>
+        <ContentPresenter Content="{Binding}"></ContentPresenter>
     </DockPanel>
 </Window>

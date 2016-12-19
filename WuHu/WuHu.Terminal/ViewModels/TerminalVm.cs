@@ -8,6 +8,5 @@ namespace WuHu.Terminal.ViewModels
 {
     public class TerminalVm : BaseVm
     {
-        
     }
 }

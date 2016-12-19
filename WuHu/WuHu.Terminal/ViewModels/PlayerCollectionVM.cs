@@ -24,7 +24,7 @@ namespace WuHu.Terminal.ViewModels
             }
         }
 
-        public PlayerVm CurrentFolder
+        public PlayerVm CurrentPlayer
         {
             get { return _currentPlayer; }
             set
