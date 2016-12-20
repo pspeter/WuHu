@@ -10,18 +10,20 @@ namespace WuHu.Terminal.ViewModels
 {
     public class TerminalVm : BaseVm
     {
-        private BaseVm _currentView;
+        private BaseVm _currentVm;
+        private RanklistVm _ranklistVm = new RanklistVm();
+        private PlayerCollectionVm _playersVm = new PlayerCollectionVm();
         
         public ObservableCollection<PlayerVm> Players { get; }
 
-        public BaseVm CurrentView
+        public BaseVm CurrentVm
         {
-            get { return _currentView; }
+            get { return _currentVm; }
             set
             {
-                if (CurrentView != value)
+                if (CurrentVm != value)
                 {
-                    _currentView = value;
+                    _currentVm = value;
                     OnPropertyChanged(this);
                 }
             }
@@ -37,12 +39,12 @@ namespace WuHu.Terminal.ViewModels
             LoadPlayers();
 
             // button commands
-            ShowRanklistCommand = new RelayCommand(p => CurrentView = new RanklistVm(Players));
+            ShowRanklistCommand = new RelayCommand(p => CurrentVm = _ranklistVm);
             ShowPlayerlistCommand = new RelayCommand(
-                p => CurrentView = new PlayerCollectionVm(Players));
+                p => CurrentVm = _playersVm);
 
             // starting view
-            CurrentView = new RanklistVm(Players);
+            CurrentVm = _ranklistVm;
         }
         
         private void LoadPlayers()

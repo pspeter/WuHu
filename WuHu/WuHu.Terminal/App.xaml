@@ -20,7 +20,7 @@
             <DataTemplate DataType="{x:Type vm:RanklistVm}">
                 <views:RanklistControl/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:RanklistVm}">
+            <DataTemplate DataType="{x:Type vm:TournamentCollectionVm}">
                 <views:RanklistControl/>
             </DataTemplate>
         </ResourceDictionary>

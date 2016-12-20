@@ -1,14 +1,19 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace WuHu.Terminal.ViewModels
 {
     public class PlayerCollectionVm : RanklistVm
     {
         public PlayerCollectionVm()
-        { }
+        {
+            CurrentPlayer = Players.First();
+        }
 
-        public PlayerCollectionVm(ObservableCollection<PlayerVm> players = null) : base(players)
-        { }
+        public PlayerCollectionVm(ObservableCollection<PlayerVm> players) : base(players)
+        {
+            CurrentPlayer = Players.First();
+        }
 
         private PlayerVm _currentPlayer;
         

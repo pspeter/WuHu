@@ -53,6 +53,6 @@
                 </MenuItem.Icon>
             </MenuItem>
         </Menu>
-        <ContentControl Content="{Binding CurrentView}"></ContentControl>
+        <ContentControl Content="{Binding CurrentVm}"></ContentControl>
     </DockPanel>
 </Window>
