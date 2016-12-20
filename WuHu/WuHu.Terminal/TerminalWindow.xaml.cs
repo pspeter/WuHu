@@ -1,5 +1,7 @@
 ﻿using System.Runtime.Remoting.Contexts;
 using System.Windows;
+using System.Windows.Input;
+using WuHu.BL.Impl;
 using WuHu.Terminal.ViewModels;
 
 namespace WuHu.Terminal
@@ -9,7 +11,7 @@ namespace WuHu.Terminal
         public TerminalWindow()
         {
             InitializeComponent();
-            DataContext = new PlayerCollectionVm();
+            Closing += (a, b) => ManagerFactory.GetTerminalManager().Logout();
         }
     }
 }

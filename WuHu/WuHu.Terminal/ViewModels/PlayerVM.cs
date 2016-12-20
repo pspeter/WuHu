@@ -8,10 +8,12 @@ namespace WuHu.Terminal.ViewModels
     public class PlayerVm : BaseVm
     {
         private Player _player;
+        private Rating _currentRating;
 
-        public PlayerVm(Player player)
+        public PlayerVm(Player player, Rating rating = null)
         {
             _player = player;
+            _currentRating = rating ?? Manager.GetCurrentRatingFor(player);
         }
 
         public string Firstname
@@ -156,6 +158,19 @@ namespace WuHu.Terminal.ViewModels
             }
         }
 
+        public Rating CurrentRating
+        {
+            get { return _currentRating; }
+            set
+            {
+                if (_currentRating != value)
+                {
+                    _currentRating = value;
+                    OnPropertyChanged(this);
+                }
+            }
+        }
+
         public BitmapImage Image
         {
             get { return LoadImage(_player.Picture); }
@@ -169,6 +184,9 @@ namespace WuHu.Terminal.ViewModels
                 }
             }
         }
+
+        public string ExtendedFullname => Firstname + " '" + Nickname + "' " + Lastname;
+        public string Fullname => Firstname + " " + Lastname;
 
         private BitmapImage LoadImage(byte[] imageData)
         {

@@ -45,6 +45,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -67,20 +69,32 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converter\HighlightedTabConverter.cs" />
+    <Compile Include="Converter\RowNumberConverter.cs" />
     <Compile Include="ViewModels\BaseVm.cs" />
     <Compile Include="ViewModels\LoginVm.cs" />
+    <Compile Include="ViewModels\MatchVm.cs" />
     <Compile Include="ViewModels\PlayerCollectionVm.cs" />
     <Compile Include="ViewModels\PlayerVm.cs" />
+    <Compile Include="ViewModels\RanklistVm.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\TerminalVm.cs" />
+    <Compile Include="ViewModels\TournamentCollectionVm.cs" />
+    <Compile Include="ViewModels\TournamentVm.cs" />
     <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PlayerPage.xaml.cs">
-      <DependentUpon>PlayerPage.xaml</DependentUpon>
+    <Compile Include="Views\PlayerControl.xaml.cs">
+      <DependentUpon>PlayerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="TerminalWindow.xaml.cs">
       <DependentUpon>TerminalWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RanklistControl.xaml.cs">
+      <DependentUpon>RanklistControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TournamentControl.xaml.cs">
+      <DependentUpon>TournamentControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -142,11 +156,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PlayerPage.xaml">
+    <Page Include="Views\PlayerControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TerminalWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RanklistControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TournamentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

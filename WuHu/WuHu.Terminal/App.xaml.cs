@@ -19,7 +19,10 @@ namespace WuHu.Terminal
 
         private void ApplicationStart(object sender, StartupEventArgs e)
         {
-            var dialog = new TerminalWindow();
+            var dialog = new TerminalWindow
+            {
+                DataContext = new TerminalVm()
+            };
             dialog.Show();
         }
     }

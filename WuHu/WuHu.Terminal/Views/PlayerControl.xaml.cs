@@ -5,11 +5,11 @@ using System.Windows.Controls;
 namespace WuHu.Terminal.Views
 {
     /// <summary>
-    /// Interaction logic for PlayerPage.xaml
+    /// Interaction logic for PlayerControl.xaml
     /// </summary>
-    public partial class PlayerPage
+    public partial class PlayerControl
     {
-        public PlayerPage()
+        public PlayerControl()
         {
             InitializeComponent();
         }

@@ -2,28 +2,16 @@
 
 namespace WuHu.Terminal.ViewModels
 {
-    public class PlayerCollectionVm : BaseVm
+    public class PlayerCollectionVm : RanklistVm
     {
-        private PlayerVm _currentPlayer;
-
         public PlayerCollectionVm()
-        {
-            Players = new ObservableCollection<PlayerVm>();
-            LoadPlayers();
-        }
+        { }
 
-        public ObservableCollection<PlayerVm> Players { get; }
+        public PlayerCollectionVm(ObservableCollection<PlayerVm> players = null) : base(players)
+        { }
 
-        private void LoadPlayers()
-        {
-            Players.Clear();
-            var players = Manager.GetAllPlayers();
-
-            foreach (var player in players) { 
-                Players.Add(new PlayerVm(player));
-            }
-        }
-
+        private PlayerVm _currentPlayer;
+        
         public PlayerVm CurrentPlayer
         {
             get { return _currentPlayer; }

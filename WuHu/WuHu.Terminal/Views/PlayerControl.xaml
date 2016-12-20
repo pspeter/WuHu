@@ -1,26 +1,31 @@
-﻿<UserControl x:Class="WuHu.Terminal.Views.PlayerPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:vm="clr-namespace:WuHu.Terminal.ViewModels"
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      mc:Ignorable="d"
-      d:DesignHeight="500" d:DesignWidth="850">
-    <UserControl.DataContext>
-        <vm:PlayerCollectionVm/>
-    </UserControl.DataContext>
+﻿<UserControl x:Class="WuHu.Terminal.Views.PlayerControl"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="14"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="{DynamicResource MaterialDesignPaper}"
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:WuHu.Terminal.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="500" d:DesignWidth="770"
+             d:DataContext="{d:DesignInstance Type=vm:PlayerCollectionVm, IsDesignTimeCreatable=False}">
+    
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
-            <ColumnDefinition Width="*" MinWidth="600"/>
+            <ColumnDefinition Width="270"/>
+            <ColumnDefinition Width="*" MinWidth="400"/>
         </Grid.ColumnDefinitions>
 
-        <ListBox Grid.Column="0" 
-                     IsEnabled="{Binding IsChecked, ElementName=EnableListBox}"
-                     ItemsSource="{Binding Players}"
-                     SelectedItem="{Binding CurrentPlayer, Mode=TwoWay}"
-                     IsSynchronizedWithCurrentItem="True">
+        <ListBox Grid.Column="0"
+                 ItemsSource="{Binding Players}"
+                 SelectedItem="{Binding CurrentPlayer, Mode=TwoWay}"
+                 IsSynchronizedWithCurrentItem="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock>
@@ -33,21 +38,22 @@
         </ListBox>
 
         <Grid Grid.Column="1"
-              Margin="10"
+              Margin="20, 10"
               DataContext="{Binding CurrentPlayer}">
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+            <StackPanel Orientation="Vertical" 
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="350"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Row="0" Grid.Column="0"
@@ -60,28 +66,29 @@
                              Margin="0, 5, 10, 5">Ist Admin:</TextBlock>
 
                     <TextBox Grid.Row="0" Grid.Column="1"
-                             Margin="15, 5"
+                             Margin="15, 5, 0, 5"
                              Text="{Binding Firstname}"
                              HorizontalAlignment="Stretch"></TextBox>
                     <TextBox Grid.Row="1" Grid.Column="1"
-                             Margin="15, 5"
+                             Margin="15, 5, 0, 5"
                              Text="{Binding Lastname}"
                              HorizontalAlignment="Stretch"></TextBox>
                     <TextBox Grid.Row="2" Grid.Column="1"
-                             Margin="15, 5"
+                             Margin="15, 5, 0, 5"
                              Text="{Binding Nickname}"
                              HorizontalAlignment="Stretch"></TextBox>
                     <CheckBox Grid.Row="3" Grid.Column="1"
-                             Margin="15, 5"
+                             Margin="15, 5, 0, 5"
                              IsChecked="{Binding IsAdmin}"
                              HorizontalAlignment="Stretch"></CheckBox>
                 </Grid>
 
-                <GroupBox HorizontalAlignment="Stretch"
+                <GroupBox HorizontalAlignment="Left"
+                          Width="250"
                           Header="Wochentage"
-                          Margin="15, 25">
+                          Margin="25">
 
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                    <StackPanel Orientation="Vertical">
                         <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
                             <TextBlock DockPanel.Dock="Left">Montag</TextBlock>
                             <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysMondays}" HorizontalAlignment="Right"></CheckBox>

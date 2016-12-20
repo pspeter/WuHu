@@ -17,23 +17,17 @@
         mc:Ignorable="d"
         Title="Terminal - WuHu" 
         Height="600" Width="770" 
-        MinWidth="770" MinHeight="300">
-
-
-    <Window.Resources>
-        <DataTemplate DataType="{x:Type vm:PlayerCollectionVm}">
-            <views:PlayerPage/>
-        </DataTemplate>
-    </Window.Resources>
+        MinWidth="770" MinHeight="300"
+        d:DataContext="{d:DesignInstance Type=vm:TerminalVm, IsDesignTimeCreatable=False}">
 
     <DockPanel Name="MenuList">
         <Menu IsMainMenu="True" DockPanel.Dock="Top">
-            <MenuItem Header="_Rangliste">
+            <MenuItem Header="_Rangliste" Command="{Binding ShowRanklistCommand}">
                 <MenuItem.Icon>
                     <materialDesign:PackIcon Kind="Trophy"></materialDesign:PackIcon>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="_Spielpläne">
+            <MenuItem Header="_Spielpläne" Command="{Binding ShowPlayerlistCommand}">
                 <MenuItem.Icon>
                     <materialDesign:PackIcon Kind="FormatListBulleted"></materialDesign:PackIcon>
                 </MenuItem.Icon>
@@ -59,6 +53,6 @@
                 </MenuItem.Icon>
             </MenuItem>
         </Menu>
-        <ContentPresenter Content="{Binding}"></ContentPresenter>
+        <ContentControl Content="{Binding CurrentView}"></ContentControl>
     </DockPanel>
 </Window>
