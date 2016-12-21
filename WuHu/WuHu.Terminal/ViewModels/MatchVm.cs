@@ -7,7 +7,7 @@ using WuHu.Domain;
 
 namespace WuHu.Terminal.ViewModels
 {
-    class MatchVm : BaseVm
+    public class MatchVm : BaseVm
     {
         private Match _match;
 

@@ -122,8 +122,8 @@ namespace WuHu.BL.Impl
             if ((credentials.Username != player.Username && Authenticate(credentials, true)) ||
                 (credentials.Username == player.Username && Authenticate(credentials, false)))
             {
-                player.Salt = PasswordManager.GenerateSalt();
-                player.Password = PasswordManager.HashPassword(newPassword, player.Salt);
+                player.Salt = CryptoService.GenerateSalt();
+                player.Password = CryptoService.HashPassword(newPassword, player.Salt);
                 return true;
             }
             return false;
@@ -258,6 +258,16 @@ namespace WuHu.BL.Impl
 
 
         // Tournament
+
+        public IList<Tournament> GetAllTournaments()
+        {
+            return TournamentDao.FindAll();
+        }
+
+        public Tournament GetMostRecentTournament()
+        {
+            return TournamentDao.FindMostRecentTournament();
+        }
 
         public bool LockTournament(Credentials credentials)
         {

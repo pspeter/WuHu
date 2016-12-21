@@ -15,111 +15,134 @@
              mc:Ignorable="d"
              d:DesignHeight="500" d:DesignWidth="770"
              d:DataContext="{d:DesignInstance Type=vm:PlayerCollectionVm, IsDesignTimeCreatable=False}">
-    
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="270"/>
-            <ColumnDefinition Width="*" MinWidth="400"/>
-        </Grid.ColumnDefinitions>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" 
+              IsMainMenu="False" 
+              HorizontalContentAlignment="Right">
+            <MenuItem Header="_New">
+                <MenuItem.Icon>
+                    <materialDesign:PackIcon Kind="PlusCircleOutline"></materialDesign:PackIcon>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem.Icon>
+                    <materialDesign:PackIcon Kind="TableEdit"></materialDesign:PackIcon>
+                </MenuItem.Icon></MenuItem>
+        </Menu>
+        
+        <Separator DockPanel.Dock="Top"
+                   Height="3"></Separator>
+        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="270"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" MinWidth="400"/>
+            </Grid.ColumnDefinitions>
 
-        <ListBox Grid.Column="0"
+            <ListBox Grid.Column="0"
                  ItemsSource="{Binding Players}"
                  SelectedItem="{Binding CurrentPlayer, Mode=TwoWay}"
                  IsSynchronizedWithCurrentItem="True">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
                             <TextBlock Text="{Binding Firstname}"></TextBlock>
                             "<TextBlock Text="{Binding Nickname}"></TextBlock>"
                             <TextBlock Text="{Binding Lastname}"></TextBlock>
                         </TextBlock>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            
+            <Separator Grid.Column="1" Width="2" 
+                       Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
 
-        <Grid Grid.Column="1"
+            <Grid Grid.Column="2"
               Margin="20, 10"
               DataContext="{Binding CurrentPlayer}">
-            <StackPanel Orientation="Vertical" 
+                <StackPanel Orientation="Vertical" 
                         HorizontalAlignment="Stretch" 
                         VerticalAlignment="Stretch">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0"
+                        <TextBlock Grid.Row="0" Grid.Column="0"
                              Margin="0, 5, 10, 5">Vorname:</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="0"
+                        <TextBlock Grid.Row="1" Grid.Column="0"
                              Margin="0, 5, 10, 5">Nachname:</TextBlock>
-                    <TextBlock Grid.Row="2" Grid.Column="0"
+                        <TextBlock Grid.Row="2" Grid.Column="0"
                              Margin="0, 5, 10, 5">Spitzname:</TextBlock>
-                    <TextBlock Grid.Row="3" Grid.Column="0"
+                        <TextBlock Grid.Row="3" Grid.Column="0"
                              Margin="0, 5, 10, 5">Ist Admin:</TextBlock>
 
-                    <TextBox Grid.Row="0" Grid.Column="1"
+                        <TextBox Grid.Row="0" Grid.Column="1"
                              Margin="15, 5, 0, 5"
                              Text="{Binding Firstname}"
                              HorizontalAlignment="Stretch"></TextBox>
-                    <TextBox Grid.Row="1" Grid.Column="1"
+                        <TextBox Grid.Row="1" Grid.Column="1"
                              Margin="15, 5, 0, 5"
                              Text="{Binding Lastname}"
                              HorizontalAlignment="Stretch"></TextBox>
-                    <TextBox Grid.Row="2" Grid.Column="1"
+                        <TextBox Grid.Row="2" Grid.Column="1"
                              Margin="15, 5, 0, 5"
                              Text="{Binding Nickname}"
                              HorizontalAlignment="Stretch"></TextBox>
-                    <CheckBox Grid.Row="3" Grid.Column="1"
+                        <CheckBox Grid.Row="3" Grid.Column="1"
                              Margin="15, 5, 0, 5"
                              IsChecked="{Binding IsAdmin}"
                              HorizontalAlignment="Stretch"></CheckBox>
-                </Grid>
+                    </Grid>
 
-                <GroupBox HorizontalAlignment="Left"
+                    <GroupBox HorizontalAlignment="Left"
                           Width="250"
                           Header="Wochentage"
                           Margin="25">
 
-                    <StackPanel Orientation="Vertical">
-                        <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
-                            <TextBlock DockPanel.Dock="Left">Montag</TextBlock>
-                            <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysMondays}" HorizontalAlignment="Right"></CheckBox>
-                        </DockPanel>
-                        <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
-                            <TextBlock DockPanel.Dock="Left">Dienstag</TextBlock>
-                            <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysTuesdays}" HorizontalAlignment="Right"></CheckBox>
-                        </DockPanel>
-                        <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
-                            <TextBlock DockPanel.Dock="Left">Mittwoch</TextBlock>
-                            <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysWednesdays}" HorizontalAlignment="Right"></CheckBox>
-                        </DockPanel>
-                        <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
-                            <TextBlock DockPanel.Dock="Left">Donnerstag</TextBlock>
-                            <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysThursdays}" HorizontalAlignment="Right"></CheckBox>
-                        </DockPanel>
-                        <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
-                            <TextBlock DockPanel.Dock="Left">Freitag</TextBlock>
-                            <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysFridays}" HorizontalAlignment="Right"></CheckBox>
-                        </DockPanel>
-                        <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
-                            <TextBlock DockPanel.Dock="Left">Samstag</TextBlock>
-                            <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysSaturdays}" HorizontalAlignment="Right"></CheckBox>
-                        </DockPanel>
-                        <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
-                            <TextBlock DockPanel.Dock="Left">Sonntag</TextBlock>
-                            <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysSundays}" HorizontalAlignment="Right"></CheckBox>
-                        </DockPanel>
-                    </StackPanel>
-                </GroupBox>
-            </StackPanel>
+                        <StackPanel Orientation="Vertical">
+                            <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
+                                <TextBlock DockPanel.Dock="Left">Montag</TextBlock>
+                                <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysMondays}" HorizontalAlignment="Right"></CheckBox>
+                            </DockPanel>
+                            <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
+                                <TextBlock DockPanel.Dock="Left">Dienstag</TextBlock>
+                                <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysTuesdays}" HorizontalAlignment="Right"></CheckBox>
+                            </DockPanel>
+                            <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
+                                <TextBlock DockPanel.Dock="Left">Mittwoch</TextBlock>
+                                <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysWednesdays}" HorizontalAlignment="Right"></CheckBox>
+                            </DockPanel>
+                            <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
+                                <TextBlock DockPanel.Dock="Left">Donnerstag</TextBlock>
+                                <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysThursdays}" HorizontalAlignment="Right"></CheckBox>
+                            </DockPanel>
+                            <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
+                                <TextBlock DockPanel.Dock="Left">Freitag</TextBlock>
+                                <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysFridays}" HorizontalAlignment="Right"></CheckBox>
+                            </DockPanel>
+                            <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
+                                <TextBlock DockPanel.Dock="Left">Samstag</TextBlock>
+                                <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysSaturdays}" HorizontalAlignment="Right"></CheckBox>
+                            </DockPanel>
+                            <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
+                                <TextBlock DockPanel.Dock="Left">Sonntag</TextBlock>
+                                <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysSundays}" HorizontalAlignment="Right"></CheckBox>
+                            </DockPanel>
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+            </Grid>
         </Grid>
-    </Grid>
+
+    </DockPanel>
 </UserControl>

@@ -11,24 +11,31 @@ namespace WuHu.Dal.Test
     [TestClass]
     public class DatabaseTests
     {
-        private static IDatabase database;
+        private static IDatabase _database;
+
+        [AssemblyInitialize] // only one per assembly!
+        public static void AssemblyInitialize(TestContext testContext)
+        {
+            var database = DalFactory.CreateDatabase();
+            TestHelper.BackupDb(database);
+        }
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            database = DalFactory.CreateDatabase();
+            _database = DalFactory.CreateDatabase();
         }
 
 
         [TestMethod]
         public void DeclareParameterTwice()
         {
-            var cmd = database.CreateCommand("SELECT * FROM Player WHERE playerId = @playerId;");
-            database.DeclareParameter(cmd, "playerId", DbType.Int32);
+            var cmd = _database.CreateCommand("SELECT * FROM Player WHERE playerId = @playerId;");
+            _database.DeclareParameter(cmd, "playerId", DbType.Int32);
 
             try
             {
-                database.DeclareParameter(cmd, "playerId", DbType.Int32);
+                _database.DeclareParameter(cmd, "playerId", DbType.Int32);
                 Assert.Fail("Declaring parameter twice");
             }
             catch(ArgumentException) { }
@@ -37,12 +44,12 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void SetParameter()
         {
-            var cmd = database.CreateCommand("SELECT * FROM Player WHERE playerId = @playerId;");
-            database.DeclareParameter(cmd, "playerId", DbType.Int32);
-            database.SetParameter(cmd, "playerId", 0);
+            var cmd = _database.CreateCommand("SELECT * FROM Player WHERE playerId = @playerId;");
+            _database.DeclareParameter(cmd, "playerId", DbType.Int32);
+            _database.SetParameter(cmd, "playerId", 0);
             try
             {
-                database.SetParameter(cmd, "invalid", "");
+                _database.SetParameter(cmd, "invalid", "");
                 Assert.Fail("Set invalid parameter");
             }
             catch (ArgumentException) { }
@@ -51,23 +58,23 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void InvalidCommand()
         {
-            var cmd = database.CreateCommand("ABCDEFG");
+            var cmd = _database.CreateCommand("ABCDEFG");
             try
             {
-                database.ExecuteReader(cmd);
+                _database.ExecuteReader(cmd);
                 Assert.Fail("No SqlException thrown");
             } catch (SqlException) { }
 
             try
             {
-                database.ExecuteNonQuery(cmd);
+                _database.ExecuteNonQuery(cmd);
                 Assert.Fail("No SqlException thrown");
             }
             catch (SqlException) { }
 
             try
             {
-                database.ExecuteScalar(cmd);
+                _database.ExecuteScalar(cmd);
                 Assert.Fail("No SqlException thrown");
             }
             catch (SqlException) { }

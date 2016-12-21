@@ -19,13 +19,7 @@ namespace WuHu.Dal.Test
         private static Player testPlayer3;
         private static Player testPlayer4;
         private static Tournament testTournament;
-
-        [AssemblyInitialize] // only one per assembly!
-        public static void AssemblyInitialize(TestContext testContext)
-        {
-            TestHelper.BackupDb();
-        }
-
+        
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {

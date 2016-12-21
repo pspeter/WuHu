@@ -244,6 +244,10 @@ namespace WuHu.Dal.SqlServer
 
         public Player FindByUsername(string username)
         {
+            if (username == null)
+            {
+                return null;
+            }
             using (DbCommand command = CreateFindByUsernameCmd(username))
             using (IDataReader reader = database.ExecuteReader(command))
             {

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Windows.Media.Imaging;
 using WuHu.Domain;
@@ -7,13 +8,37 @@ namespace WuHu.Terminal.ViewModels
 {
     public class PlayerVm : BaseVm
     {
-        private Player _player;
+        private readonly Player _player;
         private Rating _currentRating;
+        private string _password; // for creating a new Player
+        private bool _isChecked;  // for creating a new Tournament
 
-        public PlayerVm(Player player, Rating rating = null)
+        public PlayerVm()
+        {
+            _player = new Player("", "", "", "", "", false, 
+                false, false, false, false, false, false, false, null);
+            _currentRating = null;
+            SetChecked();
+        }
+
+        public Player PlayerItem => _player;
+
+        public PlayerVm(Player player)
         {
             _player = player;
-            _currentRating = rating ?? Manager.GetCurrentRatingFor(player);
+            _currentRating = Manager.GetCurrentRatingFor(player);
+            SetChecked();
+        }
+
+        public bool IsChecked
+        {
+            get { return _isChecked; }
+            set
+            {
+                if (_isChecked == value) return;
+                _isChecked = value;
+                OnPropertyChanged(this);
+            }
         }
 
         public string Firstname
@@ -65,6 +90,17 @@ namespace WuHu.Terminal.ViewModels
                     _player.IsAdmin = value;
                     OnPropertyChanged(this);
                 }
+            }
+        }
+
+        public string Passwort
+        {
+            get { return _password; }
+            set
+            {
+                if (_password == value) return;
+                _password = value;
+                OnPropertyChanged(this);
             }
         }
 
@@ -219,6 +255,54 @@ namespace WuHu.Terminal.ViewModels
         {
             return Manager.ChangePassword(
                 _player.Username, newPassword, Manager.GetUserCredentials());
+        }
+
+        private void SetChecked()
+        {
+            var today = DateTime.Now.DayOfWeek;
+            switch (today)
+            {
+                case DayOfWeek.Monday:
+                    {
+                        IsChecked = _player.PlaysMondays;
+                        break;
+                    }
+                case DayOfWeek.Tuesday:
+                    {
+                        IsChecked = _player.PlaysTuesdays;
+                        break;
+                    }
+                case DayOfWeek.Wednesday:
+                    {
+                        IsChecked = _player.PlaysWednesdays;
+                        break;
+                    }
+                case DayOfWeek.Thursday:
+                    {
+                        IsChecked = _player.PlaysThursdays;
+                        break;
+                    }
+                case DayOfWeek.Friday:
+                    {
+                        IsChecked = _player.PlaysFridays;
+                        break;
+                    }
+                case DayOfWeek.Saturday:
+                    {
+                        IsChecked = _player.PlaysSaturdays;
+                        break;
+                    }
+                case DayOfWeek.Sunday:
+                    {
+                        IsChecked = _player.PlaysSundays;
+                        break;
+                    }
+                default:
+                    {
+                        IsChecked = false;
+                        break;
+                    }
+            }
         }
     }
 }

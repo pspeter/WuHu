@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using WuHu.Terminal.ViewModels;
 using WuHu.Terminal.Views;
-using WuHu.Terminal.Views.Login;
 
 namespace WuHu.Terminal
 {
@@ -19,11 +18,8 @@ namespace WuHu.Terminal
 
         private void ApplicationStart(object sender, StartupEventArgs e)
         {
-            var dialog = new TerminalWindow
-            {
-                DataContext = new TerminalVm()
-            };
-            dialog.Show();
+            var terminal = new TerminalWindow();
+            terminal.Show();
         }
     }
 }

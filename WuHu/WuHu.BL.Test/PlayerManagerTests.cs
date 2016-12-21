@@ -31,6 +31,18 @@ namespace WuHu.BL.Test
         public void Constructor()
         {
             Assert.IsNotNull(_mgr);
+    
+            var player = new Player("", "", "", "", "", false,
+                false, false, false, false, false, false, false, null);
+
+            Assert.IsNotNull(player);
+            Assert.IsNotNull(player.Username);
+
+            player = new Player(0, "", "", "", "", new byte[32], new byte[32], false,
+                false, false, false, false, false, false, false, null);
+
+            Assert.IsNotNull(player);
+            Assert.IsNotNull(player.Username);
         }
 
         [TestMethod]

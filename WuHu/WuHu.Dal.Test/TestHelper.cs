@@ -62,8 +62,9 @@ namespace WuHu.Dal.Test
             database.ExecuteNonQuery(cmd);
         }
 
-        internal static void BackupDb()
+        internal static void BackupDb(IDatabase database = null)
         {
+            if (database != null) InsertTestData(database);
             try
             {
                 if (!File.Exists(DbPath + DbName + ".mdf.bak"))

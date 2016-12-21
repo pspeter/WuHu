@@ -6,12 +6,14 @@ using WuHu.Terminal.ViewModels;
 
 namespace WuHu.Terminal
 {
-    public partial class TerminalWindow : Window
+    public partial class TerminalWindow
     {
         public TerminalWindow()
         {
             InitializeComponent();
-            Closing += (a, b) => ManagerFactory.GetTerminalManager().Logout();
+            var vm = new TerminalVm();
+            DataContext = vm;
+            Closing += vm.OnWindowClosing;
         }
     }
 }

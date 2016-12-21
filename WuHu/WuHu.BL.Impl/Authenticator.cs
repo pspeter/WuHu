@@ -35,7 +35,7 @@ namespace WuHu.BL.Impl
             {
                 return false;
             }
-            bool correctPw = PasswordManager.CheckPassword(credentials.Password, user.Password, user.Salt);
+            var correctPw = CryptoService.CheckPassword(credentials.Password, user.Password, user.Salt);
 
             return correctPw && (!adminRequired || user.IsAdmin);
         }

@@ -45,8 +45,8 @@ namespace WuHu.Domain
             this.Lastname = lastname;
             this.Nickname = nickname;
             this.Username = username;
-            this.Salt = PasswordManager.GenerateSalt();
-            this.Password = PasswordManager.HashPassword(password, this.Salt);
+            this.Salt = CryptoService.GenerateSalt();
+            this.Password = CryptoService.HashPassword(password, this.Salt);
             this.IsAdmin = isAdmin;
             this.PlaysMondays = playsMondays;
             this.PlaysTuesdays = playsTuesdays;

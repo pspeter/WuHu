@@ -12,10 +12,10 @@
 
     <UserControl.Resources>
         <cv:RowNumberConverter x:Key="RowNumberConverter"/>
-        <CollectionViewSource x:Key="PlayerList" Source="{Binding Players}"></CollectionViewSource>
+        <CollectionViewSource x:Key="PlayerList" Source="{Binding PlayersSortedByRank}"></CollectionViewSource>
     </UserControl.Resources>
 
-    <DataGrid ItemsSource="{Binding Players}" 
+    <DataGrid ItemsSource="{Binding PlayersSortedByRank}" 
               AutoGenerateColumns="False" 
               GridLinesVisibility="None">
         <DataGrid.Columns>

@@ -1,20 +1,33 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using WuHu.Domain;
 
 namespace WuHu.Terminal.ViewModels
 {
-    public class PlayerCollectionVm : RanklistVm
+    public class PlayerCollectionVm : BaseVm
     {
         public PlayerCollectionVm()
         {
-            CurrentPlayer = Players.First();
+            LoadPlayersAsync();
         }
 
-        public PlayerCollectionVm(ObservableCollection<PlayerVm> players) : base(players)
+        public PlayerCollectionVm(ObservableCollection<PlayerVm> players,
+            ObservableCollection<PlayerVm> sortedPlayers) 
+            : base(players, sortedPlayers)
         {
-            CurrentPlayer = Players.First();
+            if (players != null)
+            {
+                CurrentPlayer = Players.Count > 0 ? Players.First() : null;
+            }
+            else
+            {
+                LoadPlayersAsync();
+            }
         }
-
+        
         private PlayerVm _currentPlayer;
         
         public PlayerVm CurrentPlayer
@@ -27,5 +40,7 @@ namespace WuHu.Terminal.ViewModels
                 OnPropertyChanged(this);
             }
         }
+
+        
     }
 }

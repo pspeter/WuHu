@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="WuHu.Terminal.Views.StatisticsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:WuHu.Terminal.Views"
+             xmlns:chart="clr-namespace:Syncfusion.Windows.Chart.Resources;assembly=Syncfusion.Chart.Wpf"
+             xmlns:sf="http://schemas.syncfusion.com/wpf"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid Width="1060" Height="650" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+        <Border x:Name="root" Width="900" Height="550" Background="White" BorderBrush="#FFE6E6E6"  HorizontalAlignment="Left">
+            <Border.Effect>
+                <DropShadowEffect Direction="181" ShadowDepth="0" BlurRadius="15" Color="Black"/>
+            </Border.Effect>
+            <Grid x:Name="GridRoot"  >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border Background="#FF3A2A48" Margin="0,-1,0,0" HorizontalAlignment="Center">
+                    <TextBlock Text="Multiple Series" Margin="10,5,10,5" Foreground="White" FontSize="20" VerticalAlignment="Center"  FontFamily="Segoe UI Bold"/>
+                </Border>
+                <Grid Grid.Row="1" Width="850">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <sf:Chart x:Name="lineChart" Height="450" Width="725" IsManipulationEnabled="True" Grid.Row="1" >
+                        <sf:ChartArea>
+                            <sf:ChartArea.PrimaryAxis>
+                                <sf:ChartAxis LabelFormat="mm:ss">
+                                    <sf:ChartAxis.Header>
+                                        <TextBlock Margin="10" Text="Minutes and Seconds" FontSize="16" FontFamily="SegoeUI"/>
+                                    </sf:ChartAxis.Header>
+                                </sf:ChartAxis>
+                            </sf:ChartArea.PrimaryAxis>
+                            <sf:ChartArea.SecondaryAxis>
+                                <sf:ChartAxis RangePadding="Normal"  EdgeLabelsDrawingMode="Fit" LabelFormat="0.00" Interval="50">
+                                    <sf:ChartAxis.Header>
+                                        <TextBlock Margin="10" Text="Value" FontSize="16" FontFamily="SegoeUI"/>
+                                    </sf:ChartAxis.Header>
+                                </sf:ChartAxis>
+                            </sf:ChartArea.SecondaryAxis>
+                        </sf:ChartArea>
+                    </sf:Chart>
+                    <StackPanel Margin="0,30,0,0" Grid.Column="1">
+                        <TextBlock x:Name="timeTaken" FontSize="14" Width="Auto" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Bottom"></TextBlock>
+                        <Button Grid.Column="1" HorizontalAlignment="Center" BorderThickness="3" Content="Load 500 * 500 Points"></Button>
+                    </StackPanel>
+                </Grid>
+
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

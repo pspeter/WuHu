@@ -23,6 +23,12 @@ namespace WuHu.Dal.SqlServer
             @"SELECT * 
                 FROM Tournament JOIN Player on (Tournament.creator = Player.playerId);";
 
+        private const string SqlFindMostRecent =
+            @"SELECT TOP 1 *
+                FROM Tournament JOIN Player on (Tournament.creator = Player.playerId)
+                    JOIN Match on (Match.tournamentId = Tournament.tournamentId)
+                ORDER BY Match.datetime DESC;";
+
         private const string SqlInsert =
             @"INSERT INTO Tournament (name, creator)
                 OUTPUT Inserted.tournamentId
@@ -80,11 +86,51 @@ namespace WuHu.Dal.SqlServer
             }
         }
 
+        protected DbCommand CreateFindMostRecent()
+        {
+            DbCommand findByIdCmd = database.CreateCommand(SqlFindMostRecent);
+            return findByIdCmd;
+        }
+
         protected DbCommand CreateFindByIdCmd(int tournamentId)
         {
             DbCommand findByIdCmd = database.CreateCommand(SqlFindById);
             database.DefineParameter(findByIdCmd, "tournamentId", DbType.Int32, tournamentId);
             return findByIdCmd;
+        }
+
+        public Tournament FindMostRecentTournament()
+        {
+            using (DbCommand command = CreateFindMostRecent())
+            using (IDataReader reader = database.ExecuteReader(command))
+            {
+                if (reader.Read())
+                {
+                    return new Tournament((int)reader["tournamentId"],
+                                          (string)reader["name"],
+                                          new Player((int)reader["playerId"],
+                                              (string)reader["firstName"],
+                                              (string)reader["lastName"],
+                                              (string)reader["nickName"],
+                                              (string)reader["userName"],
+                                              (byte[])reader["password"],
+                                              (byte[])reader["salt"],
+                                              (bool)reader["isAdmin"],
+                                              (bool)reader["playsMondays"],
+                                              (bool)reader["playsTuesdays"],
+                                              (bool)reader["playsWednesdays"],
+                                              (bool)reader["playsThursdays"],
+                                              (bool)reader["playsFridays"],
+                                              (bool)reader["playsSaturdays"],
+                                              (bool)reader["playsSundays"],
+                                              reader.IsDBNull(reader.GetOrdinal("picture")) ?
+                                                  null : (byte[])reader["picture"]));
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         public Tournament FindById(int tournamentId)

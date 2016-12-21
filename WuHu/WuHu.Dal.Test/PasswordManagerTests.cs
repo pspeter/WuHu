@@ -10,13 +10,11 @@ namespace WuHu.Dal.Test
     [TestClass]
     public class PasswordManagerTests
     {
-        
-
         [TestMethod]
         public void Salt()
         {
-            byte[] salt1 = PasswordManager.GenerateSalt();
-            byte[] salt2 = PasswordManager.GenerateSalt();
+            var salt1 = CryptoService.GenerateSalt();
+            var salt2 = CryptoService.GenerateSalt();
             Assert.IsNotNull(salt1);
             Assert.AreNotEqual(salt1, salt2);
         }
@@ -24,23 +22,23 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void Password()
         {
-            string password = "testpw";
-            byte[] salt = PasswordManager.GenerateSalt();
+            const string password = "testpw";
+            var salt = CryptoService.GenerateSalt();
             Assert.IsNotNull(salt);
-            byte[] hash1 = PasswordManager.HashPassword(password, salt);
-            byte[] hash2 = PasswordManager.HashPassword(password, salt);
+            var hash1 = CryptoService.HashPassword(password, salt);
+            var hash2 = CryptoService.HashPassword(password, salt);
             Assert.IsNotNull(hash1);
 
             Assert.IsTrue(hash1.SequenceEqual(hash2));
 
-            bool success = PasswordManager.CheckPassword(password, hash1, salt);
+            var success = CryptoService.CheckPassword(password, hash1, salt);
             Assert.IsTrue(success);
 
-            success = PasswordManager.CheckPassword("wrongPw", hash1, salt);
+            success = CryptoService.CheckPassword("wrongPw", hash1, salt);
             Assert.IsFalse(success);
 
-            byte[] wrongSalt = PasswordManager.GenerateSalt();
-            success = PasswordManager.CheckPassword(password, hash1, wrongSalt);
+            var wrongSalt = CryptoService.GenerateSalt();
+            success = CryptoService.CheckPassword(password, hash1, wrongSalt);
             Assert.IsFalse(success);
         }
     }

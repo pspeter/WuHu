@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -52,6 +53,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CommonTests.cs" />
     <Compile Include="MatchManagerTests.cs" />
     <Compile Include="PlayerManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -68,6 +70,10 @@
     <ProjectReference Include="..\WuHu.BL\WuHu.BL.csproj">
       <Project>{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}</Project>
       <Name>WuHu.BL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WuHu.Common\WuHu.Common.csproj">
+      <Project>{B995CB61-A5E2-4149-B397-F7513255CC4A}</Project>
+      <Name>WuHu.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\WuHu.Dal.Common\WuHu.Dal.Common.csproj">
       <Project>{04F6460D-1635-43D4-8080-F4903B40DB76}</Project>

@@ -34,6 +34,8 @@ namespace WuHu.BL
         bool UpdateParameter(ScoreParameter param, Credentials credentials);
         ScoreParameter GetParameter(string key);
 
+        IList<Tournament> GetAllTournaments();
+        Tournament GetMostRecentTournament();
         bool CreateTournament(Tournament tournament, IList<Player> players, int amountMatches, Credentials credentials);
         bool UpdateTournament(Tournament tournament, IList<Player> players, int amountMatches, Credentials credentials);
         bool LockTournament(Credentials credentials);

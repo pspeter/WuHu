@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WuHu.Terminal.ViewModels;
 
 namespace WuHu.Terminal.Views
 {
@@ -20,6 +21,7 @@ namespace WuHu.Terminal.Views
         public RanklistControl()
         {
             InitializeComponent();
+            DataContext = new RanklistVm();
         }
     }
 }

@@ -1,4 +1,10 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Input;
 using WuHu.BL.Impl;
 
 namespace WuHu.Terminal.ViewModels
@@ -6,17 +12,22 @@ namespace WuHu.Terminal.ViewModels
     internal class LoginVm : BaseVm
     {
         private string _username;
-        private string _password;
+        private readonly Action _onLoginAction;
 
         public ICommand LoginCommand { get; private set; }
-        public ICommand LogoutCommand { get; private set; }
 
         public LoginVm()
         {
-            LoginCommand = new RelayCommand(p => Manager.Login(Username, Password));
-            LogoutCommand = new RelayCommand(p => Manager.Logout(), p => Manager.IsUserAuthenticated());
+            LoginCommand = new RelayCommand(Login);
         }
-        
+
+        public LoginVm(Action onLogin)
+        {
+            _onLoginAction = onLogin;
+            LoginCommand = new RelayCommand(Login);
+        }
+
+
         public string Username
         {
             get { return _username; }
@@ -30,34 +41,20 @@ namespace WuHu.Terminal.ViewModels
             }
         }
 
-        public string Password
-        {
-            get { return _password; }
-            set
-            {
-                if (value != _password)
-                {
-                    _password = value;
-                    OnPropertyChanged(this);
-                }
-            }
-        }
-
-
         private void Login(object param)
         {
-            var success = Manager.Login(Username, Password);
+            var pwBox = param as PasswordBox;
+            // don't save password in memory, just send it to the Manager right away
+            if (pwBox == null) return;
+
+            var success = Manager.Login(Username, pwBox.Password);
+            pwBox.Password = null;
 
             if (success)
             {
-                IsAuthenticatedChanged();
+                OnAuthenticatedChanged(this);
+                _onLoginAction?.Invoke();
             }
-        }
-
-        private void Logout(object param)
-        {
-            Manager.Logout();
-            IsAuthenticatedChanged();
         }
     }
 }
