@@ -70,7 +70,7 @@ BEGIN
     ( 
         [tournamentId]       int  NOT NULL  IDENTITY ( 0,1 ) ,
         [name]               nvarchar(50)  NOT NULL ,
-        [creator]           int  NULL 
+        [datetime]               Datetime2  NOT NULL
     );
 
     ALTER TABLE [dbo].[Tournament]
@@ -85,8 +85,6 @@ BEGIN
         ADD CONSTRAINT [FK_Match_tournamentId] FOREIGN KEY ([tournamentId]) REFERENCES [Tournament]([tournamentId])
             ON DELETE NO ACTION
             ON UPDATE NO ACTION;
-
-
 
     ALTER TABLE [dbo].[Match]
         ADD CONSTRAINT [FK_Match_player1] FOREIGN KEY ([player1]) REFERENCES [Player]([playerId])
@@ -108,9 +106,4 @@ BEGIN
             ON DELETE NO ACTION
             ON UPDATE NO ACTION;
 
-
-    ALTER TABLE [dbo].[Tournament]
-        ADD CONSTRAINT [FK_Tournament_creator] FOREIGN KEY ([creator]) REFERENCES [Player]([playerId])
-            ON DELETE CASCADE
-            ON UPDATE CASCADE;
 END;

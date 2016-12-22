@@ -64,7 +64,7 @@ namespace WuHu.BL.Test
             Assert.AreEqual(rating.Value, int.Parse(_paramDao.FindById("initialScore")
                 ?.Value ?? DefaultParameter.InitialScore));
 
-            var tournament = new Tournament("", player);
+            var tournament = new Tournament("", DateTime.Now);
             Assert.IsTrue(_tournamentDao.Insert(tournament));
             var wonMatch = new Match(tournament, DateTime.Now, 0, 10, 0.5, true, 
                 _testPlayers[0], _testPlayers[1], player, _testPlayers[2]);

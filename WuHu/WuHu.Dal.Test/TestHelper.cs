@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Common;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WuHu.Dal.Common;
+using WuHu.Domain;
 
 namespace WuHu.Dal.Test
 {
@@ -36,7 +38,7 @@ namespace WuHu.Dal.Test
             {
                 database.ExecuteNonQuery(cmd);
             }
-            catch
+            catch(Exception e)
             {
                 // ignored
             }
@@ -46,13 +48,47 @@ namespace WuHu.Dal.Test
         {
             DropTables(database);
             CreateTables(database);
-            IEnumerable<string> script = File.ReadLines(SqlPath + "dbo.Testdata.sql");
+            var playerDao = DalFactory.CreatePlayerDao(database);
 
+            playerDao.Insert(new Player("Herwald", "Müller", "Lego-las", "legologo", "legoistcool", true, 
+                true, true, false, false, true, true, true, null));
+
+            playerDao.Insert(new Player("Heinz", "Janda", "Javanda", "JavaJanda", "javaistcool", true,
+                false, false, false, false, true, true, true, null));
+
+            playerDao.Insert(new Player("Dobrila", "Reiter", "Pascal", "compiling...", "cistcool", true,
+                false, false, false, false, true, true, true, null));
+
+            playerDao.Insert(new Player("Trinke", "Fanta", "Sei Kambucha", "secretelypepsi", "droptableplayer", true,
+                false, false, false, false, true, true, true, null));
+
+            playerDao.Insert(new Player("Mark", "Spinner", "Deitscher", "oleeee", "bayernistcool", true,
+                false, false, false, false, true, true, true, null));
+
+            var rand = new Random();
+
+            for (var i = 0; i < 25; ++i)
+            {
+                var uniqueUsername = GenerateName();
+
+                playerDao.Insert(new Player("Vorname", "Nachname", "Spitzname", uniqueUsername, "passwort", false, 
+                    rand.NextDouble() > 0.4, rand.NextDouble() > 0.4, rand.NextDouble() > 0.4, rand.NextDouble() > 0.4,
+                    rand.NextDouble() > 0.4, rand.NextDouble() > 0.4, rand.NextDouble() > 0.4, null));
+            }
+            
+            IEnumerable<string> script = File.ReadLines(SqlPath + "dbo.Testdata.sql");
             foreach (var line in script)
             {
                 Console.WriteLine(line);
                 DbCommand cmd = database.CreateCommand(line);
-                database.ExecuteNonQuery(cmd);
+                try
+                {
+                    database.ExecuteNonQuery(cmd);
+                }
+                catch
+                {
+                    Console.WriteLine("error");
+                }
             }
         }
 
@@ -62,9 +98,8 @@ namespace WuHu.Dal.Test
             database.ExecuteNonQuery(cmd);
         }
 
-        internal static void BackupDb(IDatabase database = null)
+        internal static void BackupDb(IDatabase database)
         {
-            if (database != null) InsertTestData(database);
             try
             {
                 if (!File.Exists(DbPath + DbName + ".mdf.bak"))

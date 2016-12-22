@@ -9,13 +9,11 @@ using WuHu.Domain;
 
 namespace WuHu.Terminal.ViewModels
 {
-    public class RanklistVm : PlayerCollectionVm
+    public class RanklistVm : BaseVm
     {
-        public RanklistVm(ObservableCollection<PlayerVm> players,
-            ObservableCollection<PlayerVm> sortedPlayers) : base(players, sortedPlayers)
-        { }
-
-        public RanklistVm() : this(null, null)
-        { }
+        public RanklistVm()
+        {
+            LoadPlayersAsync();
+        }
     }
 }

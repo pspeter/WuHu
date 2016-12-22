@@ -12,6 +12,7 @@ namespace WuHu.BL
         bool Login(string username, string password);
         bool IsUserAuthenticated();
         void Logout();
-        Credentials GetUserCredentials();
+        Credentials AuthenticatedCredentials { get; }
+        Player AuthenticatedUser { get; }
     }
 }

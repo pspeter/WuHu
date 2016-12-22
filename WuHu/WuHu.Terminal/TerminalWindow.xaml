@@ -3,6 +3,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz" 
         xmlns:dockablz="clr-namespace:Dragablz.Dockablz;assembly=Dragablz"
@@ -32,50 +33,73 @@
         </controls:FlyoutsControl>
     </controls:MetroWindow.Flyouts>
 
-    <dockablz:Layout>
-        <dragablz:TabablzControl BorderThickness="1"
-                                 Margin="0">
-            <dragablz:TabablzControl.InterTabController>
-                <dragablz:InterTabController />
-            </dragablz:TabablzControl.InterTabController>
+    <TabControl BorderThickness="1"
+                Margin="0">
 
-            <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent">
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <wpf:PackIcon Kind="Trophy"
+        <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal"
+                            Margin="5, 20">
+                    <wpf:PackIcon Kind="Trophy"
                                       Margin="5, 0"></wpf:PackIcon>
-                        <TextBlock Text="HEADER"
+                    <TextBlock Text="RANGLISTE"
                                    Margin="5, 0"/>
-                    </StackPanel>
-                </TabItem.Header>
-                <views:RanklistControl/>
-            </TabItem>
-            <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent">
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <wpf:PackIcon Kind="FormatListBulleted"
+                </StackPanel>
+            </TabItem.Header>
+            <views:RanklistPage/>
+        </TabItem>
+        <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal"
+                            Margin="5, 20">
+                    <wpf:PackIcon Kind="FormatListBulleted"
                                       Margin="5, 0"></wpf:PackIcon>
-                        <TextBlock Text="SPIELPLAN"
+                    <TextBlock Text="SPIELPLAN"
                                    Margin="5, 0"/>
-                    </StackPanel>
-                </TabItem.Header>
-                <views:TournamentControl/>
-            </TabItem>
-            <TabItem Header="SPIELER"
-                         wpf:FlyoutAssist.HeaderColorMode="Accent">
-                <views:PlayerControl/>
-            </TabItem>
-            <TabItem Header="STATISTIK"
-                     wpf:FlyoutAssist.HeaderColorMode="Accent">
-                <views:StatisticsControl/>
-            </TabItem>
-            <TabItem Header="LOGIN"
-                     wpf:FlyoutAssist.HeaderColorMode="Accent"
-                     Visibility="{Binding IsNotAuthenticated, Converter={StaticResource BoolToVis}}">
-                <views:LoginControl/>
-            </TabItem>
-        </dragablz:TabablzControl>
-    </dockablz:Layout>
+                </StackPanel>
+            </TabItem.Header>
+            <views:TournamentPage/>
+        </TabItem>
+        <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent"
+                     IsEnabled="{Binding IsAuthenticated}">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal"
+                            Margin="5, 20">
+                    <wpf:PackIcon Kind="AccountCardDetails"
+                                      Margin="5, 0"></wpf:PackIcon>
+                    <TextBlock Text="SPIELER"
+                                   Margin="5, 0"/>
+                </StackPanel>
+            </TabItem.Header>
+            <views:PlayerPage/>
+        </TabItem>
+        <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent"
+                     IsEnabled="{Binding IsAuthenticated}">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal"
+                            Margin="5, 20">
+                    <wpf:PackIcon Kind="TrendingUp"
+                                      Margin="5, 0"></wpf:PackIcon>
+                    <TextBlock Text="STATISTIK"
+                                   Margin="5, 0"/>
+                </StackPanel>
+            </TabItem.Header>
+            <views:StatisticsPage/>
+        </TabItem>
+        <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent"
+                     IsEnabled="{Binding IsNotAuthenticated}">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal"
+                            Margin="5, 20">
+                    <wpf:PackIcon Kind="LoginVariant"
+                                      Margin="5, 0"></wpf:PackIcon>
+                    <TextBlock Text="LOGIN"
+                                   Margin="5, 0"/>
+                </StackPanel>
+            </TabItem.Header>
+            <views:LoginPage/>
+        </TabItem>
+    </TabControl>
 </controls:MetroWindow>
 
  

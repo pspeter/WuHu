@@ -14,7 +14,6 @@ namespace WuHu.Dal.Test
         private static IDatabase database;
         private static IPlayerDao playerDao;
         private static ITournamentDao tournamentDao;
-        private static Player testPlayer;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
@@ -22,14 +21,6 @@ namespace WuHu.Dal.Test
             database = DalFactory.CreateDatabase();
             playerDao = DalFactory.CreatePlayerDao(database);
             tournamentDao = DalFactory.CreateTournamentDao(database);
-
-            testPlayer = playerDao.FindById(0);
-            if (testPlayer == null)
-            {
-                testPlayer = new Player("first", "last", "nick", "us7er", "pass",
-                    false, false, false, false, false, true, true, true, null);
-                playerDao.Insert(testPlayer);
-            }
         }
 
         [TestMethod]
@@ -38,10 +29,10 @@ namespace WuHu.Dal.Test
             string name = "name";
             Assert.IsNotNull(tournamentDao);
 
-            Tournament tournament = new Tournament(0, name, testPlayer);
+            Tournament tournament = new Tournament(0, name, DateTime.Now);
             Assert.IsNotNull(tournament);
 
-            tournament = new Tournament(name, testPlayer);
+            tournament = new Tournament(name, DateTime.Now);
             Assert.IsNotNull(tournament);
 
             Assert.AreEqual(tournament.ToString(), name);
@@ -52,7 +43,7 @@ namespace WuHu.Dal.Test
         {
             int cnt1 = tournamentDao.Count();
             Assert.IsTrue(cnt1 >= 0);
-            tournamentDao.Insert(new Tournament("name", testPlayer));
+            tournamentDao.Insert(new Tournament("name", DateTime.Now));
 
             int cnt2 = tournamentDao.Count();
             Assert.AreEqual(cnt1 + 1, cnt2);
@@ -61,7 +52,7 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void FindById()
         {
-            Tournament tournament = new Tournament("name", testPlayer);
+            Tournament tournament = new Tournament("name", DateTime.Now);
             tournamentDao.Insert(tournament);
             Assert.IsNotNull(tournament.TournamentId);
             Tournament foundTournament = tournamentDao.FindById(tournament.TournamentId.Value);
@@ -83,7 +74,7 @@ namespace WuHu.Dal.Test
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                Tournament tournament = new Tournament("name", testPlayer);
+                Tournament tournament = new Tournament("name", DateTime.Now);
                 tournamentDao.Insert(tournament);
             }
             int cntAfterInsert = tournamentDao.Count();
@@ -97,7 +88,7 @@ namespace WuHu.Dal.Test
         public void Insert()
         {
             int cnt = tournamentDao.Count();
-            var tournament = new Tournament("name", testPlayer);
+            var tournament = new Tournament("name", DateTime.Now);
             tournamentDao.Insert(tournament);
             Assert.IsNotNull(tournament.TournamentId);
             int newCnt = tournamentDao.Count();
@@ -105,25 +96,11 @@ namespace WuHu.Dal.Test
             Assert.IsTrue(tournament.TournamentId.Value >= 0);
         }
 
-        [TestMethod]
-        public void InsertWithoutPlayerIdFails()
-        {
-            var player = new Player("", "", "", "", "", false, false,
-                                false, false, false, false, false, false, null);
-
-            try
-            {
-                tournamentDao.Insert(new Tournament("name", player));
-                Assert.Fail("No ArgumentException thrown.");
-            }
-            catch (ArgumentException)
-            { }
-        }
 
         [TestMethod]
         public void Update()
         {
-            var tournament = new Tournament("name", testPlayer);
+            var tournament = new Tournament("name", DateTime.Now);
 
             tournamentDao.Insert(tournament);
             Assert.IsNotNull(tournament.TournamentId);
@@ -141,21 +118,9 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void UpdateWithoutIdFails()
         {
-            
-            Player player = new Player("first", "last", "nick", "user", "pass",
-                false, false, false, false, false, true, true, true, null);
-            
-            try // no playerId
-            {
-                tournamentDao.Update(new Tournament(0, "name", player)); // should throw ArgumentException
-                Assert.Fail("No ArgumentException thrown");
-            }
-            catch (ArgumentException)
-            { }
-
             try // no tournamentId
             {
-                tournamentDao.Update(new Tournament("name", testPlayer));
+                tournamentDao.Update(new Tournament("name", DateTime.Now));
                 Assert.Fail("No ArgumentException thrown");
             }
             catch (ArgumentException) { }

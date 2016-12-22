@@ -67,6 +67,11 @@ namespace WuHu.Dal.SqlServer
                 command.Connection = connection;
                 return command.ExecuteNonQuery();
             }
+            catch (Exception e)
+            {
+                Console.WriteLine("hi");
+                throw; 
+            }
             finally
             {
                 ReleaseConnection(connection);

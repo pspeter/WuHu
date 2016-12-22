@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Services.Client;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -17,6 +18,8 @@ namespace WuHu.Terminal.ViewModels
     public abstract class BaseVm : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public event Action OnPlayersLoaded;
+        public event Action OnPlayersSortedByRankLoaded;
 
         protected ITerminalManager Manager;
 
@@ -25,8 +28,8 @@ namespace WuHu.Terminal.ViewModels
 
         protected void OnAuthenticatedChanged(object sender)
         {
-            OnPropertyChanged(this, nameof(IsAuthenticated));
-            OnPropertyChanged(this, nameof(IsNotAuthenticated));
+            OnPropertyChanged(sender, nameof(IsAuthenticated));
+            OnPropertyChanged(sender, nameof(IsNotAuthenticated));
         }
 
         protected virtual void OnPropertyChanged(object sender, [CallerMemberName] string propertyName = null)
@@ -43,8 +46,7 @@ namespace WuHu.Terminal.ViewModels
             Players = players ?? new ObservableCollection<PlayerVm>();
             PlayersSortedByRank = sortedPlayers ?? new ObservableCollection<PlayerVm>();
         }
-
-        // shared state
+        
         public ObservableCollection<PlayerVm> Players { get; }
         public ObservableCollection<PlayerVm> PlayersSortedByRank { get; }
 
@@ -52,40 +54,29 @@ namespace WuHu.Terminal.ViewModels
         {
             Players.Clear();
 
-            /*
-            await Task.Factory.StartNew(() =>
-            {
-                var players = Manager.GetAllPlayers();
-
-                foreach (var player in players)
-                {
-                    Players.Add(new PlayerVm(player));
-                }
-
-                var orderedPlayers = Players.OrderByDescending(p => p.CurrentRating?.Value ?? int.MinValue);
-                foreach (var player in orderedPlayers)
-                {
-                    PlayersSortedByRank.Add(player);
-                }
-            },
-            CancellationToken.None,
-            TaskCreationOptions.None,
-            TaskScheduler.FromCurrentSynchronizationContext());*/
-
             var playerVms = await Task.Run(() => 
                 Manager.GetAllPlayers()
-                .Select(player => new PlayerVm(player)).ToList());
+                .Select(player => new PlayerVm(player, Reload)).ToList());
 
             foreach (var vm in playerVms)
             {
                 Players.Add(vm); 
             }
 
+            OnPlayersLoaded?.Invoke();
+
             var orderedPlayers = Players.OrderByDescending(p => p.CurrentRating?.Value ?? int.MinValue);
             foreach (var player in orderedPlayers)
             {
                 PlayersSortedByRank.Add(player);
             }
+
+            OnPlayersSortedByRankLoaded?.Invoke();
+        }
+
+        public virtual void Reload()
+        {
+            LoadPlayersAsync();
         }
     }
 }

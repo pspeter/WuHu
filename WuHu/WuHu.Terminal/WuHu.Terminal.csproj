@@ -66,6 +66,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -98,31 +99,54 @@
     <Compile Include="Converter\RowNumberConverter.cs" />
     <Compile Include="ViewModels\BaseVm.cs" />
     <Compile Include="ViewModels\LoginVm.cs" />
+    <Compile Include="ViewModels\MatchListVm.cs" />
     <Compile Include="ViewModels\MatchVm.cs" />
-    <Compile Include="ViewModels\PlayerCollectionVm.cs" />
+    <Compile Include="ViewModels\NewPlayerVm.cs" />
+    <Compile Include="ViewModels\PlayerListVm.cs" />
+    <Compile Include="ViewModels\PlayerPageVm.cs" />
     <Compile Include="ViewModels\PlayerVm.cs" />
     <Compile Include="ViewModels\RanklistVm.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
+    <Compile Include="ValidationRules\PositiveIntValidationRule.cs" />
     <Compile Include="ViewModels\StatisticsVm.cs" />
     <Compile Include="ViewModels\TerminalVm.cs" />
     <Compile Include="ViewModels\TournamentVm.cs" />
-    <Compile Include="Views\LoginControl.xaml.cs">
-      <DependentUpon>LoginControl.xaml</DependentUpon>
+    <Compile Include="Views\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\NewTournamentVm.cs" />
+    <Compile Include="Views\MatchControl.xaml.cs">
+      <DependentUpon>MatchControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewPlayerControl.xaml.cs">
+      <DependentUpon>NewPlayerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewTournamentControl.xaml.cs">
+      <DependentUpon>NewTournamentControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PlayerControl.xaml.cs">
       <DependentUpon>PlayerControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\PlayerListControl.xaml.cs">
+      <DependentUpon>PlayerListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TerminalWindow.xaml.cs">
       <DependentUpon>TerminalWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RanklistControl.xaml.cs">
-      <DependentUpon>RanklistControl.xaml</DependentUpon>
+    <Compile Include="Views\PlayerPage.xaml.cs">
+      <DependentUpon>PlayerPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\StatisticsControl.xaml.cs">
-      <DependentUpon>StatisticsControl.xaml</DependentUpon>
+    <Compile Include="Views\RanklistPage.xaml.cs">
+      <DependentUpon>RanklistPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TournamentControl.xaml.cs">
-      <DependentUpon>TournamentControl.xaml</DependentUpon>
+    <Compile Include="Views\StatisticsPage.xaml.cs">
+      <DependentUpon>StatisticsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TournamentPage.xaml.cs">
+      <DependentUpon>TournamentPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MatchListControl.xaml.cs">
+      <DependentUpon>MatchListControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -180,7 +204,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\LoginControl.xaml">
+    <Page Include="Views\LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MatchControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewPlayerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewTournamentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -188,19 +224,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\PlayerListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TerminalWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\RanklistControl.xaml">
+    <Page Include="Views\PlayerPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\StatisticsControl.xaml">
+    <Page Include="Views\RanklistPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\TournamentControl.xaml">
+    <Page Include="Views\StatisticsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TournamentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MatchListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

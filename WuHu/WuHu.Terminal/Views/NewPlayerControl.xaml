@@ -1,0 +1,114 @@
+﻿<UserControl x:Class="WuHu.Terminal.Views.NewPlayerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WuHu.Terminal.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="600">
+    <StackPanel Orientation="Vertical" 
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch"
+                Grid.Column="2"
+                Margin="20, 10">
+
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid Margin="0, 0, 15, 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                                     Margin="0, 5, 10, 5">Vorname:</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="0"
+                                     Margin="0, 5, 10, 5">Nachname:</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="0"
+                                     Margin="0, 5, 10, 5">Spitzname:</TextBlock>
+                <TextBlock Grid.Row="3" Grid.Column="0"
+                                     Margin="0, 5, 10, 5">Passwort:</TextBlock>
+                <TextBlock Grid.Row="3" Grid.Column="0"
+                                     Margin="0, 5, 10, 5">Ist Admin:</TextBlock>
+
+                <TextBox Grid.Row="0" Grid.Column="1"
+                                     Margin="15, 5, 0, 5"
+                                     Text="{Binding Firstname}"
+                                     HorizontalAlignment="Stretch"></TextBox>
+                <TextBox Grid.Row="1" Grid.Column="1"
+                                     Margin="15, 5, 0, 5"
+                                     Text="{Binding Lastname}"
+                                     HorizontalAlignment="Stretch"></TextBox>
+                <TextBox Grid.Row="2" Grid.Column="1"
+                                     Margin="15, 5, 0, 5"
+                                     Text="{Binding Nickname}"
+                                     HorizontalAlignment="Stretch"></TextBox>
+                <PasswordBox Grid.Row="3" Grid.Column="1"
+                                     Margin="15, 5, 0, 5"
+                                     HorizontalAlignment="Stretch"></PasswordBox>
+                <CheckBox Grid.Row="4" Grid.Column="1"
+                                     Margin="15, 5, 0, 5"
+                                     IsChecked="{Binding IsAdmin}"
+                                     HorizontalAlignment="Stretch"></CheckBox>
+            </Grid>
+
+
+            <GroupBox  Grid.Column="1" 
+                           HorizontalAlignment="Left"
+                           Width="200"
+                           Header="Wochentage"
+                           Margin="25">
+
+                <StackPanel Orientation="Vertical">
+                    <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
+                        <TextBlock DockPanel.Dock="Left">Montag</TextBlock>
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysMondays}" HorizontalAlignment="Right"></CheckBox>
+                    </DockPanel>
+                    <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
+                        <TextBlock DockPanel.Dock="Left">Dienstag</TextBlock>
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysTuesdays}" HorizontalAlignment="Right"></CheckBox>
+                    </DockPanel>
+                    <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
+                        <TextBlock DockPanel.Dock="Left">Mittwoch</TextBlock>
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysWednesdays}" HorizontalAlignment="Right"></CheckBox>
+                    </DockPanel>
+                    <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
+                        <TextBlock DockPanel.Dock="Left">Donnerstag</TextBlock>
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysThursdays}" HorizontalAlignment="Right"></CheckBox>
+                    </DockPanel>
+                    <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
+                        <TextBlock DockPanel.Dock="Left">Freitag</TextBlock>
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysFridays}" HorizontalAlignment="Right"></CheckBox>
+                    </DockPanel>
+                    <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
+                        <TextBlock DockPanel.Dock="Left">Samstag</TextBlock>
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysSaturdays}" HorizontalAlignment="Right"></CheckBox>
+                    </DockPanel>
+                    <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
+                        <TextBlock DockPanel.Dock="Left">Sonntag</TextBlock>
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysSundays}" HorizontalAlignment="Right"></CheckBox>
+                    </DockPanel>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+
+        <Image Grid.Column="1" 
+                           VerticalAlignment="Top"
+                           Margin="10"
+                           Source="{Binding Image}"
+                           Width="200"
+                           Height="200"/>
+    </StackPanel>
+</UserControl>

@@ -1,10 +1,11 @@
-﻿using WuHu.Terminal.ViewModels;
+﻿using WuHu.Domain;
+using WuHu.Terminal.ViewModels;
 
 namespace WuHu.Terminal.Views
 {
-    public partial class TournamentControl 
+    public partial class TournamentPage 
     {
-        public TournamentControl()
+        public TournamentPage()
         {
             InitializeComponent();
             DataContext = new TournamentVm();

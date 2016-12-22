@@ -17,11 +17,11 @@ using WuHu.Terminal.ViewModels;
 namespace WuHu.Terminal.Views
 {
     /// <summary>
-    /// Interaction logic for StatisticsControl.xaml
+    /// Interaction logic for StatisticsPage.xaml
     /// </summary>
-    public partial class StatisticsControl : UserControl
+    public partial class StatisticsPage
     {
-        public StatisticsControl()
+        public StatisticsPage()
         {
             InitializeComponent();
             DataContext = new StatisticsVm();

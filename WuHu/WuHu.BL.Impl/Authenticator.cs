@@ -30,6 +30,7 @@ namespace WuHu.BL.Impl
 
         public bool Authenticate(Credentials credentials, bool adminRequired = true)
         {
+            if (credentials == null) return false;
             var user = _playerDao.FindByUsername(credentials.Username);
             if (user == null)
             {

@@ -62,7 +62,7 @@ namespace WuHu.Dal.Test
             testTournament = tournamentDao.FindById(0);
             if (testTournament == null)
             {
-                testTournament = new Tournament("Test", testPlayer1);
+                testTournament = new Tournament("Test", DateTime.Now);
                 tournamentDao.Insert(testTournament);
             }
         }
@@ -190,7 +190,7 @@ namespace WuHu.Dal.Test
 
             try
             {
-                matchDao.FindAllByTournament(new Tournament("name", testPlayer1));
+                matchDao.FindAllByTournament(new Tournament("name", DateTime.Now));
                 Assert.Fail("No ArgumentException thrown.");
             }
             catch (ArgumentException) { }
@@ -228,7 +228,7 @@ namespace WuHu.Dal.Test
             Tournament tournamentWithoutId = tournamentDao.FindById(0);
             if (tournamentWithoutId == null)
             {
-                tournamentWithoutId = new Tournament("name", testPlayer1);
+                tournamentWithoutId = new Tournament("name", DateTime.Now);
                 tournamentDao.Insert(tournamentWithoutId);
             }
             tournamentWithoutId.TournamentId = null;
@@ -290,7 +290,7 @@ namespace WuHu.Dal.Test
             {
             }
 
-            Tournament tournamentWithoutId = new Tournament("name", testPlayer1);
+            Tournament tournamentWithoutId = new Tournament("name", DateTime.Now);
             try // no tournamentId
             {
                 matchDao.Update(new Match(0, tournamentWithoutId, new DateTime(2000, 1, 1),

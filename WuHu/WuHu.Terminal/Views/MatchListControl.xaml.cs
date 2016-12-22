@@ -12,16 +12,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WuHu.Terminal.ViewModels;
+using MaterialDesignThemes.Wpf;
 
 namespace WuHu.Terminal.Views
 {
-    public partial class RanklistControl
+    /// <summary>
+    /// Interaction logic for MatchListControl.xaml
+    /// </summary>
+    public partial class MatchListControl : UserControl
     {
-        public RanklistControl()
+        public MatchListControl()
         {
             InitializeComponent();
-            DataContext = new RanklistVm();
         }
     }
 }

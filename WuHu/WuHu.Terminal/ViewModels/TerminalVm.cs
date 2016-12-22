@@ -6,7 +6,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
+using MahApps.Metro.Controls;
 using WuHu.Terminal.Views;
 
 namespace WuHu.Terminal.ViewModels
@@ -23,9 +25,8 @@ namespace WuHu.Terminal.ViewModels
                 Logout,
                 p => IsAuthenticated);
 
-            // Load data
-            LoadPlayersAsync();
         }
+        
 
         private void Logout(object o)
         {

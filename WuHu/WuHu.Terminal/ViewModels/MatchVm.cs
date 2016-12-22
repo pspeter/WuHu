@@ -14,12 +14,15 @@ namespace WuHu.Terminal.ViewModels
         public MatchVm(Match match)
         {
             _match = match;
+            ScoreVirtualization = new List<int>(Enumerable.Range(0, 100));
         }
 
         public Player Player1 => _match.Player1;
         public Player Player2 => _match.Player2;
         public Player Player3 => _match.Player3;
         public Player Player4 => _match.Player4;
+        
+        public IList<int> ScoreVirtualization { get; }
 
         public DateTime Datetime
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WuHu.Terminal.ViewModels
 {
-    public class StatisticsVm : PlayerCollectionVm
+    public class StatisticsVm : BaseVm
     {
         public IEnumerable<Tuple<DateTime, int>> ChartData;
 

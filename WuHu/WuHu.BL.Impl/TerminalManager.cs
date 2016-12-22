@@ -9,37 +9,34 @@ namespace WuHu.BL.Impl
 {
     public class TerminalManager : CommonManager, ITerminalManager
     {
-        private Player _authenticatedUser;
-        private Credentials _credentials;
 
         public bool Login(string username, string password)
         {
-            _credentials = new Credentials(username, password);
+            AuthenticatedCredentials = new Credentials(username, password);
 
-            if (!Authentication.Authenticate(_credentials, true))
+            if (!Authentication.Authenticate(AuthenticatedCredentials, true))
             {
                 Logout();
                 return false;
             }
 
-            _authenticatedUser = PlayerDao.FindByUsername(username);
+            AuthenticatedUser = PlayerDao.FindByUsername(username);
             return true;
         }
         
         public bool IsUserAuthenticated()
         {
-            return true;// _authenticatedUser != null;
+            return AuthenticatedUser != null;
         }
 
         public void Logout()
         {
-            _authenticatedUser = null;
-            _credentials = null;
+            AuthenticatedUser = null;
+            AuthenticatedCredentials = null;
         }
 
-        public Credentials GetUserCredentials()
-        {
-            return _credentials;
-        }
+        public Credentials AuthenticatedCredentials { get; private set; }
+
+        public Player AuthenticatedUser { get; private set; }
     }
 }

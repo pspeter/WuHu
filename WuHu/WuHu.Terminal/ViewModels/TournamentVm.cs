@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,88 +14,44 @@ namespace WuHu.Terminal.ViewModels
     public class TournamentVm : BaseVm
     {
         private readonly Tournament _tournament;
-        private int _amountMatches;
-        private MatchVm _currentMatch;
+        private BaseVm _currentVm;
 
-        public ObservableCollection<MatchVm> Matches { get; }
-
+        private readonly NewTournamentVm _newTournamentVm;
+        private readonly MatchListVm _matchListVm;
+        
         public TournamentVm()
         {
             _tournament = Manager.GetMostRecentTournament();
-            Matches = new ObservableCollection<MatchVm>();
 
-            LoadMatchesForTournamentAsync(_tournament);
-            SetMatchesCommand = new RelayCommand(param => SetMatches());
+            _matchListVm = new MatchListVm(p => SwitchVm(_newTournamentVm));
+            _newTournamentVm = new NewTournamentVm(
+                () => SwitchVm(_matchListVm),
+                () =>
+                {
+                    _matchListVm.Reload();
+                });
 
-            LoadPlayersAsync();
+            CurrentVm = _matchListVm;
         }
 
-        public TournamentVm(ObservableCollection<PlayerVm> players) : base(players)
+        public BaseVm CurrentVm
         {
-            _tournament = Manager.GetMostRecentTournament();
-            Matches = new ObservableCollection<MatchVm>();
-            LoadMatchesForTournamentAsync(_tournament);
-            SetMatchesCommand = new RelayCommand(param => SetMatches());
-        }
-
-        public MatchVm CurrentMatch
-        {
-            get { return _currentMatch; }
+            get { return _currentVm; }
             set
             {
-                if (_currentMatch == value)
+                if (!Equals(_currentVm, value))
                 {
-                    _currentMatch = value;
+                    _currentVm = value;
                     OnPropertyChanged(this);
                 }
             }
         }
 
-        public string Name
+        private void SwitchVm(BaseVm vm)
         {
-            get { return _tournament.Name; }
-            set
-            {
-                if (Equals(_tournament.Name, value)) return;
-                _tournament.Name = value;
-                OnPropertyChanged(this);
-            }
-        }
-
-        public int AmountMatches
-        {
-            get { return _amountMatches; }
-            set
-            {
-                if (_amountMatches == value) return;
-                _amountMatches = value;
-                OnPropertyChanged(this);
-            }
+            CurrentVm = vm;
         }
 
         public ICommand SetMatchesCommand { get; }
-
-        public void SetMatches()
-        {
-            var players = Players.Where(p => p.IsChecked)
-                .Select(p => p.PlayerItem)
-                .ToList();
-            Manager.CreateTournament(_tournament, players, AmountMatches, Manager.GetUserCredentials());
-        }
-        
-        private async void LoadMatchesForTournamentAsync(Tournament tournament)
-        {
-            Matches.Clear();
-            await Task.Run(() =>
-            {
-                var matches = Manager.GetAllMatchesFor(tournament);
-
-                foreach (var match in matches)
-                {
-                    Matches.Add(new MatchVm(match));
-                }
-            });
-
-        }
     }
 }

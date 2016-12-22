@@ -58,7 +58,7 @@ namespace WuHu.BL.Test
         {
             const int amountMatches = 3;
             var admin = _testPlayers.First();
-            var tournament = new Tournament("", admin);
+            var tournament = new Tournament("", DateTime.Now);
             _tournamentDao.Insert(tournament);
             var matches = _matchDao.FindAllByTournament(tournament);
             Assert.AreEqual(0, matches.Count);

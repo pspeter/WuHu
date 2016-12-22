@@ -16,31 +16,30 @@ namespace WuHu.Dal.SqlServer
 
         private const string SqlFindById =
           @"SELECT * 
-            FROM Tournament JOIN Player on (Tournament.creator = Player.playerId)
+            FROM Tournament
             WHERE tournamentId = @tournamentId;";
 
         private const string SqlFindAll =
             @"SELECT * 
-                FROM Tournament JOIN Player on (Tournament.creator = Player.playerId);";
+                FROM Tournament;";
 
         private const string SqlFindMostRecent =
-            @"SELECT TOP 1 *
-                FROM Tournament JOIN Player on (Tournament.creator = Player.playerId)
-                    JOIN Match on (Match.tournamentId = Tournament.tournamentId)
-                ORDER BY Match.datetime DESC;";
+            @"SELECT TOP(1) *
+                FROM Tournament
+                ORDER BY Tournament.datetime DESC;";
 
         private const string SqlInsert =
-            @"INSERT INTO Tournament (name, creator)
+            @"INSERT INTO Tournament (name, datetime)
                 OUTPUT Inserted.tournamentId
-                VALUES (@name, @creator);";
+                VALUES (@name, @datetime);";
 
         private const string SqlCount =
             @"SELECT Count(*)
-                FROM Tournament JOIN Player on (Tournament.creator = Player.playerId);";
+                FROM Tournament;";
 
         private const string SqlUpdate =
             @"UPDATE Tournament
-                SET creator = @creator,
+                SET datetime = @datetime,
                     name = @name
                 WHERE tournamentId = @tournamentId";
 
@@ -65,23 +64,7 @@ namespace WuHu.Dal.SqlServer
                 while (reader.Read())
                     result.Add(new Tournament((int)reader["tournamentId"],
                                               (string)reader["name"],
-                                                new Player((int)reader["playerId"],
-                                                    (string)reader["firstName"],
-                                                    (string)reader["lastName"],
-                                                    (string)reader["nickName"],
-                                                    (string)reader["userName"],
-                                                    (byte[])reader["password"],
-                                                    (byte[])reader["salt"],
-                                                    (bool)reader["isAdmin"],
-                                                    (bool)reader["playsMondays"],
-                                                    (bool)reader["playsTuesdays"],
-                                                    (bool)reader["playsWednesdays"],
-                                                    (bool)reader["playsThursdays"],
-                                                    (bool)reader["playsFridays"],
-                                                    (bool)reader["playsSaturdays"],
-                                                    (bool)reader["playsSundays"],
-                                                    reader.IsDBNull(reader.GetOrdinal("picture")) ?
-                                                        null : (byte[])reader["picture"])));
+                                              (DateTime)reader["datetime"]));
                 return result;
             }
         }
@@ -108,23 +91,7 @@ namespace WuHu.Dal.SqlServer
                 {
                     return new Tournament((int)reader["tournamentId"],
                                           (string)reader["name"],
-                                          new Player((int)reader["playerId"],
-                                              (string)reader["firstName"],
-                                              (string)reader["lastName"],
-                                              (string)reader["nickName"],
-                                              (string)reader["userName"],
-                                              (byte[])reader["password"],
-                                              (byte[])reader["salt"],
-                                              (bool)reader["isAdmin"],
-                                              (bool)reader["playsMondays"],
-                                              (bool)reader["playsTuesdays"],
-                                              (bool)reader["playsWednesdays"],
-                                              (bool)reader["playsThursdays"],
-                                              (bool)reader["playsFridays"],
-                                              (bool)reader["playsSaturdays"],
-                                              (bool)reader["playsSundays"],
-                                              reader.IsDBNull(reader.GetOrdinal("picture")) ?
-                                                  null : (byte[])reader["picture"]));
+                                          (DateTime)reader["datetime"]);
                 }
                 else
                 {
@@ -142,23 +109,7 @@ namespace WuHu.Dal.SqlServer
                 {
                     return new Tournament((int)reader["tournamentId"],
                                           (string)reader["name"],
-                                          new Player((int)reader["playerId"],
-                                              (string)reader["firstName"],
-                                              (string)reader["lastName"],
-                                              (string)reader["nickName"],
-                                              (string)reader["userName"],
-                                              (byte[])reader["password"],
-                                              (byte[])reader["salt"],
-                                              (bool)reader["isAdmin"],
-                                              (bool)reader["playsMondays"],
-                                              (bool)reader["playsTuesdays"],
-                                              (bool)reader["playsWednesdays"],
-                                              (bool)reader["playsThursdays"],
-                                              (bool)reader["playsFridays"],
-                                              (bool)reader["playsSaturdays"],
-                                              (bool)reader["playsSundays"],
-                                              reader.IsDBNull(reader.GetOrdinal("picture")) ?
-                                                  null : (byte[])reader["picture"]));
+                                          (DateTime)reader["datetime"]);
                 }
                 else
                 {
@@ -167,22 +118,18 @@ namespace WuHu.Dal.SqlServer
             }
         }
 
-        private DbCommand CreateInsertCmd(string name, int playerId)
+        private DbCommand CreateInsertCmd(string name, DateTime datetime)
         {
             DbCommand cmd = database.CreateCommand(SqlInsert);
             database.DefineParameter(cmd, "name", DbType.String, name);
-            database.DefineParameter(cmd, "creator", DbType.Int32, playerId);
+            database.DefineParameter(cmd, "datetime", DbType.DateTime2, datetime);
             return cmd;
         }
 
         public bool Insert(Tournament tournament)
         {
-            if (tournament.Creator?.PlayerId == null)
-            {
-                throw new ArgumentException("No playerId for Insert into Tournament provided.");
-            }
 
-            using (DbCommand command = CreateInsertCmd(tournament.Name, tournament.Creator.PlayerId.Value))
+            using (DbCommand command = CreateInsertCmd(tournament.Name, tournament.Datetime))
             {
                 try
                 {
@@ -197,12 +144,12 @@ namespace WuHu.Dal.SqlServer
             }
         }
         
-        protected DbCommand CreateUpdateCmd(int tournamentId, string name, int playerId)
+        protected DbCommand CreateUpdateCmd(int tournamentId, string name, DateTime datetime)
         {
             DbCommand updateByIdCmd = database.CreateCommand(SqlUpdate);
             database.DefineParameter(updateByIdCmd, "tournamentId", DbType.Int32, tournamentId);
             database.DefineParameter(updateByIdCmd, "name", DbType.String, name);
-            database.DefineParameter(updateByIdCmd, "creator", DbType.Int32, playerId);
+            database.DefineParameter(updateByIdCmd, "datetime", DbType.DateTime2, datetime);
 
             return updateByIdCmd;
         }
@@ -213,12 +160,8 @@ namespace WuHu.Dal.SqlServer
             {
                 throw new ArgumentException("TournamentId null on update for Tournament");
             }
-            if (tournament.Creator?.PlayerId == null)
-            {
-                throw new ArgumentException("PlayerId null on update for Tournament");
-            }
             using (DbCommand command = CreateUpdateCmd(tournament.TournamentId.Value, 
-                tournament.Name, tournament.Creator.PlayerId.Value))
+                tournament.Name, tournament.Datetime))
             {
                 return database.ExecuteNonQuery(command) == 1;
             }

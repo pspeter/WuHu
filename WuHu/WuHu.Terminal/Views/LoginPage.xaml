@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="WuHu.Terminal.Views.LoginControl"
+﻿<UserControl x:Class="WuHu.Terminal.Views.LoginPage"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -12,12 +12,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WuHu.Terminal.Views"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:vm="clr-namespace:WuHu.Terminal.ViewModels"
         mc:Ignorable="d"
         d:DesignHeight="500" d:DesignWidth="500"
         d:DataContext="{d:DesignInstance Type=vm:LoginVm, IsDesignTimeCreatable=False}">
 
-    <Grid Margin="10">
+    <Grid Margin="10"
+          MaxWidth="500"
+          MaxHeight="350">
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
@@ -35,7 +38,7 @@
         <Border Grid.Row="1"
                 BorderThickness="2"
                 BorderBrush="DarkSlateGray">
-            <Grid Margin="10">
+            <Grid Margin="10, 25, 10, 10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>

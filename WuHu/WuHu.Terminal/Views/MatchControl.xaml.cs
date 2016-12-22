@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace WuHu.Terminal.Views
 {
     /// <summary>
-    /// Interaction logic for PlayerControl.xaml
+    /// Interaction logic for MatchControl.xaml
     /// </summary>
-    public partial class PlayerControl : UserControl
+    public partial class MatchControl : UserControl
     {
-        public PlayerControl()
+        public MatchControl()
         {
             InitializeComponent();
         }

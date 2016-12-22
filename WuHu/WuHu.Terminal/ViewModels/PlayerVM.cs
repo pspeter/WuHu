@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using WuHu.Domain;
 
@@ -8,12 +10,13 @@ namespace WuHu.Terminal.ViewModels
 {
     public class PlayerVm : BaseVm
     {
-        private readonly Player _player;
+        private Player _player;
+        private Player _oldPlayer;
         private Rating _currentRating;
-        private string _password; // for creating a new Player
         private bool _isChecked;  // for creating a new Tournament
+        private bool _isDirty; 
 
-        public PlayerVm()
+        public PlayerVm(Action reloadParent)
         {
             _player = new Player("", "", "", "", "", false, 
                 false, false, false, false, false, false, false, null);
@@ -21,13 +24,75 @@ namespace WuHu.Terminal.ViewModels
             SetChecked();
         }
 
+        public ICommand SavePlayerCommand { get; }
+        public ICommand RevertChangesCommand { get; }
+
         public Player PlayerItem => _player;
 
-        public PlayerVm(Player player)
+        public PlayerVm(Player player, Action reloadParent)
         {
             _player = player;
+            _oldPlayer = player;
             _currentRating = Manager.GetCurrentRatingFor(player);
             SetChecked();
+            
+            SavePlayerCommand = new RelayCommand(async _ =>
+            {
+                if (IsDirty)
+                {
+                    IsDirty = false;
+                    _oldPlayer = new Player(_player.PlayerId ?? -1, _player.Firstname, _player.Lastname,
+                        _player.Nickname, _player.Username,
+                        _player.Password, _player.Salt, _player.IsAdmin, _player.PlaysMondays, _player.PlaysTuesdays,
+                        _player.PlaysWednesdays,
+                        _player.PlaysThursdays, _player.PlaysFridays, _player.PlaysSaturdays, _player.PlaysSundays,
+                        _player.Picture);
+                    await Task.Run(() =>
+                    {
+                        Manager.UpdatePlayer(_player, Manager.AuthenticatedCredentials);
+                    });
+                    reloadParent?.Invoke();
+                }
+            },
+            _ => IsDirty && IsAuthenticated);
+
+            RevertChangesCommand = new RelayCommand(_ =>
+            {
+                if (IsDirty)
+                {
+                    IsDirty = false;
+                    _player = _oldPlayer;
+                    _oldPlayer = new Player(_player.PlayerId ?? -1, _player.Firstname, _player.Lastname, _player.Nickname, _player.Username,
+                        _player.Password, _player.Salt, _player.IsAdmin, _player.PlaysMondays, _player.PlaysTuesdays, _player.PlaysWednesdays,
+                        _player.PlaysThursdays, _player.PlaysFridays, _player.PlaysSaturdays, _player.PlaysSundays, _player.Picture);
+                    OnPropertyChanged(this);
+                    OnPropertyChanged(this, nameof(IsChecked));
+                    OnPropertyChanged(this, nameof(Firstname));
+                    OnPropertyChanged(this, nameof(Nickname));
+                    OnPropertyChanged(this, nameof(Lastname));
+                    OnPropertyChanged(this, nameof(IsAdmin));
+                    OnPropertyChanged(this, nameof(PlaysMondays));
+                    OnPropertyChanged(this, nameof(PlaysTuesdays));
+                    OnPropertyChanged(this, nameof(PlaysWednesdays));
+                    OnPropertyChanged(this, nameof(PlaysThursdays));
+                    OnPropertyChanged(this, nameof(PlaysFridays));
+                    OnPropertyChanged(this, nameof(PlaysSaturdays));
+                    OnPropertyChanged(this, nameof(PlaysSundays));
+                    OnPropertyChanged(this, nameof(Image));
+                }
+            },
+            _ => IsDirty && IsAuthenticated);
+        }
+
+        public bool IsDirty
+        {
+            get { return _isDirty; } 
+            set
+            {
+                if (_isDirty == value) return;
+                _isDirty = value;
+                OnPropertyChanged(this);
+            }
         }
 
         public bool IsChecked
@@ -37,6 +102,7 @@ namespace WuHu.Terminal.ViewModels
             {
                 if (_isChecked == value) return;
                 _isChecked = value;
+                IsDirty = true;
                 OnPropertyChanged(this);
             }
         }
@@ -49,6 +115,7 @@ namespace WuHu.Terminal.ViewModels
                 if (_player.Firstname != value)
                 {
                     _player.Firstname = value;
+                    IsDirty = true;
                     OnPropertyChanged(this);
                 }
             }
@@ -62,6 +129,7 @@ namespace WuHu.Terminal.ViewModels
                 if (_player.Nickname != value)
                 {
                     _player.Nickname = value;
+                    IsDirty = true;
                     OnPropertyChanged(this);
                 }
             }
@@ -75,6 +143,7 @@ namespace WuHu.Terminal.ViewModels
                 if (_player.Lastname != value)
                 {
                     _player.Lastname = value;
+                    IsDirty = true;
                     OnPropertyChanged(this);
                 }
             }
@@ -88,19 +157,9 @@ namespace WuHu.Terminal.ViewModels
                 if (_player.IsAdmin != value)
                 {
                     _player.IsAdmin = value;
+                    IsDirty = true;
                     OnPropertyChanged(this);
                 }
-            }
-        }
-
-        public string Passwort
-        {
-            get { return _password; }
-            set
-            {
-                if (_password == value) return;
-                _password = value;
-                OnPropertyChanged(this);
             }
         }
 
@@ -112,6 +171,7 @@ namespace WuHu.Terminal.ViewModels
                 if (_player.PlaysMondays != value)
                 {
                     _player.PlaysMondays = value;
+                    IsDirty = true;
                     OnPropertyChanged(this);
                 }
             }
@@ -125,6 +185,7 @@ namespace WuHu.Terminal.ViewModels
                 if (_player.PlaysTuesdays != value)
                 {
                     _player.PlaysTuesdays = value;
+                    IsDirty = true;
                     OnPropertyChanged(this);
                 }
             }
@@ -138,6 +199,7 @@ namespace WuHu.Terminal.ViewModels
                 if (_player.PlaysWednesdays != value)
                 {
                     _player.PlaysWednesdays = value;
+                    IsDirty = true;
                     OnPropertyChanged(this);
                 }
             }
@@ -150,6 +212,7 @@ namespace WuHu.Terminal.ViewModels
                 if (_player.PlaysThursdays != value)
                 {
                     _player.PlaysThursdays = value;
+                    IsDirty = true;
                     OnPropertyChanged(this);
                 }
             }
@@ -163,6 +226,7 @@ namespace WuHu.Terminal.ViewModels
                 if (_player.PlaysFridays != value)
                 {
                     _player.PlaysFridays = value;
+                    IsDirty = true;
                     OnPropertyChanged(this);
                 }
             }
@@ -176,6 +240,7 @@ namespace WuHu.Terminal.ViewModels
                 if (_player.PlaysSaturdays != value)
                 {
                     _player.PlaysSaturdays = value;
+                    IsDirty = true;
                     OnPropertyChanged(this);
                 }
             }
@@ -189,6 +254,7 @@ namespace WuHu.Terminal.ViewModels
                 if (_player.PlaysSundays != value)
                 {
                     _player.PlaysSundays = value;
+                    IsDirty = true;
                     OnPropertyChanged(this);
                 }
             }
@@ -216,6 +282,7 @@ namespace WuHu.Terminal.ViewModels
                 if (_player.Picture != SaveImage(value))
                 {
                     _player.Picture = SaveImage(value);
+                    IsDirty = true;
                     OnPropertyChanged(this);
                 }
             }
@@ -249,12 +316,6 @@ namespace WuHu.Terminal.ViewModels
             encoder.Frames.Add(BitmapFrame.Create(image));
             encoder.Save(memStream);
             return memStream.ToArray();
-        }
-
-        private bool ChangePassword(string newPassword)
-        {
-            return Manager.ChangePassword(
-                _player.Username, newPassword, Manager.GetUserCredentials());
         }
 
         private void SetChecked()

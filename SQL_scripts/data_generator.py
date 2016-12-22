@@ -35,7 +35,7 @@ allKeys = ["firstName","lastName", "nickName", "userName","password","salt","isA
 
 with open("dbo.Testdata.sql", "w") as f: # Player
 	i = 0
-	for player in randomPlayer[:30]:
+	for player in randomPlayer[:25]:
 		values = []
 		if i > 5:
 			player["userName"] = "player" + str(i) # make sure our username is unique
@@ -55,7 +55,13 @@ with open("dbo.Testdata.sql", "w") as f: # Player
 			values.append(isPlaying)
 		f.write(insertInto("Player", allKeys, values))
 
-			
+    # Tournament
+	for i in range(365*2):
+		k = random.randint(0, len(randomNames) - 1)
+		l = random.randint(0, len(randomNames) - 1)
+		admin = random.randint(0, 1)
+		f.write(insertInto("Tournament", ["name", "datetime"], [quote(randomCities[k]+"_"+randomNames[l]), "dateadd(day, " + str(i) + ", cast('2014-01-02 07:36:13.000' as datetime2))"]))
+	
 	# Rating
 	for playerid in range(30):
 		rating = 2000
@@ -67,13 +73,7 @@ with open("dbo.Testdata.sql", "w") as f: # Player
 			
 			
 
-	# Tournament
-	for i in range(365*2):
-		k = random.randint(0, len(randomNames) - 1)
-		l = random.randint(0, len(randomNames) - 1)
-		admin = random.randint(0, 1)
-		f.write(insertInto("Tournament", ["name", "creator"], [quote(randomCities[k]+"_"+randomNames[l]), admin]))
-	
+
 	# Match
 	STARTID = 0 # first tournamentId 
 	

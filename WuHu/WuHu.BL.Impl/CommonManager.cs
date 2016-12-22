@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -101,7 +102,7 @@ namespace WuHu.BL.Impl
 
         public bool UpdatePlayer(Player player, Credentials credentials)
         {
-            if (player.PlayerId == null)
+            if (player.PlayerId == null || credentials == null)
             {
                 return false;
             }
@@ -297,8 +298,9 @@ namespace WuHu.BL.Impl
             {
                 return false;
             }
-
+            LockTournament(credentials);
             SetMatchesForTournament(tournament, players, amountMatches, credentials);
+            UnlockTournament(credentials);
             return true;
         }
 
@@ -330,7 +332,7 @@ namespace WuHu.BL.Impl
                 var playerIndex1 = Rand.Next(players.Count());
                 var player1 = players.ElementAt(playerIndex1);
                 players.RemoveAt(playerIndex1);
-                var player1Rating = RatingDao.FindCurrentRating(player1).Value;
+                var player1Rating = RatingDao.FindCurrentRating(player1)?.Value ?? 1000;
 
                 // as his first opponent, pick somebody with similar rating
                 if (players.Count == 0)
@@ -339,7 +341,7 @@ namespace WuHu.BL.Impl
                     players.Remove(player1);
                 }
                 var player3 = PickPlayer(players, player1Rating);
-                var player3Rating = RatingDao.FindCurrentRating(player3).Value;
+                var player3Rating = RatingDao.FindCurrentRating(player3)?.Value ?? 1000;
 
                 // as his teammate, pick somebody who would even out their score difference
                 if (players.Count == 0)
@@ -349,7 +351,7 @@ namespace WuHu.BL.Impl
                     players.Remove(player3);
                 }
                 var player2 = PickPlayer(players, 2 * player3Rating - player1Rating);
-                var player2Rating = RatingDao.FindCurrentRating(player2).Value;
+                var player2Rating = RatingDao.FindCurrentRating(player2)?.Value ?? 1000;
 
                 // as his second opponent, again try to cancel out the rating difference between the teams
                 if (players.Count == 0)
@@ -360,7 +362,7 @@ namespace WuHu.BL.Impl
                     players.Remove(player3);
                 }
                 var player4 = PickPlayer(players, player1Rating + player2Rating - player3Rating);
-                var player4Rating = RatingDao.FindCurrentRating(player4).Value;
+                var player4Rating = RatingDao.FindCurrentRating(player4)?.Value ?? 1000;
 
                 var team1Rating = ((double)player1Rating + player2Rating) / 2;
                 var team2Rating = ((double)player3Rating + player4Rating) / 2;
@@ -379,7 +381,8 @@ namespace WuHu.BL.Impl
         private Player PickPlayer(ICollection<Player> players, int fromScore)
         {
             var playerCount = players.Count; // faster than LINQ Count() on sortedPlayers
-            var sortedPlayers = players.OrderBy(p => Math.Abs(RatingDao.FindCurrentRating(p).Value - fromScore));
+
+            var sortedPlayers = players.OrderBy(p => Math.Abs(RatingDao.FindCurrentRating(p)?.Value ?? 1000 - fromScore));
 
             var cutoff = 1 / (Math.Log(playerCount) + 1);
 
@@ -410,7 +413,7 @@ namespace WuHu.BL.Impl
 
         private bool Authenticate(Credentials credentials, bool adminRequired)
         {
-            return Authentication.Authenticate(credentials, adminRequired);
+            return Authentication?.Authenticate(credentials, adminRequired) ?? false;
         }
     }
 }
