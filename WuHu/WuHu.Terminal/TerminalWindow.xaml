@@ -17,6 +17,7 @@
         xmlns:vm="clr-namespace:WuHu.Terminal.ViewModels"
         xmlns:views="clr-namespace:WuHu.Terminal.Views"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:tabItems="clr-namespace:WuHu.Terminal.ViewModels.TabItems"
         mc:Ignorable="d"
         Title="Terminal - WuHu" 
         Height="600" Width="770" 
@@ -25,17 +26,44 @@
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <DataTemplate DataType="{x:Type vm:RanklistVm}">
+            <views:RanklistPage DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TournamentVm}">
+            <views:TournamentPage DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:LoginVm}">
+            <views:LoginPage DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PlayerPageVm}">
+            <views:PlayerPage DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:StatisticsVm}">
+            <views:StatisticsPage DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate x:Key="TabItemTemplate" DataType="{x:Type tabItems:TabItemVm}">
+            <StackPanel Orientation="Horizontal"
+                                Margin="5, 20">
+                <wpf:PackIcon Kind="{Binding IconName}"
+                                      Margin="5, 0"/>
+                <TextBlock Text="{Binding Header}"
+                                   Margin="5, 0"
+                                   FontSize="12"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="TabContentTemplate" DataType="{x:Type tabItems:TabItemVm}">
+            <ContentControl Content="{Binding Content}"></ContentControl>
+        </DataTemplate>
     </Window.Resources>
 
-    <controls:MetroWindow.Flyouts>
-        <controls:FlyoutsControl>
-
-        </controls:FlyoutsControl>
-    </controls:MetroWindow.Flyouts>
-
     <TabControl BorderThickness="1"
-                Margin="0">
-
+                Margin="0"
+                ItemsSource="{Binding TabItems}"
+                ContentTemplate="{StaticResource TabContentTemplate}"
+                ItemTemplate="{StaticResource TabItemTemplate}"
+                IsSynchronizedWithCurrentItem="True">
+        
+        <!--
         <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent">
             <TabItem.Header>
                 <StackPanel Orientation="Horizontal"
@@ -61,7 +89,7 @@
             <views:TournamentPage/>
         </TabItem>
         <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent"
-                     IsEnabled="{Binding IsAuthenticated}">
+                     IsEnabled="True">
             <TabItem.Header>
                 <StackPanel Orientation="Horizontal"
                             Margin="5, 20">
@@ -74,7 +102,7 @@
             <views:PlayerPage/>
         </TabItem>
         <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent"
-                     IsEnabled="{Binding IsAuthenticated}">
+                     IsEnabled="True">
             <TabItem.Header>
                 <StackPanel Orientation="Horizontal"
                             Margin="5, 20">
@@ -87,7 +115,7 @@
             <views:StatisticsPage/>
         </TabItem>
         <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent"
-                     IsEnabled="{Binding IsNotAuthenticated}">
+                     IsEnabled="True">
             <TabItem.Header>
                 <StackPanel Orientation="Horizontal"
                             Margin="5, 20">
@@ -98,7 +126,7 @@
                 </StackPanel>
             </TabItem.Header>
             <views:LoginPage/>
-        </TabItem>
+        </TabItem>-->
     </TabControl>
 </controls:MetroWindow>
 
