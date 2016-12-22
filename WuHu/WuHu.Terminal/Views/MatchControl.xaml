@@ -8,10 +8,10 @@
              xmlns:validationRules="clr-namespace:WuHu.Terminal.ValidationRules"
              xmlns:viewModels="clr-namespace:WuHu.Terminal.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
-             d:DataContext="{d:DesignInstance Type=viewModels:MatchVm, IsDesignTimeCreatable=False}">
-    <Grid Grid.Column="2"
-            Margin="20, 10">
+             d:DesignHeight="400" d:DesignWidth="400"
+             d:DataContext="{d:DesignInstance Type=viewModels:MatchVm, IsDesignTimeCreatable=True}">
+    <Grid Margin="20, 10"
+          IsEnabled="{Binding CanEdit}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
@@ -19,6 +19,7 @@
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0"
@@ -132,6 +133,14 @@
                 </ComboBox>
 
             </Grid>
+
+            <Button Grid.Row="5" HorizontalAlignment="Right"
+                        MinWidth="100"
+                        Margin="10"
+                        Command="{Binding SetScoreCommand}"
+                        IsDefault="True">
+                Ergebnis eintragen
+            </Button>
         </Grid>
     </Grid>
 </UserControl>

@@ -17,7 +17,7 @@
         xmlns:vm="clr-namespace:WuHu.Terminal.ViewModels"
         xmlns:views="clr-namespace:WuHu.Terminal.Views"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-        xmlns:tabItems="clr-namespace:WuHu.Terminal.ViewModels.TabItems"
+        xmlns:tabItems="clr-namespace:WuHu.Terminal.ViewModels"
         mc:Ignorable="d"
         Title="Terminal - WuHu" 
         Height="600" Width="770" 

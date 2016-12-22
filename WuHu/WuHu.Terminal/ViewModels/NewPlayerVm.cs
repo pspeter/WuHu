@@ -4,15 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using WuHu.Common;
 using WuHu.Domain;
 
 namespace WuHu.Terminal.ViewModels
 {
     public class NewPlayerVm : BaseVm
     {
-        private readonly Player _player;
         private string _password; // for creating a new Player
         
         public ICommand CancelCommand { get; }
@@ -20,31 +21,41 @@ namespace WuHu.Terminal.ViewModels
 
         public NewPlayerVm(Action showPlayerList, Action reloadParent)
         {
-            _player = new Player("", "", "", "", "", false,
+            PlayerItem = new Player("", "", "", "", "", false,
                 false, false, false, false, false, false, false, null);
 
 
             CancelCommand = new RelayCommand(_ => showPlayerList?.Invoke());
 
-            SubmitCommand = new RelayCommand(async _ =>
+            SubmitCommand = new RelayCommand(async param =>
             {
+                var pwBox = param as PasswordBox;
+                // don't save password in memory, just send it to the Manager right away
+                if (pwBox == null) return;
+
+                var salt = CryptoService.GenerateSalt();
+                var hash = CryptoService.HashPassword(pwBox.Password, salt);
+                pwBox.Password = null;
+
+                PlayerItem.Salt = salt;
+                PlayerItem.Password = hash;
                 showPlayerList?.Invoke();
                 await Task.Run(() =>
-                    Manager.AddPlayer(_player, Manager.AuthenticatedCredentials));
+                    Manager.AddPlayer(PlayerItem, Manager.AuthenticatedCredentials));
                 reloadParent?.Invoke();
             });
         }
 
-        public Player PlayerItem => _player;
+        public Player PlayerItem { get; }
 
         public string Firstname
         {
-            get { return _player.Firstname; }
+            get { return PlayerItem.Firstname; }
             set
             {
-                if (_player.Firstname != value)
+                if (PlayerItem.Firstname != value)
                 {
-                    _player.Firstname = value;
+                    PlayerItem.Firstname = value;
                     OnPropertyChanged(this);
                 }
             }
@@ -52,12 +63,12 @@ namespace WuHu.Terminal.ViewModels
 
         public string Nickname
         {
-            get { return _player.Nickname; }
+            get { return PlayerItem.Nickname; }
             set
             {
-                if (_player.Nickname != value)
+                if (PlayerItem.Nickname != value)
                 {
-                    _player.Nickname = value;
+                    PlayerItem.Nickname = value;
                     OnPropertyChanged(this);
                 }
             }
@@ -65,12 +76,24 @@ namespace WuHu.Terminal.ViewModels
 
         public string Lastname
         {
-            get { return _player.Lastname; }
+            get { return PlayerItem.Lastname; }
             set
             {
-                if (_player.Lastname != value)
+                if (PlayerItem.Lastname != value)
                 {
-                    _player.Lastname = value;
+                    PlayerItem.Lastname = value;
+                    OnPropertyChanged(this);
+                }
+            }
+        }
+        public string Username
+        {
+            get { return PlayerItem.Username; }
+            set
+            {
+                if (PlayerItem.Username != value)
+                {
+                    PlayerItem.Username = value;
                     OnPropertyChanged(this);
                 }
             }
@@ -78,36 +101,25 @@ namespace WuHu.Terminal.ViewModels
 
         public bool IsAdmin
         {
-            get { return _player.IsAdmin; }
+            get { return PlayerItem.IsAdmin; }
             set
             {
-                if (_player.IsAdmin != value)
+                if (PlayerItem.IsAdmin != value)
                 {
-                    _player.IsAdmin = value;
+                    PlayerItem.IsAdmin = value;
                     OnPropertyChanged(this);
                 }
             }
         }
 
-        public string Passwort
-        {
-            get { return _password; }
-            set
-            {
-                if (_password == value) return;
-                _password = value;
-                OnPropertyChanged(this);
-            }
-        }
-
         public bool PlaysMondays
         {
-            get { return _player.PlaysMondays; }
+            get { return PlayerItem.PlaysMondays; }
             set
             {
-                if (_player.PlaysMondays != value)
+                if (PlayerItem.PlaysMondays != value)
                 {
-                    _player.PlaysMondays = value;
+                    PlayerItem.PlaysMondays = value;
                     OnPropertyChanged(this);
                 }
             }
@@ -115,12 +127,12 @@ namespace WuHu.Terminal.ViewModels
 
         public bool PlaysTuesdays
         {
-            get { return _player.PlaysTuesdays; }
+            get { return PlayerItem.PlaysTuesdays; }
             set
             {
-                if (_player.PlaysTuesdays != value)
+                if (PlayerItem.PlaysTuesdays != value)
                 {
-                    _player.PlaysTuesdays = value;
+                    PlayerItem.PlaysTuesdays = value;
                     OnPropertyChanged(this);
                 }
             }
@@ -128,24 +140,24 @@ namespace WuHu.Terminal.ViewModels
 
         public bool PlaysWednesdays
         {
-            get { return _player.PlaysWednesdays; }
+            get { return PlayerItem.PlaysWednesdays; }
             set
             {
-                if (_player.PlaysWednesdays != value)
+                if (PlayerItem.PlaysWednesdays != value)
                 {
-                    _player.PlaysWednesdays = value;
+                    PlayerItem.PlaysWednesdays = value;
                     OnPropertyChanged(this);
                 }
             }
         }
         public bool PlaysThursdays
         {
-            get { return _player.PlaysThursdays; }
+            get { return PlayerItem.PlaysThursdays; }
             set
             {
-                if (_player.PlaysThursdays != value)
+                if (PlayerItem.PlaysThursdays != value)
                 {
-                    _player.PlaysThursdays = value;
+                    PlayerItem.PlaysThursdays = value;
                     OnPropertyChanged(this);
                 }
             }
@@ -153,12 +165,12 @@ namespace WuHu.Terminal.ViewModels
 
         public bool PlaysFridays
         {
-            get { return _player.PlaysFridays; }
+            get { return PlayerItem.PlaysFridays; }
             set
             {
-                if (_player.PlaysFridays != value)
+                if (PlayerItem.PlaysFridays != value)
                 {
-                    _player.PlaysFridays = value;
+                    PlayerItem.PlaysFridays = value;
                     OnPropertyChanged(this);
                 }
             }
@@ -166,12 +178,12 @@ namespace WuHu.Terminal.ViewModels
 
         public bool PlaysSaturdays
         {
-            get { return _player.PlaysSaturdays; }
+            get { return PlayerItem.PlaysSaturdays; }
             set
             {
-                if (_player.PlaysSaturdays != value)
+                if (PlayerItem.PlaysSaturdays != value)
                 {
-                    _player.PlaysSaturdays = value;
+                    PlayerItem.PlaysSaturdays = value;
                     OnPropertyChanged(this);
                 }
             }
@@ -179,12 +191,12 @@ namespace WuHu.Terminal.ViewModels
 
         public bool PlaysSundays
         {
-            get { return _player.PlaysSundays; }
+            get { return PlayerItem.PlaysSundays; }
             set
             {
-                if (_player.PlaysSundays != value)
+                if (PlayerItem.PlaysSundays != value)
                 {
-                    _player.PlaysSundays = value;
+                    PlayerItem.PlaysSundays = value;
                     OnPropertyChanged(this);
                 }
             }
@@ -192,13 +204,13 @@ namespace WuHu.Terminal.ViewModels
 
         public BitmapImage Image
         {
-            get { return LoadImage(_player.Picture); }
+            get { return LoadImage(PlayerItem.Picture); }
             set
             {
                 var img = SaveImage(value);
-                if (_player.Picture != SaveImage(value))
+                if (PlayerItem.Picture != SaveImage(value))
                 {
-                    _player.Picture = SaveImage(value);
+                    PlayerItem.Picture = SaveImage(value);
                     OnPropertyChanged(this);
                 }
             }
@@ -237,7 +249,7 @@ namespace WuHu.Terminal.ViewModels
         private bool ChangePassword(string newPassword)
         {
             return Manager.ChangePassword(
-                _player.Username, newPassword, Manager.AuthenticatedCredentials);
+                PlayerItem.Username, newPassword, Manager.AuthenticatedCredentials);
         }
     }
 }

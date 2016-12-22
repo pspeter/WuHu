@@ -3,18 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using WuHu.Domain;
 
 namespace WuHu.Terminal.ViewModels
 {
     public class MatchVm : BaseVm
     {
-        private Match _match;
+        private readonly Match _match;
 
-        public MatchVm(Match match)
+        public ICommand SetScoreCommand { get; }
+
+        public MatchVm(Match match, Action reloadParent)
         {
             _match = match;
-            ScoreVirtualization = new List<int>(Enumerable.Range(0, 100));
+
+            SetScoreCommand = new RelayCommand(async _ =>
+                {
+                    await Task.Run(() =>
+                    {
+                        Manager.SetScore(_match, Manager.AuthenticatedCredentials);
+                    });
+                    reloadParent?.Invoke();
+                }
+                ,
+            o => ScoreTeam1 != null && ScoreTeam2 != null &&
+                 ScoreTeam1 >= 0    && ScoreTeam2 >= 0
+            );
         }
 
         public Player Player1 => _match.Player1;
@@ -22,7 +37,7 @@ namespace WuHu.Terminal.ViewModels
         public Player Player3 => _match.Player3;
         public Player Player4 => _match.Player4;
         
-        public IList<int> ScoreVirtualization { get; }
+        public IList<int> ScoreVirtualization { get; } = new List<int>(Enumerable.Range(0, 100));
 
         public DateTime Datetime
         {
@@ -87,8 +102,11 @@ namespace WuHu.Terminal.ViewModels
                 {
                     _match.IsDone = value;
                     OnPropertyChanged(this);
+                    OnPropertyChanged(this, nameof(CanEdit));
                 }
             }
         }
+
+        public bool CanEdit => !IsDone && IsAuthenticated;
     }
 }

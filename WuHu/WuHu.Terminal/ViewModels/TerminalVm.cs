@@ -10,7 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using MahApps.Metro.Controls;
-using WuHu.Terminal.ViewModels.TabItems;
+using WuHu.Terminal.ViewModels;
 using WuHu.Terminal.Views;
 
 namespace WuHu.Terminal.ViewModels

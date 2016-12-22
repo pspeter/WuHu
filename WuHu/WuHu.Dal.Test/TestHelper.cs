@@ -66,7 +66,8 @@ namespace WuHu.Dal.Test
                 false, false, false, false, true, true, true, null));
 
             var rand = new Random();
-
+            
+            /*
             for (var i = 0; i < 25; ++i)
             {
                 var uniqueUsername = GenerateName();
@@ -74,9 +75,9 @@ namespace WuHu.Dal.Test
                 playerDao.Insert(new Player("Vorname", "Nachname", "Spitzname", uniqueUsername, "passwort", false, 
                     rand.NextDouble() > 0.4, rand.NextDouble() > 0.4, rand.NextDouble() > 0.4, rand.NextDouble() > 0.4,
                     rand.NextDouble() > 0.4, rand.NextDouble() > 0.4, rand.NextDouble() > 0.4, null));
-            }
+            }*/
             
-            IEnumerable<string> script = File.ReadLines(SqlPath + "dbo.Testdata.sql");
+            var script = File.ReadLines(SqlPath + "dbo.Testdata.sql");
             foreach (var line in script)
             {
                 Console.WriteLine(line);

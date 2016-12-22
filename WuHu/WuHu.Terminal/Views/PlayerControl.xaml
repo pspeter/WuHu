@@ -63,19 +63,23 @@
                             <TextBox Grid.Row="0" Grid.Column="1"
                                      Margin="15, 5, 0, 5"
                                      Text="{Binding Firstname}"
-                                     HorizontalAlignment="Stretch"></TextBox>
+                                     HorizontalAlignment="Stretch"
+                                       IsEnabled="{Binding IsAuthenticated}"></TextBox>
                             <TextBox Grid.Row="1" Grid.Column="1"
                                      Margin="15, 5, 0, 5"
                                      Text="{Binding Lastname}"
-                                     HorizontalAlignment="Stretch"></TextBox>
+                                     HorizontalAlignment="Stretch"
+                                       IsEnabled="{Binding IsAuthenticated}"></TextBox>
                             <TextBox Grid.Row="2" Grid.Column="1"
                                      Margin="15, 5, 0, 5"
                                      Text="{Binding Nickname}"
-                                     HorizontalAlignment="Stretch"></TextBox>
+                                     HorizontalAlignment="Stretch"
+                                       IsEnabled="{Binding IsAuthenticated}"></TextBox>
                             <CheckBox Grid.Row="3" Grid.Column="1"
                                      Margin="15, 5, 0, 5"
                                      IsChecked="{Binding IsAdmin}"
-                                     HorizontalAlignment="Stretch"></CheckBox>
+                                     HorizontalAlignment="Stretch"
+                                       IsEnabled="{Binding IsAuthenticated}"></CheckBox>
                         </Grid>
 
 
@@ -83,9 +87,11 @@
                                   HorizontalAlignment="Left"
                                   Width="200"
                                   Header="Wochentage"
-                                  Margin="25">
+                                  Margin="25"
+                                  IsEnabled="{Binding IsAuthenticated}">
 
-                            <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Vertical"
+                                       IsEnabled="{Binding IsAuthenticated}">
                                 <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
                                     <TextBlock DockPanel.Dock="Left">Montag</TextBlock>
                                     <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PlaysMondays}" HorizontalAlignment="Right"></CheckBox>

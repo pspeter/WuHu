@@ -1,28 +1,32 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using WuHu.Domain;
 
 namespace WuHu.Terminal.ViewModels
 {
-    public class NewTournamentVm : BaseVm
+    public class EditTournamentVm : BaseVm
     {
         public IList<int> AmountVirtualization { get; } = new List<int>(Enumerable.Range(1, 100));
         private readonly Tournament _tournament;
         private int _amountMatches;
-        
+
         public ICommand CancelCommand { get; }
         public ICommand SubmitCommand { get; }
 
-        public NewTournamentVm(Action showMatchList, Action reloadParent)
+        public EditTournamentVm(Tournament tournament, Action showMatchList, Action reloadParent)
         {
-            _tournament = new Tournament("", DateTime.Now);
-            
+            _tournament = tournament;
+            var locked = Manager.LockTournament(Manager.AuthenticatedCredentials);
+            if (!locked)
+            {
+                // TODO show UI error
+                showMatchList?.Invoke();
+            }
+
             CancelCommand = new RelayCommand(_ => showMatchList?.Invoke());
 
             SubmitCommand = new RelayCommand(async _ =>
@@ -31,25 +35,20 @@ namespace WuHu.Terminal.ViewModels
                     .Select(p => p.PlayerItem).ToList();
                 _tournament.Datetime = DateTime.Now;
                 showMatchList?.Invoke();
-                await Task.Run(() => 
-                    Manager.CreateTournament(
-                        _tournament, players, AmountMatches, Manager.AuthenticatedCredentials));
+                await Task.Run(() =>
+                {
+                    Manager.UpdateTournament(
+                        _tournament, players, AmountMatches, Manager.AuthenticatedCredentials);
+                    Manager.UnlockTournament(Manager.AuthenticatedCredentials);
+                });
+                // TODO show success or not
                 reloadParent?.Invoke();
             });
 
             LoadPlayersAsync();
         }
 
-        public string Name
-        {
-            get { return _tournament.Name; }
-            set
-            {
-                if (Equals(_tournament.Name, value)) return;
-                _tournament.Name = value;
-                OnPropertyChanged(this);
-            }
-        }
+        public string Name => _tournament.Name;
 
         public int AmountMatches
         {

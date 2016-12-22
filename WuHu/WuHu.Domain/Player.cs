@@ -65,7 +65,7 @@ namespace WuHu.Domain
 
         public string Nickname { get; set; }
 
-        public string Username { get; }
+        public string Username { get; set; }
 
         public byte[] Password { get; set; }
 

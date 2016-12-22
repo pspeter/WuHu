@@ -15,22 +15,31 @@ namespace WuHu.Terminal.ViewModels
     {
         private readonly Tournament _tournament;
         private BaseVm _currentVm;
-
-        private readonly NewTournamentVm _newTournamentVm;
+        
         private readonly MatchListVm _matchListVm;
         
         public TournamentVm()
         {
             _tournament = Manager.GetMostRecentTournament();
 
-            _matchListVm = new MatchListVm(p => SwitchVm(_newTournamentVm));
-            _newTournamentVm = new NewTournamentVm(
-                () => SwitchVm(_matchListVm),
-                () =>
-                {
-                    _matchListVm.Reload();
-                });
-
+            _matchListVm = new MatchListVm(p => 
+                SwitchVm(new NewTournamentVm(
+                    () => SwitchVm(_matchListVm),
+                    () =>
+                    {
+                        _matchListVm.Reload();
+                    }
+                )),
+                t => SwitchVm(new EditTournamentVm(
+                    t,
+                    () => SwitchVm(_matchListVm),
+                    () =>
+                    {
+                        _matchListVm.Reload();
+                    }
+                ))
+            );
+            
             CurrentVm = _matchListVm;
         }
 

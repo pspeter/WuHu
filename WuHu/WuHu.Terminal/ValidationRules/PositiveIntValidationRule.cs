@@ -19,7 +19,7 @@ namespace WuHu.Terminal.ValidationRules
             }
             catch
             {
-                return new ValidationResult(false, "Keine Nummer");
+                return new ValidationResult(false, "");
             }
 
             if (num < 0)

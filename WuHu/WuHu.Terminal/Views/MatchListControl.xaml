@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:WuHu.Terminal.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:WuHu.Terminal.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type=viewModels:MatchListVm, IsDesignTimeCreatable=False}">
@@ -31,6 +32,12 @@
                         <DockPanel HorizontalAlignment="Stretch"></DockPanel>
                     </ItemsPanelTemplate>
                 </Menu.ItemsPanel>
+                <MenuItem Header="_Edit" HorizontalAlignment="Right"
+                          Command="{Binding ShowEditTournamentCommand}">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="Pencil"></materialDesign:PackIcon>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="_New" HorizontalAlignment="Right"
                           Command="{Binding ShowAddTournamentCommand}">
                     <MenuItem.Icon>

@@ -19,16 +19,18 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top" 
               IsMainMenu="False" 
-              HorizontalContentAlignment="Right">
+              HorizontalAlignment="Right"
+              HorizontalContentAlignment="Stretch">
+            <Menu.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <DockPanel HorizontalAlignment="Stretch"></DockPanel>
+                </ItemsPanelTemplate>
+            </Menu.ItemsPanel>
             <MenuItem Header="_New" Command="{Binding ShowAddPlayerCommand}">
                 <MenuItem.Icon>
                     <materialDesign:PackIcon Kind="PlusCircleOutline"></materialDesign:PackIcon>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="_Edit">
-                <MenuItem.Icon>
-                    <materialDesign:PackIcon Kind="TableEdit"></materialDesign:PackIcon>
-                </MenuItem.Icon></MenuItem>
         </Menu>
         
         <Separator DockPanel.Dock="Top"
@@ -60,7 +62,7 @@
                        Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
 
             <views:PlayerControl Grid.Column="2"
-                            DataContext="{Binding CurrentPlayer}"/>
+                     DataContext="{Binding CurrentPlayer}"/>
         </Grid>
         
     </DockPanel>

@@ -30,6 +30,7 @@ namespace WuHu.Terminal.ViewModels
         {
             OnPropertyChanged(sender, nameof(IsAuthenticated));
             OnPropertyChanged(sender, nameof(IsNotAuthenticated));
+            OnPropertyChanged(sender, nameof(MatchVm.CanEdit));
         }
 
         protected virtual void OnPropertyChanged(object sender, [CallerMemberName] string propertyName = null)

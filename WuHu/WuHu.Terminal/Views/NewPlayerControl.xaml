@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WuHu.Terminal.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="600">
+             d:DesignHeight="500" d:DesignWidth="600">
     <StackPanel Orientation="Vertical" 
                 HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch"
@@ -16,10 +16,24 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Grid Margin="0, 0, 15, 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="3*"/>
+            </Grid.RowDefinitions>
+
+            <Image Grid.Column="1" Grid.Row="0" 
+                           VerticalAlignment="Top"
+                           Margin="10"
+                           Source="{Binding Image}"
+                           Width="200"
+                           Height="200"/>
+
+            <Grid Grid.Column="1" Grid.Row="0"
+                  Margin="5, 0">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
@@ -29,19 +43,28 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*" MaxWidth="300"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
+
                 <TextBlock Grid.Row="0" Grid.Column="0"
-                                     Margin="0, 5, 10, 5">Vorname:</TextBlock>
+                                     Margin="0, 5, 10, 5"
+                           VerticalAlignment="Bottom">Vorname:</TextBlock>
                 <TextBlock Grid.Row="1" Grid.Column="0"
-                                     Margin="0, 5, 10, 5">Nachname:</TextBlock>
+                                     Margin="0, 5, 10, 5"
+                           VerticalAlignment="Bottom">Nachname:</TextBlock>
                 <TextBlock Grid.Row="2" Grid.Column="0"
-                                     Margin="0, 5, 10, 5">Spitzname:</TextBlock>
+                                     Margin="0, 5, 10, 5"
+                           VerticalAlignment="Bottom">Spitzname:</TextBlock>
                 <TextBlock Grid.Row="3" Grid.Column="0"
-                                     Margin="0, 5, 10, 5">Passwort:</TextBlock>
-                <TextBlock Grid.Row="3" Grid.Column="0"
-                                     Margin="0, 5, 10, 5">Ist Admin:</TextBlock>
+                                     Margin="0, 5, 10, 5"
+                           VerticalAlignment="Bottom">Username:</TextBlock>
+                <TextBlock Grid.Row="4" Grid.Column="0"
+                                     Margin="0, 5, 10, 5"
+                           VerticalAlignment="Bottom">Passwort:</TextBlock>
+                <TextBlock Grid.Row="5" Grid.Column="0"
+                            Margin="0, 5, 10, 5"
+                           VerticalAlignment="Center">Ist Admin:</TextBlock>
 
                 <TextBox Grid.Row="0" Grid.Column="1"
                                      Margin="15, 5, 0, 5"
@@ -55,21 +78,25 @@
                                      Margin="15, 5, 0, 5"
                                      Text="{Binding Nickname}"
                                      HorizontalAlignment="Stretch"></TextBox>
-                <PasswordBox Grid.Row="3" Grid.Column="1"
+                <TextBox Grid.Row="3" Grid.Column="1"
+                                     Margin="15, 5, 0, 5"
+                                     Text="{Binding Username}"
+                                     HorizontalAlignment="Stretch"></TextBox>
+                <PasswordBox Grid.Row="4" Grid.Column="1"
+                                     Name="TxtPassword" 
                                      Margin="15, 5, 0, 5"
                                      HorizontalAlignment="Stretch"></PasswordBox>
-                <CheckBox Grid.Row="4" Grid.Column="1"
+                <CheckBox Grid.Row="5" Grid.Column="1"
                                      Margin="15, 5, 0, 5"
                                      IsChecked="{Binding IsAdmin}"
                                      HorizontalAlignment="Stretch"></CheckBox>
             </Grid>
 
-
-            <GroupBox  Grid.Column="1" 
-                           HorizontalAlignment="Left"
-                           Width="200"
-                           Header="Wochentage"
-                           Margin="25">
+            <GroupBox Grid.Column="0" Grid.Row="0" 
+                      HorizontalAlignment="Left"
+                      Width="200"
+                      Header="Wochentage"
+                      Margin="25">
 
                 <StackPanel Orientation="Vertical">
                     <DockPanel Margin="0, 5, 0, 0" HorizontalAlignment="Stretch">
@@ -102,13 +129,28 @@
                     </DockPanel>
                 </StackPanel>
             </GroupBox>
+
+            <StackPanel  Grid.Row="1" Grid.Column="1"
+                         Orientation="Horizontal"
+                         VerticalAlignment="Bottom"
+                         Margin="10, 0, 10, 15">
+                <Button HorizontalAlignment="Right"
+                        MinWidth="100"
+                        Margin="10"
+                        Command="{Binding CancelCommand}"
+                        IsCancel="True">
+                    Abbrechen
+                </Button>
+                <Button HorizontalAlignment="Right"
+                        MinWidth="100"
+                        Margin="10"
+                        Command="{Binding SubmitCommand}"
+                        CommandParameter="{Binding ElementName=TxtPassword}"
+                        IsDefault="True">
+                    Erstellen
+                </Button>
+            </StackPanel>
         </Grid>
 
-        <Image Grid.Column="1" 
-                           VerticalAlignment="Top"
-                           Margin="10"
-                           Source="{Binding Image}"
-                           Width="200"
-                           Height="200"/>
     </StackPanel>
 </UserControl>

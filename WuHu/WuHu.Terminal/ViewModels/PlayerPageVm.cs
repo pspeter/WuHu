@@ -10,16 +10,16 @@ namespace WuHu.Terminal.ViewModels
     public class PlayerPageVm : BaseVm
     {
         private BaseVm _currentVm;
-        private readonly NewPlayerVm _newPlayerVm;
         private readonly PlayerListVm _playerListVm;
         
         public PlayerPageVm()
         {
-            _newPlayerVm = new NewPlayerVm(
-                () => SwitchVm(_playerListVm),
-                () => _playerListVm.Reload());
-
-            _playerListVm = new PlayerListVm((o) => SwitchVm(_newPlayerVm));
+            _playerListVm = new PlayerListVm(
+                o => SwitchVm(new NewPlayerVm(
+                    () => SwitchVm(_playerListVm),
+                    () => _playerListVm.Reload())
+                )
+            );
             SwitchVm(_playerListVm);
         }
 

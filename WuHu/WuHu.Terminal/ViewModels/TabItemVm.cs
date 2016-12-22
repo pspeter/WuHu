@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WuHu.Terminal.ViewModels.TabItems
+namespace WuHu.Terminal.ViewModels
 {
     public class TabItemVm: INotifyPropertyChanged
     {

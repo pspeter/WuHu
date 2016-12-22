@@ -17,14 +17,21 @@ namespace WuHu.Terminal.ViewModels
         private readonly Action _onMatchesLoaded;
 
         public ICommand ShowAddTournamentCommand { get; }
+        public ICommand ShowEditTournamentCommand { get; }
 
-        public MatchListVm(Action<object> showAddTournament)
+        public MatchListVm(Action<object> showAddTournament, Action<Tournament> showEditTournament)
         {
+            _tournament = Manager.GetMostRecentTournament();
+
             ShowAddTournamentCommand = new RelayCommand(
                 showAddTournament,
                 _ => IsAuthenticated);
+            ShowEditTournamentCommand = new RelayCommand(o =>
+                showEditTournament(_tournament),
+                _ => IsAuthenticated);
+
             Matches = new ObservableCollection<MatchVm>();
-            _tournament = Manager.GetMostRecentTournament();
+
             LoadMatchesForTournamentAsync(_tournament);
             _onMatchesLoaded += () =>
                 CurrentMatch = Matches.Count > 0 ? Matches.First() : null;
@@ -60,7 +67,7 @@ namespace WuHu.Terminal.ViewModels
             Matches.Clear();
             var matchVms = await Task.Run(() =>
                 Manager.GetAllMatchesFor(tournament)
-                .Select(m => new MatchVm(m)).ToList());
+                .Select(m => new MatchVm(m, Reload)).ToList());
 
             foreach (var match in matchVms)
             {
