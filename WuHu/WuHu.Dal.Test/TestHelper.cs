@@ -18,9 +18,9 @@ namespace WuHu.Dal.Test
 
         public static void CreateTables(IDatabase database)
         {
-            string script = File.ReadAllText(SqlPath + "dbo.createAll.sql");
+            var script = File.ReadAllText(SqlPath + "dbo.createAll.sql");
 
-            DbCommand cmd = database.CreateCommand(script);
+            var cmd = database.CreateCommand(script);
             database.ExecuteNonQuery(cmd);
         }
 
@@ -31,9 +31,9 @@ namespace WuHu.Dal.Test
 
         public static void DropTables(IDatabase database)
         {
-            string script = File.ReadAllText(SqlPath + "dbo.dropAll.sql");
+            var script = File.ReadAllText(SqlPath + "dbo.dropAll.sql");
 
-            DbCommand cmd = database.CreateCommand(script);
+            var cmd = database.CreateCommand(script);
             try
             {
                 database.ExecuteNonQuery(cmd);
@@ -81,7 +81,7 @@ namespace WuHu.Dal.Test
             foreach (var line in script)
             {
                 Console.WriteLine(line);
-                DbCommand cmd = database.CreateCommand(line);
+                var cmd = database.CreateCommand(line);
                 try
                 {
                     database.ExecuteNonQuery(cmd);
@@ -95,7 +95,7 @@ namespace WuHu.Dal.Test
 
         internal static void DeleteAllFromTable(IDatabase database, string table)
         {
-            DbCommand cmd = database.CreateCommand("DELETE FROM dbo." + table);
+            var cmd = database.CreateCommand("DELETE FROM dbo." + table);
             database.ExecuteNonQuery(cmd);
         }
 

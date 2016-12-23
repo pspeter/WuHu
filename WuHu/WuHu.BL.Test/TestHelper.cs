@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using WuHu.Dal.Common;
+using WuHu.Domain;
 
 namespace WuHu.BL.Test
 {
@@ -9,10 +11,24 @@ namespace WuHu.BL.Test
         private static readonly string DbPath = ConfigurationManager.AppSettings["DbPath"];
         private static readonly string DbName = ConfigurationManager.AppSettings["DbName"];
         private static readonly string SqlPath = ConfigurationManager.AppSettings["SqlPath"];
+
+        internal static readonly Player Admin;
+
+        internal static readonly Credentials AdminCredentials;
+
+        static TestHelper()
+        {
+            Admin = Admin = new Player("admin", "last", "nick", GenerateName(), "pass",
+                true, false, false, false, false, true, true, true, null);
+            DalFactory.CreatePlayerDao(DalFactory.CreateDatabase()).Insert(Admin);
+            AdminCredentials = new Credentials(Admin.Username, "pass");
+        }
+
         internal static string GenerateName()
         {
             return Guid.NewGuid().ToString().Substring(0, 20); //random 20 character string
         }
+
         internal static void BackupDb()
         {
             try

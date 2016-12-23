@@ -72,7 +72,7 @@ namespace WuHu.Dal.Test
         {
             Assert.IsNotNull(matchDao);
 
-            Match match = new Match(null, testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+            var match = new Match(null, testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
             Assert.IsNotNull(match);
 
             match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
@@ -110,21 +110,21 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void Count()
         {
-            int cnt1 = matchDao.Count();
+            var cnt1 = matchDao.Count();
             Assert.IsTrue(cnt1 >= 0);
             matchDao.Insert(new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4));
 
-            int cnt2 = matchDao.Count();
+            var cnt2 = matchDao.Count();
             Assert.AreEqual(cnt1 + 1, cnt2);
         }
 
         [TestMethod]
         public void FindById()
         {
-            Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+            var match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
             matchDao.Insert(match);
             Assert.IsNotNull(match.MatchId);
-            Match foundMatch = matchDao.FindById(match.MatchId.Value);
+            var foundMatch = matchDao.FindById(match.MatchId.Value);
 
             Assert.AreEqual(match.MatchId, foundMatch.MatchId);
         }
@@ -132,21 +132,21 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void FindAll()
         {
-            int foundInitial = matchDao.FindAll().Count;
-            int cntInitial = matchDao.Count();
+            var foundInitial = matchDao.FindAll().Count;
+            var cntInitial = matchDao.Count();
             Assert.AreEqual(foundInitial, cntInitial);
 
             const int insertAmount = 10;
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+                var match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
                 matchDao.Insert(match);
             }
-            int cntAfterInsert = matchDao.Count();
+            var cntAfterInsert = matchDao.Count();
             Assert.AreEqual(insertAmount + foundInitial, cntAfterInsert);
 
-            int foundAfterInsert = matchDao.FindAll().Count;
+            var foundAfterInsert = matchDao.FindAll().Count;
             Assert.AreEqual(cntAfterInsert, foundAfterInsert);
         }
 
@@ -154,14 +154,14 @@ namespace WuHu.Dal.Test
         public void FindAllByPlayer()
         {
             const int insertAmount = 10;
-            int foundInitial = matchDao.FindAllByPlayer(testPlayer1).Count;
+            var foundInitial = matchDao.FindAllByPlayer(testPlayer1).Count;
             for (var i = 0; i < insertAmount; ++i)
             {
-                Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+                var match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
                 matchDao.Insert(match);
             }
 
-            int foundAfterInsert = matchDao.FindAllByPlayer(testPlayer1).Count;
+            var foundAfterInsert = matchDao.FindAllByPlayer(testPlayer1).Count;
             Assert.AreEqual(insertAmount + foundInitial, foundAfterInsert);
 
             try
@@ -177,15 +177,15 @@ namespace WuHu.Dal.Test
         public void FindAllByTournament()
         {
             const int insertAmount = 10;
-            int foundInitial = matchDao.FindAllByTournament(testTournament).Count;
+            var foundInitial = matchDao.FindAllByTournament(testTournament).Count;
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                Match match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+                var match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
                 matchDao.Insert(match);
             }
 
-            int foundAfterInsert = matchDao.FindAllByTournament(testTournament).Count;
+            var foundAfterInsert = matchDao.FindAllByTournament(testTournament).Count;
             Assert.AreEqual(insertAmount + foundInitial, foundAfterInsert);
 
             try
@@ -199,11 +199,11 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void Insert()
         {
-            int cnt = matchDao.Count();
+            var cnt = matchDao.Count();
             var match = new Match(testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
             matchDao.Insert(match);
             Assert.IsNotNull(match.MatchId);
-            int newCnt = matchDao.Count();
+            var newCnt = matchDao.Count();
             Assert.AreEqual(cnt + 1, newCnt);
             Assert.IsTrue(match.MatchId.Value >= 0);
         }
@@ -225,14 +225,14 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void InsertWithoutTournamentIdFails()
         {
-            Tournament tournamentWithoutId = tournamentDao.FindById(0);
+            var tournamentWithoutId = tournamentDao.FindById(0);
             if (tournamentWithoutId == null)
             {
                 tournamentWithoutId = new Tournament("name", DateTime.Now);
                 tournamentDao.Insert(tournamentWithoutId);
             }
             tournamentWithoutId.TournamentId = null;
-            Match match = new Match(tournamentWithoutId, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
+            var match = new Match(tournamentWithoutId, new DateTime(2000, 1, 1), 0, 0, 0.5, false, testPlayer1, testPlayer2, testPlayer3, testPlayer4);
 
             try
             {
@@ -277,7 +277,7 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void UpdateWithoutIdFails()
         {
-            Player playerWithoutId = new Player("first", "last", "nic2k", "us7er", "pass",
+            var playerWithoutId = new Player("first", "last", "nic2k", "us7er", "pass",
                     false, false, false, false, false, true, true, true, null);
 
             try // no playerId
@@ -290,7 +290,7 @@ namespace WuHu.Dal.Test
             {
             }
 
-            Tournament tournamentWithoutId = new Tournament("name", DateTime.Now);
+            var tournamentWithoutId = new Tournament("name", DateTime.Now);
             try // no tournamentId
             {
                 matchDao.Update(new Match(0, tournamentWithoutId, new DateTime(2000, 1, 1),

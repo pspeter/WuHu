@@ -66,8 +66,8 @@ namespace WuHu.Dal.SqlServer
 
         public IList<Rating> FindAll()
         {
-            using (DbCommand command = CreateFindAllCmd())
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindAllCmd())
+            using (var reader = database.ExecuteReader(command))
             {
                 var result = new List<Rating>();
                 while (reader.Read())
@@ -97,7 +97,7 @@ namespace WuHu.Dal.SqlServer
 
         public DbCommand CreateFindAllByPlayerCmd(int playerId)
         {
-            DbCommand command = database.CreateCommand(SqlFindAllByPlayer);
+            var command = database.CreateCommand(SqlFindAllByPlayer);
             database.DefineParameter(command, "playerId", DbType.Int32, playerId);
             return command;
         }
@@ -108,8 +108,8 @@ namespace WuHu.Dal.SqlServer
             {
                 throw new ArgumentException("PlayerId null on update");
             }
-            using (DbCommand command = CreateFindAllByPlayerCmd(player.PlayerId.Value))
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindAllByPlayerCmd(player.PlayerId.Value))
+            using (var reader = database.ExecuteReader(command))
             {
                 var result = new List<Rating>();
                 while (reader.Read())
@@ -139,7 +139,7 @@ namespace WuHu.Dal.SqlServer
 
         protected DbCommand CreateFindCurrentRatingCommand(int playerId)
         {
-            DbCommand command = database.CreateCommand(SqlFindCurrentRating);
+            var command = database.CreateCommand(SqlFindCurrentRating);
             database.DefineParameter(command, "playerId", DbType.Int32, playerId);
             return command;
         }
@@ -150,8 +150,8 @@ namespace WuHu.Dal.SqlServer
             {
                 throw new ArgumentException("PlayerId null on update for Player");
             }
-            using (DbCommand command = CreateFindCurrentRatingCommand(player.PlayerId.Value))
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindCurrentRatingCommand(player.PlayerId.Value))
+            using (var reader = database.ExecuteReader(command))
             {
                 if (reader.Read())
                 {
@@ -185,15 +185,15 @@ namespace WuHu.Dal.SqlServer
 
         protected DbCommand CreateFindByIdCmd(int ratingId)
         {
-            DbCommand findByIdCmd = database.CreateCommand(SqlFindById);
+            var findByIdCmd = database.CreateCommand(SqlFindById);
             database.DefineParameter(findByIdCmd, "ratingId", DbType.Int32, ratingId);
             return findByIdCmd;
         }
 
         public Rating FindById(int ratingId)
         {
-            using (DbCommand command = CreateFindByIdCmd(ratingId))
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindByIdCmd(ratingId))
+            using (var reader = database.ExecuteReader(command))
             {
                 if (reader.Read())
                 {
@@ -227,7 +227,7 @@ namespace WuHu.Dal.SqlServer
 
         private DbCommand CreateInsertCmd(int playerId, DateTime datetime, int value)
         {
-            DbCommand cmd = database.CreateCommand(SqlInsert);
+            var cmd = database.CreateCommand(SqlInsert);
             database.DefineParameter(cmd, "playerId", DbType.Int32, playerId);
             database.DefineParameter(cmd, "datetime", DbType.DateTime2, datetime);
             database.DefineParameter(cmd, "value", DbType.Int32, value);
@@ -241,7 +241,7 @@ namespace WuHu.Dal.SqlServer
                 throw new ArgumentException("No playerId for Insert into Rating provided.");
             }
 
-            using (DbCommand command = CreateInsertCmd(rating.Player.PlayerId.Value, rating.Datetime, rating.Value))
+            using (var command = CreateInsertCmd(rating.Player.PlayerId.Value, rating.Datetime, rating.Value))
             {
                 var id = database.ExecuteScalar(command); // set the objects id right away
                 rating.RatingId = id;
@@ -252,7 +252,7 @@ namespace WuHu.Dal.SqlServer
         // Update
         protected DbCommand CreateUpdateCmd(int ratingId, int playerId, DateTime datetime, int value)
         {
-            DbCommand updateByIdCmd = database.CreateCommand(SqlUpdate);
+            var updateByIdCmd = database.CreateCommand(SqlUpdate);
             database.DefineParameter(updateByIdCmd, "ratingId", DbType.Int32, ratingId);
             database.DefineParameter(updateByIdCmd, "playerId", DbType.Int32, playerId);
             database.DefineParameter(updateByIdCmd, "datetime", DbType.DateTime, datetime);
@@ -271,7 +271,7 @@ namespace WuHu.Dal.SqlServer
             {
                 throw new ArgumentException("PlayerId null on update for Rating");
             }
-            using (DbCommand command = CreateUpdateCmd(rating.RatingId.Value,
+            using (var command = CreateUpdateCmd(rating.RatingId.Value,
                 rating.Player.PlayerId.Value, rating.Datetime, rating.Value))
             {
                 return database.ExecuteNonQuery(command) == 1;
@@ -284,7 +284,7 @@ namespace WuHu.Dal.SqlServer
         }
         public int Count()
         {
-            using (DbCommand command = CreateCountCmd())
+            using (var command = CreateCountCmd())
             {
                 return database.ExecuteScalar(command);
             }

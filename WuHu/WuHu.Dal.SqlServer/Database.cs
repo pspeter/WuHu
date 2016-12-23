@@ -53,7 +53,7 @@ namespace WuHu.Dal.SqlServer
 
         public void DefineParameter(DbCommand command, string name, DbType type, object value)
         {
-            int index = DeclareParameter(command, name, type);
+            var index = DeclareParameter(command, name, type);
             command.Parameters[index].Value = value;
         }
 
@@ -117,7 +117,7 @@ namespace WuHu.Dal.SqlServer
 
         private DbConnection CreateOpenConnection()
         {
-            SqlConnection connection = new SqlConnection(connectionString);
+            var connection = new SqlConnection(connectionString);
             connection.Open();
             sharedConnection = connection;
             return connection;
@@ -125,7 +125,7 @@ namespace WuHu.Dal.SqlServer
 
         private DbConnection GetOpenConnection()
         {
-            Transaction currentTransaction = Transaction.Current;
+            var currentTransaction = Transaction.Current;
 
             if (currentTransaction == null)
             {

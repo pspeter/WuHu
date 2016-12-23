@@ -21,9 +21,6 @@ namespace WuHu.BL.Test
             _mgr = ManagerFactory.GetPlayerManager();
 
             var user = TestHelper.GenerateName();
-            var admin = new Player("admin", "last", "nick", user, "pass",
-                    true, false, false, false, false, true, true, true, null);
-            DalFactory.CreatePlayerDao(database).Insert(admin);
             _creds = new Credentials(user, "pass");
         }
 

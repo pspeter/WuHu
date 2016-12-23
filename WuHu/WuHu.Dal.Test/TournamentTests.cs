@@ -26,10 +26,10 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void Constructor()
         {
-            string name = "name";
+            var name = "name";
             Assert.IsNotNull(tournamentDao);
 
-            Tournament tournament = new Tournament(0, name, DateTime.Now);
+            var tournament = new Tournament(0, name, DateTime.Now);
             Assert.IsNotNull(tournament);
 
             tournament = new Tournament(name, DateTime.Now);
@@ -41,57 +41,57 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void Count()
         {
-            int cnt1 = tournamentDao.Count();
+            var cnt1 = tournamentDao.Count();
             Assert.IsTrue(cnt1 >= 0);
             tournamentDao.Insert(new Tournament("name", DateTime.Now));
 
-            int cnt2 = tournamentDao.Count();
+            var cnt2 = tournamentDao.Count();
             Assert.AreEqual(cnt1 + 1, cnt2);
         }
 
         [TestMethod]
         public void FindById()
         {
-            Tournament tournament = new Tournament("name", DateTime.Now);
+            var tournament = new Tournament("name", DateTime.Now);
             tournamentDao.Insert(tournament);
             Assert.IsNotNull(tournament.TournamentId);
-            Tournament foundTournament = tournamentDao.FindById(tournament.TournamentId.Value);
+            var foundTournament = tournamentDao.FindById(tournament.TournamentId.Value);
 
             Assert.AreEqual(tournament.TournamentId, foundTournament.TournamentId);
 
-            Tournament nullTournament = tournamentDao.FindById(-1);
+            var nullTournament = tournamentDao.FindById(-1);
             Assert.IsNull(nullTournament);
         }
 
         [TestMethod]
         public void FindAll()
         {
-            int foundInitial = tournamentDao.FindAll().Count;
-            int cntInitial = tournamentDao.Count();
+            var foundInitial = tournamentDao.FindAll().Count;
+            var cntInitial = tournamentDao.Count();
             Assert.AreEqual(foundInitial, cntInitial);
 
             const int insertAmount = 10;
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                Tournament tournament = new Tournament("name", DateTime.Now);
+                var tournament = new Tournament("name", DateTime.Now);
                 tournamentDao.Insert(tournament);
             }
-            int cntAfterInsert = tournamentDao.Count();
+            var cntAfterInsert = tournamentDao.Count();
             Assert.AreEqual(insertAmount + foundInitial, cntAfterInsert);
 
-            int foundAfterInsert = tournamentDao.FindAll().Count;
+            var foundAfterInsert = tournamentDao.FindAll().Count;
             Assert.AreEqual(cntAfterInsert, foundAfterInsert);
         }
 
         [TestMethod]
         public void Insert()
         {
-            int cnt = tournamentDao.Count();
+            var cnt = tournamentDao.Count();
             var tournament = new Tournament("name", DateTime.Now);
             tournamentDao.Insert(tournament);
             Assert.IsNotNull(tournament.TournamentId);
-            int newCnt = tournamentDao.Count();
+            var newCnt = tournamentDao.Count();
             Assert.AreEqual(cnt + 1, newCnt);
             Assert.IsTrue(tournament.TournamentId.Value >= 0);
         }

@@ -29,53 +29,53 @@ namespace WuHu.Dal.Test
         {
             Assert.IsNotNull(paramDao);
 
-            string id = GenerateName();
-            ScoreParameter param = new ScoreParameter(id, "val");
+            var id = GenerateName();
+            var param = new ScoreParameter(id, "val");
             Assert.IsNotNull(param);
         }
 
         [TestMethod]
         public void FindById()
         {
-            string id = GenerateName();
-            ScoreParameter param = new ScoreParameter(id, "val");
+            var id = GenerateName();
+            var param = new ScoreParameter(id, "val");
             paramDao.Insert(param);
-            ScoreParameter foundParam = paramDao.FindById(id);
+            var foundParam = paramDao.FindById(id);
 
             Assert.AreEqual(param.Value, foundParam.Value);
             Assert.AreEqual(param.Key, foundParam.Key);
 
 
-            ScoreParameter nullParam = paramDao.FindById("");
+            var nullParam = paramDao.FindById("");
             Assert.IsNull(nullParam);
         }
 
         [TestMethod]
         public void FindAll()
         {
-            int foundInitial = paramDao.FindAll().Count;
+            var foundInitial = paramDao.FindAll().Count;
 
             const int insertAmount = 10;
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                string id = GenerateName();
-                ScoreParameter param = new ScoreParameter(id, "val");
+                var id = GenerateName();
+                var param = new ScoreParameter(id, "val");
                 paramDao.Insert(param);
             }
 
-            int foundAfterInsert = paramDao.FindAll().Count;
+            var foundAfterInsert = paramDao.FindAll().Count;
             Assert.AreEqual(insertAmount + foundInitial, foundAfterInsert);
         }
         
         [TestMethod]
         public void Insert()
         {
-            string id = GenerateName();
-            ScoreParameter param = new ScoreParameter(id, "val");
+            var id = GenerateName();
+            var param = new ScoreParameter(id, "val");
             paramDao.Insert(param);
 
-            ScoreParameter foundParam = paramDao.FindById(id);
+            var foundParam = paramDao.FindById(id);
 
             Assert.AreEqual(param.Value, foundParam.Value);
             Assert.AreEqual(param.Key, foundParam.Key);
@@ -84,8 +84,8 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void Update()
         {
-            string id = GenerateName();
-            ScoreParameter param = new ScoreParameter(id, "val");
+            var id = GenerateName();
+            var param = new ScoreParameter(id, "val");
             paramDao.Insert(param);
 
             var newValue = "newVal";

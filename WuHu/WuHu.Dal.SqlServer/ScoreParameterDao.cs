@@ -45,8 +45,8 @@ namespace WuHu.Dal.SqlServer
 
         public IList<ScoreParameter> FindAll()
         {
-            using (DbCommand command = CreateFindAllCmd())
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindAllCmd())
+            using (var reader = database.ExecuteReader(command))
             {
                 var result = new List<ScoreParameter>();
                 while (reader.Read())
@@ -59,15 +59,15 @@ namespace WuHu.Dal.SqlServer
         }
         protected DbCommand CreateFindByIdCmd(string key)
         {
-            DbCommand findByIdCmd = database.CreateCommand(SqlFindById);
+            var findByIdCmd = database.CreateCommand(SqlFindById);
             database.DefineParameter(findByIdCmd, "key", DbType.String, key);
             return findByIdCmd;
         }
 
         public ScoreParameter FindById(string key)
         {
-            using (DbCommand command = CreateFindByIdCmd(key))
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindByIdCmd(key))
+            using (var reader = database.ExecuteReader(command))
             {
                 if (reader.Read())
                 {
@@ -83,7 +83,7 @@ namespace WuHu.Dal.SqlServer
 
         private DbCommand CreateInsertCmd(string key, string value)
         {
-            DbCommand cmd = database.CreateCommand(SqlInsert);
+            var cmd = database.CreateCommand(SqlInsert);
             database.DefineParameter(cmd, "key", DbType.String, key);
             database.DefineParameter(cmd, "value", DbType.String, value);
             return cmd;
@@ -91,7 +91,7 @@ namespace WuHu.Dal.SqlServer
 
         public bool Insert(ScoreParameter param)
         {
-            using (DbCommand command = CreateInsertCmd(param.Key, param.Value))
+            using (var command = CreateInsertCmd(param.Key, param.Value))
             {
                 return (database.ExecuteNonQuery(command) == 1);
             }
@@ -99,7 +99,7 @@ namespace WuHu.Dal.SqlServer
 
         private DbCommand CreateUpdateCmd(string key, string value)
         {
-            DbCommand cmd = database.CreateCommand(SqlUpdate);
+            var cmd = database.CreateCommand(SqlUpdate);
             database.DefineParameter(cmd, "key", DbType.String, key);
             database.DefineParameter(cmd, "value", DbType.String, value);
             return cmd;
@@ -107,7 +107,7 @@ namespace WuHu.Dal.SqlServer
 
         public bool Update(ScoreParameter param)
         {
-            using (DbCommand command = CreateUpdateCmd(param.Key, param.Value))
+            using (var command = CreateUpdateCmd(param.Key, param.Value))
             {
                 return (database.ExecuteNonQuery(command) == 1);
             }

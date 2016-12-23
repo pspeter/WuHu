@@ -18,14 +18,14 @@ namespace WuHu.Dal.Common
 
         public static IDatabase CreateDatabase()
         {
-            string connectionString = ConfigurationManager.
+            var connectionString = ConfigurationManager.
                 ConnectionStrings["DefaultConnectionString"].ConnectionString;
             return CreateDatabase(connectionString);
         }
 
         public static IDatabase CreateDatabase(string connectionString)
         {
-            Type dbClass = dalAssembly.GetType(assemblyName + ".Database");
+            var dbClass = dalAssembly.GetType(assemblyName + ".Database");
             return Activator.CreateInstance(dbClass, connectionString) as IDatabase;
         }
 
@@ -56,7 +56,7 @@ namespace WuHu.Dal.Common
         private static T CreateDao<T>(IDatabase database, string typeName)
             where T : class // T must be a reference type
         {
-            Type daoType = dalAssembly.GetType(assemblyName + "." + typeName);
+            var daoType = dalAssembly.GetType(assemblyName + "." + typeName);
             return Activator.CreateInstance(daoType, database) as T;
         }
     }

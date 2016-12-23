@@ -57,8 +57,8 @@ namespace WuHu.Dal.SqlServer
 
         public IList<Tournament> FindAll()
         {
-            using (DbCommand command = CreateFindAllCmd())
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindAllCmd())
+            using (var reader = database.ExecuteReader(command))
             {
                 var result = new List<Tournament>();
                 while (reader.Read())
@@ -71,21 +71,21 @@ namespace WuHu.Dal.SqlServer
 
         protected DbCommand CreateFindMostRecent()
         {
-            DbCommand findByIdCmd = database.CreateCommand(SqlFindMostRecent);
+            var findByIdCmd = database.CreateCommand(SqlFindMostRecent);
             return findByIdCmd;
         }
 
         protected DbCommand CreateFindByIdCmd(int tournamentId)
         {
-            DbCommand findByIdCmd = database.CreateCommand(SqlFindById);
+            var findByIdCmd = database.CreateCommand(SqlFindById);
             database.DefineParameter(findByIdCmd, "tournamentId", DbType.Int32, tournamentId);
             return findByIdCmd;
         }
 
         public Tournament FindMostRecentTournament()
         {
-            using (DbCommand command = CreateFindMostRecent())
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindMostRecent())
+            using (var reader = database.ExecuteReader(command))
             {
                 if (reader.Read())
                 {
@@ -102,8 +102,8 @@ namespace WuHu.Dal.SqlServer
 
         public Tournament FindById(int tournamentId)
         {
-            using (DbCommand command = CreateFindByIdCmd(tournamentId))
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindByIdCmd(tournamentId))
+            using (var reader = database.ExecuteReader(command))
             {
                 if (reader.Read())
                 {
@@ -120,7 +120,7 @@ namespace WuHu.Dal.SqlServer
 
         private DbCommand CreateInsertCmd(string name, DateTime datetime)
         {
-            DbCommand cmd = database.CreateCommand(SqlInsert);
+            var cmd = database.CreateCommand(SqlInsert);
             database.DefineParameter(cmd, "name", DbType.String, name);
             database.DefineParameter(cmd, "datetime", DbType.DateTime2, datetime);
             return cmd;
@@ -129,7 +129,7 @@ namespace WuHu.Dal.SqlServer
         public bool Insert(Tournament tournament)
         {
 
-            using (DbCommand command = CreateInsertCmd(tournament.Name, tournament.Datetime))
+            using (var command = CreateInsertCmd(tournament.Name, tournament.Datetime))
             {
                 try
                 {
@@ -146,7 +146,7 @@ namespace WuHu.Dal.SqlServer
         
         protected DbCommand CreateUpdateCmd(int tournamentId, string name, DateTime datetime)
         {
-            DbCommand updateByIdCmd = database.CreateCommand(SqlUpdate);
+            var updateByIdCmd = database.CreateCommand(SqlUpdate);
             database.DefineParameter(updateByIdCmd, "tournamentId", DbType.Int32, tournamentId);
             database.DefineParameter(updateByIdCmd, "name", DbType.String, name);
             database.DefineParameter(updateByIdCmd, "datetime", DbType.DateTime2, datetime);
@@ -160,7 +160,7 @@ namespace WuHu.Dal.SqlServer
             {
                 throw new ArgumentException("TournamentId null on update for Tournament");
             }
-            using (DbCommand command = CreateUpdateCmd(tournament.TournamentId.Value, 
+            using (var command = CreateUpdateCmd(tournament.TournamentId.Value, 
                 tournament.Name, tournament.Datetime))
             {
                 return database.ExecuteNonQuery(command) == 1;
@@ -173,7 +173,7 @@ namespace WuHu.Dal.SqlServer
         }
         public int Count()
         {
-            using (DbCommand command = CreateCountCmd())
+            using (var command = CreateCountCmd())
             {
                 return database.ExecuteScalar(command);
             }

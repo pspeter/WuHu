@@ -47,7 +47,7 @@ namespace WuHu.Terminal.ViewModels
 
             UploadCommand = new RelayCommand(o =>
                 {
-                    OpenFileDialog op = new OpenFileDialog
+                    var op = new OpenFileDialog
                     {
                         Title = "Select a picture",
                         Filter = "All supported graphics|*.jpg;*.jpeg|" +

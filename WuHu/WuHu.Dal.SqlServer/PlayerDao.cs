@@ -87,8 +87,8 @@ namespace WuHu.Dal.SqlServer
 
         public IList<Player> FindAll()
         {
-            using (DbCommand command = CreateFindAllCmd())
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindAllCmd())
+            using (var reader = database.ExecuteReader(command))
             {
                 IList<Player> result = new List<Player>();
                 while (reader.Read())
@@ -120,7 +120,7 @@ namespace WuHu.Dal.SqlServer
             bool playsThursdays = false, bool playsFridays = false, bool playsSaturdays = false,
             bool playsSundays = false)
         {
-            DbCommand findCmd = database.CreateCommand(SqlFindAllOnDays);
+            var findCmd = database.CreateCommand(SqlFindAllOnDays);
             database.DefineParameter(findCmd, "playsMondays", DbType.Boolean, playsMondays);
             database.DefineParameter(findCmd, "playsTuesdays", DbType.Boolean, playsTuesdays);
             database.DefineParameter(findCmd, "playsWednesdays", DbType.Boolean, playsWednesdays);
@@ -134,8 +134,8 @@ namespace WuHu.Dal.SqlServer
 
         public IList<Player> FindAllOnDays(bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday)
         {
-            using (DbCommand command = CreateFindAllOnDaysCmd(monday, tuesday, wednesday, thursday, friday, saturday, sunday))
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindAllOnDaysCmd(monday, tuesday, wednesday, thursday, friday, saturday, sunday))
+            using (var reader = database.ExecuteReader(command))
             {
                 IList<Player> result = new List<Player>();
                 while (reader.Read())
@@ -162,15 +162,15 @@ namespace WuHu.Dal.SqlServer
 
         protected DbCommand CreateFindByIdCmd(int playerId)
         {
-            DbCommand findByIdCmd = database.CreateCommand(SqlFindById);
+            var findByIdCmd = database.CreateCommand(SqlFindById);
             database.DefineParameter(findByIdCmd, "playerId", DbType.Int32, playerId);
             return findByIdCmd;
         }
 
         public Player FindById(int playerId)
         {
-            using (DbCommand command = CreateFindByIdCmd(playerId))
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindByIdCmd(playerId))
+            using (var reader = database.ExecuteReader(command))
             {
                 if (reader.Read())
                 {
@@ -202,15 +202,15 @@ namespace WuHu.Dal.SqlServer
 
         private DbCommand CreateFindAllByStringCmd(string name)
         {
-            DbCommand findCmd = database.CreateCommand(SqlFindByString);
+            var findCmd = database.CreateCommand(SqlFindByString);
             database.DefineParameter(findCmd, "name", DbType.String, "%" + name + "%");
             return findCmd;
         }
 
         public IList<Player> FindAllByString(string name)
         {
-            using (DbCommand command = CreateFindAllByStringCmd(name))
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindAllByStringCmd(name))
+            using (var reader = database.ExecuteReader(command))
             {
                 IList<Player> result = new List<Player>();
                 while (reader.Read())
@@ -237,7 +237,7 @@ namespace WuHu.Dal.SqlServer
 
         private DbCommand CreateFindByUsernameCmd(string username)
         {
-            DbCommand findCmd = database.CreateCommand(SqlFindByUsername);
+            var findCmd = database.CreateCommand(SqlFindByUsername);
             database.DefineParameter(findCmd, "username", DbType.String, username);
             return findCmd;
         }
@@ -248,8 +248,8 @@ namespace WuHu.Dal.SqlServer
             {
                 return null;
             }
-            using (DbCommand command = CreateFindByUsernameCmd(username))
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindByUsernameCmd(username))
+            using (var reader = database.ExecuteReader(command))
             {
                 if (reader.Read())
                 {
@@ -285,7 +285,7 @@ namespace WuHu.Dal.SqlServer
                                             bool playsThursdays, bool playsFridays, bool playsSaturdays,
                                             bool playsSundays, byte[] picture)
         {
-            DbCommand insertCmd = database.CreateCommand(SqlInsert);
+            var insertCmd = database.CreateCommand(SqlInsert);
             database.DefineParameter(insertCmd, "firstName", DbType.String, firstName);
             database.DefineParameter(insertCmd, "lastName", DbType.String, lastName);
             database.DefineParameter(insertCmd, "nickName", DbType.String, nickName);
@@ -306,7 +306,7 @@ namespace WuHu.Dal.SqlServer
 
         public bool Insert(Player player)
         {
-            using (DbCommand command = CreateInsertCmd(player.Firstname, player.Lastname, player.Nickname,
+            using (var command = CreateInsertCmd(player.Firstname, player.Lastname, player.Nickname,
                                                         player.Username, player.Password, player.Salt, player.IsAdmin,
                                                         player.PlaysMondays, player.PlaysTuesdays, player.PlaysWednesdays,
                                                         player.PlaysThursdays, player.PlaysFridays, player.PlaysSaturdays,
@@ -314,7 +314,7 @@ namespace WuHu.Dal.SqlServer
             {
                 try
                 {
-                    int playerId = database.ExecuteScalar(command);
+                    var playerId = database.ExecuteScalar(command);
                     player.PlayerId = playerId;
                 }
                 catch (SqlException)
@@ -331,7 +331,7 @@ namespace WuHu.Dal.SqlServer
                                             bool playsThursdays, bool playsFridays, bool playsSaturdays,
                                             bool playsSundays, byte[] picture)
         {
-            DbCommand updateByIdCmd = database.CreateCommand(SqlUpdateById);
+            var updateByIdCmd = database.CreateCommand(SqlUpdateById);
             database.DefineParameter(updateByIdCmd, "playerId", DbType.Int32, playerId);
             database.DefineParameter(updateByIdCmd, "firstName", DbType.String, firstName);
             database.DefineParameter(updateByIdCmd, "lastName", DbType.String, lastName);
@@ -358,7 +358,7 @@ namespace WuHu.Dal.SqlServer
             {
                 throw new ArgumentException("PlayerId null on update for Player");
             }
-            using (DbCommand command = CreateUpdateByIdCmd(player.PlayerId.Value, player.Firstname, player.Lastname, player.Nickname,
+            using (var command = CreateUpdateByIdCmd(player.PlayerId.Value, player.Firstname, player.Lastname, player.Nickname,
                                             player.Username, player.Password, player.Salt, player.IsAdmin,
                                             player.PlaysMondays, player.PlaysTuesdays, player.PlaysWednesdays,
                                             player.PlaysThursdays, player.PlaysFridays, player.PlaysSaturdays,
@@ -370,13 +370,13 @@ namespace WuHu.Dal.SqlServer
 
         protected DbCommand CreateCountCmd()
         {
-            DbCommand countCmd = database.CreateCommand(SqlCount);
+            var countCmd = database.CreateCommand(SqlCount);
             return countCmd;
         }
 
         public int Count()
         {
-            using (DbCommand command = CreateCountCmd())
+            using (var command = CreateCountCmd())
             {
                 return database.ExecuteScalar(command);
             }

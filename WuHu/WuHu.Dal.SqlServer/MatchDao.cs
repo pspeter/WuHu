@@ -78,15 +78,15 @@ namespace WuHu.Dal.SqlServer
 
         protected Match BuildMatch(IDataReader reader)
         {
-            IPlayerDao playerDao = DalFactory.CreatePlayerDao(database);
+            var playerDao = DalFactory.CreatePlayerDao(database);
 
-            Tournament tournament = DalFactory.CreateTournamentDao(database)
+            var tournament = DalFactory.CreateTournamentDao(database)
                 .FindById((int)reader["tournamentId"]);
             
-            Player p1 = playerDao.FindById((int)reader["player1"]);
-            Player p2 = playerDao.FindById((int)reader["player2"]);
-            Player p3 = playerDao.FindById((int)reader["player3"]);
-            Player p4 = playerDao.FindById((int)reader["player4"]);
+            var p1 = playerDao.FindById((int)reader["player1"]);
+            var p2 = playerDao.FindById((int)reader["player2"]);
+            var p3 = playerDao.FindById((int)reader["player3"]);
+            var p4 = playerDao.FindById((int)reader["player4"]);
 
             return new Match((int)reader["matchId"],
                 tournament,
@@ -112,8 +112,8 @@ namespace WuHu.Dal.SqlServer
 
         public IList<Match> FindAll()
         {
-            using (DbCommand command = CreateFindAllCmd())
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindAllCmd())
+            using (var reader = database.ExecuteReader(command))
             {
                 var result = new List<Match>();
                 while (reader.Read())
@@ -126,7 +126,7 @@ namespace WuHu.Dal.SqlServer
 
         protected DbCommand CreateFindAllByPlayerCmd(int playerId)
         {
-            DbCommand findByIdCmd = database.CreateCommand(SqlFindAllByPlayer);
+            var findByIdCmd = database.CreateCommand(SqlFindAllByPlayer);
             database.DefineParameter(findByIdCmd, "playerId", DbType.Int32, playerId);
             return findByIdCmd;
         }
@@ -137,8 +137,8 @@ namespace WuHu.Dal.SqlServer
             {
                 throw new ArgumentException("PlayerId null for finding Matches");
             }
-            using (DbCommand command = CreateFindAllByPlayerCmd(player.PlayerId.Value))
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindAllByPlayerCmd(player.PlayerId.Value))
+            using (var reader = database.ExecuteReader(command))
             {
                 var result = new List<Match>();
                 while (reader.Read())
@@ -151,7 +151,7 @@ namespace WuHu.Dal.SqlServer
 
         protected DbCommand CreateFindAllByTournamentCmd(int tournamentId)
         {
-            DbCommand findByIdCmd = database.CreateCommand(SqlFindAllByTournament);
+            var findByIdCmd = database.CreateCommand(SqlFindAllByTournament);
             database.DefineParameter(findByIdCmd, "tournamentId", DbType.Int32, tournamentId);
             return findByIdCmd;
         }
@@ -162,8 +162,8 @@ namespace WuHu.Dal.SqlServer
             {
                 throw new ArgumentException("TournamentId Null for finding Matches");
             }
-            using (DbCommand command = CreateFindAllByTournamentCmd(tournament.TournamentId.Value))
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindAllByTournamentCmd(tournament.TournamentId.Value))
+            using (var reader = database.ExecuteReader(command))
             {
                 var result = new List<Match>();
                 while (reader.Read())
@@ -176,7 +176,7 @@ namespace WuHu.Dal.SqlServer
 
         protected DbCommand CreateFindByIdCmd(int matchId)
         {
-            DbCommand findByIdCmd = database.CreateCommand(SqlFindById);
+            var findByIdCmd = database.CreateCommand(SqlFindById);
             database.DefineParameter(findByIdCmd, "matchId", DbType.Int32, matchId);
             return findByIdCmd;
         }
@@ -184,8 +184,8 @@ namespace WuHu.Dal.SqlServer
 
         public Match FindById(int matchId)
         {
-            using (DbCommand command = CreateFindByIdCmd(matchId))
-            using (IDataReader reader = database.ExecuteReader(command))
+            using (var command = CreateFindByIdCmd(matchId))
+            using (var reader = database.ExecuteReader(command))
             {
                 if (reader.Read())
                 {
@@ -202,7 +202,7 @@ namespace WuHu.Dal.SqlServer
             byte? scoreTeam1, byte? scoreTeam2, double estimatedWinChance, 
             bool isDone, int player1, int player2, int player3, int player4)
         {
-            DbCommand cmd = database.CreateCommand(SqlInsert);
+            var cmd = database.CreateCommand(SqlInsert);
             database.DefineParameter(cmd, "tournamentId", DbType.Int32, tournamentId);
             database.DefineParameter(cmd, "player1", DbType.Int32, player1);
             database.DefineParameter(cmd, "player2", DbType.Int32, player2);
@@ -228,7 +228,7 @@ namespace WuHu.Dal.SqlServer
                 throw new ArgumentException("TournamentId for Insert into Match missing.");
             }
 
-            using (DbCommand command = CreateInsertCmd(match.Tournament.TournamentId.Value, 
+            using (var command = CreateInsertCmd(match.Tournament.TournamentId.Value, 
                 match.Datetime, match.ScoreTeam1, match.ScoreTeam2, match.EstimatedWinChance,
                 match.IsDone, match.Player1.PlayerId.Value, match.Player2.PlayerId.Value, 
                 match.Player3.PlayerId.Value, match.Player4.PlayerId.Value))
@@ -250,7 +250,7 @@ namespace WuHu.Dal.SqlServer
             byte? scoreTeam1, byte? scoreTeam2, double estimatedWinChance,
             bool isDone, int player1, int player2, int player3, int player4)
         {
-            DbCommand cmd = database.CreateCommand(SqlUpdate);
+            var cmd = database.CreateCommand(SqlUpdate);
             database.DefineParameter(cmd, "matchId", DbType.Int32, matchId);
             database.DefineParameter(cmd, "tournamentId", DbType.Int32, tournamentId);
             database.DefineParameter(cmd, "player1", DbType.Int32, player1);
@@ -281,7 +281,7 @@ namespace WuHu.Dal.SqlServer
                 throw new ArgumentException("MatchId for Update on Match missing.");
             }
 
-            using (DbCommand command = CreateUpdateCmd(match.MatchId.Value, match.Tournament.TournamentId.Value,
+            using (var command = CreateUpdateCmd(match.MatchId.Value, match.Tournament.TournamentId.Value,
                 match.Datetime, match.ScoreTeam1, match.ScoreTeam2, match.EstimatedWinChance,
                 match.IsDone, match.Player1.PlayerId.Value, match.Player2.PlayerId.Value,
                 match.Player3.PlayerId.Value, match.Player4.PlayerId.Value))
@@ -292,7 +292,7 @@ namespace WuHu.Dal.SqlServer
 
         protected DbCommand CreateDeleteCmd(int matchId)
         {
-            DbCommand cmd = database.CreateCommand(SqlDelete);
+            var cmd = database.CreateCommand(SqlDelete);
             database.DefineParameter(cmd, "matchId", DbType.Int32, matchId);
             return cmd;
         }
@@ -304,7 +304,7 @@ namespace WuHu.Dal.SqlServer
                 throw new ArgumentException("MatchId for Delete on Match missing.");
             }
 
-            using (DbCommand command = CreateDeleteCmd(match.MatchId.Value))
+            using (var command = CreateDeleteCmd(match.MatchId.Value))
             {
                 return database.ExecuteNonQuery(command) == 1;
             }
@@ -312,13 +312,13 @@ namespace WuHu.Dal.SqlServer
 
         protected DbCommand CreateCountCmd()
         {
-            DbCommand countCmd = database.CreateCommand(SqlCount);
+            var countCmd = database.CreateCommand(SqlCount);
             return countCmd;
         }
 
         public int Count()
         {
-            using (DbCommand command = CreateCountCmd())
+            using (var command = CreateCountCmd())
             {
                 return database.ExecuteScalar(command);
             }

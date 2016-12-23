@@ -39,7 +39,7 @@ namespace WuHu.Dal.Test
         {
             Assert.IsNotNull(ratingDao);
 
-            Rating rating = new Rating(0, testPlayer, new DateTime(2000, 1, 1), 2000);
+            var rating = new Rating(0, testPlayer, new DateTime(2000, 1, 1), 2000);
             Assert.IsNotNull(rating);
 
             rating = new Rating(testPlayer, new DateTime(2000, 1, 1), 2000);
@@ -49,62 +49,62 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void Count()
         {
-            int cnt1 = ratingDao.Count();
+            var cnt1 = ratingDao.Count();
             Assert.IsTrue(cnt1 >= 0);
             ratingDao.Insert(new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000));
 
-            int cnt2 = ratingDao.Count();
+            var cnt2 = ratingDao.Count();
             Assert.AreEqual(cnt1 + 1, cnt2);
         }
 
         [TestMethod]
         public void FindById()
         {
-            Rating rating = new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000);
+            var rating = new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000);
             ratingDao.Insert(rating);
             Assert.IsNotNull(rating.RatingId);
-            Rating foundRating = ratingDao.FindById(rating.RatingId.Value);
+            var foundRating = ratingDao.FindById(rating.RatingId.Value);
 
             Assert.AreEqual(rating.RatingId, foundRating.RatingId);
 
-            Rating nullRating = ratingDao.FindById(-1);
+            var nullRating = ratingDao.FindById(-1);
             Assert.IsNull(nullRating);
         }
  
         [TestMethod]
         public void FindAll()
         {
-            int foundInitial = ratingDao.FindAll().Count;
-            int cntInitial = ratingDao.Count();
+            var foundInitial = ratingDao.FindAll().Count;
+            var cntInitial = ratingDao.Count();
             Assert.AreEqual(foundInitial, cntInitial);
 
             const int insertAmount = 10;
             
             for (var i = 0; i < insertAmount; ++i)
             {
-                Rating rating = new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000);
+                var rating = new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000);
                 ratingDao.Insert(rating);
             }
-            int cntAfterInsert = ratingDao.Count();
+            var cntAfterInsert = ratingDao.Count();
             Assert.AreEqual(insertAmount + foundInitial, cntAfterInsert);
 
-            int foundAfterInsert = ratingDao.FindAll().Count;
+            var foundAfterInsert = ratingDao.FindAll().Count;
             Assert.AreEqual(cntAfterInsert, foundAfterInsert);
         }
         
         [TestMethod]
         public void FindAllByPlayer()
         {
-            int foundInitial = ratingDao.FindAllByPlayer(RatingTests.testPlayer).Count;
+            var foundInitial = ratingDao.FindAllByPlayer(RatingTests.testPlayer).Count;
             const int insertAmount = 10;
 
             for (var i = 0; i < insertAmount; ++i)
             {
-                Rating rating = new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000);
+                var rating = new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000);
                 ratingDao.Insert(rating);
             }
 
-            int foundAfterInsert = ratingDao.FindAllByPlayer(RatingTests.testPlayer).Count;
+            var foundAfterInsert = ratingDao.FindAllByPlayer(RatingTests.testPlayer).Count;
             Assert.AreEqual(foundInitial + insertAmount, foundAfterInsert);
 
             try
@@ -120,11 +120,11 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void Insert()
         {
-            int cnt = ratingDao.Count();
+            var cnt = ratingDao.Count();
             var rating = new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000);
             ratingDao.Insert(rating);
             Assert.IsNotNull(rating.RatingId);
-            int newCnt = ratingDao.Count();
+            var newCnt = ratingDao.Count();
             Assert.AreEqual(cnt + 1, newCnt);
             Assert.IsTrue(rating.RatingId >= 0);
         }
@@ -164,7 +164,7 @@ namespace WuHu.Dal.Test
         public void UpdateWithoutIdFails()
         {
             
-            Player player = new Player("first", "last", "nick", "user", "pass",
+            var player = new Player("first", "last", "nick", "user", "pass",
                     false, false, false, false, false, true, true, true, null);
             try // no playerId
             {
@@ -202,7 +202,7 @@ namespace WuHu.Dal.Test
             catch (ArgumentException) { }
 
             playerDao.Insert(playerWithoutId);
-            Rating nullRating = ratingDao.FindCurrentRating(playerWithoutId);
+            var nullRating = ratingDao.FindCurrentRating(playerWithoutId);
             Assert.IsNull(nullRating);
         }
     }

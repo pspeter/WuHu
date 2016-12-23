@@ -58,13 +58,92 @@ namespace WuHu.BL.Test
         public void SetScore()
         {
             var match = CreateTestMatch();
+            _matchDao.Insert(match);
 
+            Assert.IsNotNull(match.MatchId);
             Assert.IsFalse(match.IsDone);
+            Assert.IsNull(match.ScoreTeam1);
             Assert.IsNull(match.ScoreTeam1);
 
             match.ScoreTeam1 = 0;
             match.ScoreTeam2 = 1;
-            _mgr.SetScore(match, )
+            _mgr.SetScore(match, TestHelper.AdminCredentials);
+            
+            match = _matchDao.FindById(match.MatchId.Value);
+
+            Assert.IsTrue(match.IsDone);
+            Assert.IsNotNull(match.ScoreTeam1);
+        }
+
+        [TestMethod]
+        public void GetAll()
+        {
+            var foundInitial = _mgr.GetAllMatches().Count;
+            var cntInitial = _matchDao.Count();
+            Assert.AreEqual(foundInitial, cntInitial);
+
+            const int insertAmount = 5;
+
+            for (var i = 0; i < insertAmount; ++i)
+            {
+                var match = new Match(_testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5,
+                    false, _testPlayers[0], _testPlayers[1], _testPlayers[2], _testPlayers[3]);
+                _matchDao.Insert(match);
+            }
+            var cntAfterInsert = _matchDao.Count();
+            Assert.AreEqual(insertAmount + foundInitial, cntAfterInsert);
+
+            var foundAfterInsert = _mgr.GetAllMatches().Count;
+            Assert.AreEqual(cntAfterInsert, foundAfterInsert);
+        }
+
+
+        [TestMethod]
+        public void FindAllByPlayer()
+        {
+            const int insertAmount = 10;
+            var foundInitial = _mgr.GetAllMatchesFor(_testPlayers[1]).Count;
+            for (var i = 0; i < insertAmount; ++i)
+            {
+                var match = new Match(_testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, 
+                    _testPlayers[0], _testPlayers[1], _testPlayers[1], _testPlayers[1]);
+                _matchDao.Insert(match);
+            }
+
+            var foundAfterInsert = _mgr.GetAllMatchesFor(_testPlayers[1]).Count;
+            Assert.AreEqual(insertAmount + foundInitial, foundAfterInsert);
+
+            try
+            {
+                _mgr.GetAllMatchesFor(new Player("", "", "", "", "", false, false,
+                    false, false, false, false, false, false, null));
+                Assert.Fail("No ArgumentException thrown.");
+            }
+            catch (ArgumentException) { }
+        }
+
+        [TestMethod]
+        public void FindAllByTournament()
+        {
+            const int insertAmount = 10;
+            var foundInitial = _mgr.GetAllMatchesFor(_testTournament).Count;
+
+            for (var i = 0; i < insertAmount; ++i)
+            {
+                var match = new Match(_testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false,
+                    _testPlayers[0], _testPlayers[1], _testPlayers[1], _testPlayers[1]);
+                _matchDao.Insert(match);
+            }
+
+            var foundAfterInsert = _mgr.GetAllMatchesFor(_testTournament).Count;
+            Assert.AreEqual(insertAmount + foundInitial, foundAfterInsert);
+
+            try
+            {
+                _mgr.GetAllMatchesFor(new Tournament("name", DateTime.Now));
+                Assert.Fail("No ArgumentException thrown.");
+            }
+            catch (ArgumentException) { }
         }
     }
 }

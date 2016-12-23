@@ -33,7 +33,7 @@ namespace WuHu.BL.Test
             var rand = new Random(42);
 
             _testPlayers = new List<Player>();
-            for (int i = 0; i < 3; ++i)
+            for (var i = 0; i < 3; ++i)
             {
                 var user = TestHelper.GenerateName();
                 var player = new Player(i.ToString(), "last", "nick", user, "pass",
@@ -55,7 +55,7 @@ namespace WuHu.BL.Test
         public void AddCurrentRating()
         {
             var user = TestHelper.GenerateName();
-            Player player = new Player("first", "last", "nick", user, "pass",
+            var player = new Player("first", "last", "nick", user, "pass",
                 true, false, false, false, false, true, true, true, null);
             _playerDao.Insert(player);
             _mgr.AddCurrentRatingFor(player, _creds);

@@ -35,7 +35,7 @@ namespace WuHu.BL.Test
             var rand = new Random(42);
 
             _testPlayers = new List<Player>();
-            for (int i = 0; i < 4; ++i)
+            for (var i = 0; i < 4; ++i)
             {
                 var user = TestHelper.GenerateName();
                 var player = new Player(i.ToString(), "last", "nick", user, "pass",
