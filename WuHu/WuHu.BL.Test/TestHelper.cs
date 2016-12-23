@@ -12,19 +12,6 @@ namespace WuHu.BL.Test
         private static readonly string DbName = ConfigurationManager.AppSettings["DbName"];
         private static readonly string SqlPath = ConfigurationManager.AppSettings["SqlPath"];
 
-        internal static readonly Player Admin;
-
-        internal static readonly Credentials AdminCredentials;
-
-        static TestHelper()
-        {
-            Admin = Admin = new Player("admin", "last", "nick", GenerateName(), "pass",
-                true, false, false, false, false, true, true, true, null);
-            DalFactory.CreatePlayerDao(DalFactory.CreateDatabase()).Insert(Admin);
-            AdminCredentials = new Credentials(Admin.Username, "pass");
-        }
-
-
         public static void CreateTables(IDatabase database)
         {
             var script = File.ReadAllText(SqlPath + "dbo.createAll.sql");

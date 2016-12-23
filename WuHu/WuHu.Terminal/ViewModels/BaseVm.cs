@@ -84,7 +84,7 @@ namespace WuHu.Terminal.ViewModels
             OnPlayersSortedByRankLoaded?.Invoke();
         }
 
-        public virtual void Reload()
+        public virtual void Reload(string msg = null)
         {
             LoadPlayersAsync();
         }

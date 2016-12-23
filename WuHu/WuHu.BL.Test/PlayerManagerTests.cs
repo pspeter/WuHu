@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WuHu.BL.Impl;
+using WuHu.Common;
 using WuHu.Dal.Common;
 using WuHu.Domain;
 
@@ -11,7 +12,7 @@ namespace WuHu.BL.Test
     {
         private static IPlayerManager _mgr;
         private static IPlayerDao _playerDao;
-        private static Credentials _creds;
+        private static Credentials _admin;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
@@ -19,9 +20,11 @@ namespace WuHu.BL.Test
             var database = DalFactory.CreateDatabase();
             _playerDao = DalFactory.CreatePlayerDao(database);
             _mgr = ManagerFactory.GetPlayerManager();
-
-            var user = TestHelper.GenerateName();
-            _creds = new Credentials(user, "pass");
+            
+            _admin = new Credentials(TestHelper.GenerateName(), "pass");
+            var admin = new Player("admin", "last", "nick", _admin.Username, "pass",
+                true, false, false, false, false, true, true, true, null);
+            _playerDao.Insert(admin);
         }
 
         [TestMethod]
@@ -91,7 +94,7 @@ namespace WuHu.BL.Test
             var user = TestHelper.GenerateName();
             var admin = new Player("admin", "last", "nick", user, "pass",
                     true, false, false, false, false, true, true, true, null);
-            var success = _mgr.AddPlayer(admin, _creds);
+            var success = _mgr.AddPlayer(admin, _admin);
             Assert.IsTrue(success);
             var creds = new Credentials(user, "pass");
 
@@ -135,7 +138,7 @@ namespace WuHu.BL.Test
             Assert.IsFalse(success);
             
             // other admins can change other players and even make them admin
-            success = _mgr.UpdatePlayer(player, _creds);
+            success = _mgr.UpdatePlayer(player, _admin);
             Assert.IsTrue(success);
 
 
@@ -143,10 +146,27 @@ namespace WuHu.BL.Test
             var notInsertedPlayer = new Player("first", "last", "nick", user, "pass",
                     false, false, false, false, false, true, true, true, null);
             // can't update players that aren't inserted
-            success = _mgr.UpdatePlayer(notInsertedPlayer, _creds);
+            success = _mgr.UpdatePlayer(notInsertedPlayer, _admin);
             Assert.IsFalse(success);
         
             Assert.IsFalse(_mgr.UpdatePlayer(player, new Credentials("", "1234")));
+        }
+
+        [TestMethod]
+        public void ChangePassword()
+        {
+            var user = TestHelper.GenerateName();
+            var player = new Player("first", "last", "nick", user, "pass",
+                    false, false, false, false, false, true, true, true, null);
+            _playerDao.Insert(player);
+            Assert.IsTrue(_mgr.ChangePassword(user, "newPass", new Credentials(user, "pass")));
+
+            player = _playerDao.FindByUsername(user);
+
+            var success = CryptoService.CheckPassword("newPass", player.Password, player.Salt);
+
+            Assert.IsTrue(success);
+
         }
     }
 }

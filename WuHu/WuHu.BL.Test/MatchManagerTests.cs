@@ -18,6 +18,7 @@ namespace WuHu.BL.Test
         private static IRatingDao _ratingDao;
         private static IList<Player> _testPlayers;
         private static Tournament _testTournament;
+        private static Credentials _admin;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
@@ -32,6 +33,13 @@ namespace WuHu.BL.Test
             _testTournament = new Tournament("", DateTime.Now);
             _tournamentDao.Insert(_testTournament);
             _testPlayers = new List<Player>();
+
+
+            _admin = new Credentials(TestHelper.GenerateName(), "pass");
+            var admin = new Player("admin", "last", "nick", _admin.Username, "pass",
+                true, false, false, false, false, true, true, true, null);
+            _playerDao.Insert(admin);
+
             for (var i = 0; i < 10; ++i)
             {
                 var user = TestHelper.GenerateName();
@@ -68,7 +76,7 @@ namespace WuHu.BL.Test
 
             match.ScoreTeam1 = 0;
             match.ScoreTeam2 = 1;
-            _mgr.SetScore(match, TestHelper.AdminCredentials);
+            _mgr.SetScore(match, _admin);
             
             match = _matchDao.FindById(match.MatchId.Value);
 
@@ -107,7 +115,7 @@ namespace WuHu.BL.Test
             for (var i = 0; i < insertAmount; ++i)
             {
                 var match = new Match(_testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, 
-                    _testPlayers[0], _testPlayers[2], _testPlayers[3], _testPlayers[4]);
+                    _testPlayers[0], _testPlayers[1], _testPlayers[2], _testPlayers[3]);
                 _matchDao.Insert(match);
             }
 

@@ -32,13 +32,13 @@
                         <DockPanel HorizontalAlignment="Stretch"></DockPanel>
                     </ItemsPanelTemplate>
                 </Menu.ItemsPanel>
-                <MenuItem Header="_Edit" HorizontalAlignment="Right"
+                <MenuItem Header="_Ändern" HorizontalAlignment="Right"
                           Command="{Binding ShowEditTournamentCommand}">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="Pencil"></materialDesign:PackIcon>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_New" HorizontalAlignment="Right"
+                <MenuItem Header="_Neu" HorizontalAlignment="Right"
                           Command="{Binding ShowAddTournamentCommand}">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="PlusCircleOutline"></materialDesign:PackIcon>

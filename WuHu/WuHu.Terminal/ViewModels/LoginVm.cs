@@ -12,11 +12,11 @@ namespace WuHu.Terminal.ViewModels
     internal class LoginVm : BaseVm
     {
         private string _username;
-        private Action _notifyParent;
+        private Action<string> _notifyParent;
 
         public ICommand LoginCommand { get; private set; }
 
-        public LoginVm(Action notifyAuthenticationChanged)
+        public LoginVm(Action<string> notifyAuthenticationChanged)
         {
             _notifyParent = notifyAuthenticationChanged;
             LoginCommand = new RelayCommand(Login);
@@ -45,12 +45,9 @@ namespace WuHu.Terminal.ViewModels
             var success = AuthenticationManager.Login(Username, pwBox.Password);
             pwBox.Password = null;
 
-            if (success)
-            {
-                OnAuthenticatedChanged(this);
-                _notifyParent?.Invoke();
-                //TODO notify UI success
-            }
+       
+            OnAuthenticatedChanged(this);
+            _notifyParent?.Invoke(success ? "Erfolgreich angemeldet." : "Falscher Nutzername oder Passwort");
         }
     }
 }

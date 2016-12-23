@@ -63,11 +63,58 @@ namespace WuHu.BL.Test
             var matches = _matchDao.FindAllByTournament(tournament);
             Assert.AreEqual(0, matches.Count);
             _mgr.LockTournament(_creds);
-            var success = _mgr.CreateTournament(tournament, _testPlayers, amountMatches, new Credentials(admin.Username, "pass"));
+            var success = _mgr.CreateTournament(tournament, new List<Player>(_testPlayers), amountMatches, new Credentials(admin.Username, "pass"));
             _mgr.UnlockTournament(_creds);
             Assert.IsTrue(success);
             matches = _matchDao.FindAllByTournament(tournament);
             Assert.AreEqual(amountMatches, matches.Count);
+        }
+
+        [TestMethod]
+        public void GetAllTournaments()
+        {
+            var foundInitial = _mgr.GetAllTournaments().Count;
+            var cntInitial = _tournamentDao.Count();
+            Assert.AreEqual(foundInitial, cntInitial);
+
+            const int insertAmount = 10;
+
+            for (var i = 0; i < insertAmount; ++i)
+            {
+                var tournament = new Tournament("name", DateTime.Now);
+                _tournamentDao.Insert(tournament);
+            }
+            var cntAfterInsert = _tournamentDao.Count();
+            Assert.AreEqual(insertAmount + foundInitial, cntAfterInsert);
+
+            var foundAfterInsert = _mgr.GetAllTournaments().Count;
+            Assert.AreEqual(cntAfterInsert, foundAfterInsert);
+        }
+
+        [TestMethod]
+        public void GetMostRecent()
+        {
+            var t = new Tournament("", DateTime.Now);
+            _tournamentDao.Insert(t);
+
+            var mostRecent = _mgr.GetMostRecentTournament();
+
+            Assert.IsTrue(t.TournamentId == mostRecent.TournamentId);
+        }
+
+        [TestMethod]
+        public void UpdateTournament()
+        {
+            var t = new Tournament("", DateTime.Now);
+            _mgr.LockTournament(_creds);
+            _mgr.CreateTournament(t, new List<Player>(_testPlayers), 1, _creds);
+            Assert.IsNotNull(t.TournamentId);
+
+            _mgr.LockTournament(_creds);
+            Assert.IsTrue(_mgr.UpdateTournament(t, new List<Player>(_testPlayers), 2, _creds));
+            var matchesAmount = _matchDao.FindAllByTournament(t).Count;
+
+            Assert.AreEqual(2, matchesAmount);
         }
     }
 }

@@ -67,12 +67,12 @@ namespace WuHu.BL.Impl
         {
             var player = PlayerDao.FindByUsername(username);
 
-            if ((credentials.Username != player.Username && Authenticate(credentials, true)) ||
+            if ((Authenticate(credentials, true)) ||
                 (credentials.Username == player.Username && Authenticate(credentials, false)))
             {
                 player.Salt = CryptoService.GenerateSalt();
                 player.Password = CryptoService.HashPassword(newPassword, player.Salt);
-                return true;
+                return PlayerDao.Update(player); ;
             }
             return false;
         }
@@ -91,14 +91,6 @@ namespace WuHu.BL.Impl
         {
             return PlayerDao.FindAll();
         }
-
-        public IList<Player> GetRanklist()
-        {
-            return new List<Player>(
-                PlayerDao.FindAll()
-                .OrderByDescending(p => RatingDao.FindCurrentRating(p)));
-        }
-
 
         private bool Authenticate(Credentials credentials, bool adminRequired)
         {

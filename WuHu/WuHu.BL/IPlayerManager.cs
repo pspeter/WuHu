@@ -15,6 +15,5 @@ namespace WuHu.BL
         Player GetPlayer(int playerId);
         Player GetPlayer(string username);
         IList<Player> GetAllPlayers();
-        IList<Player> GetRanklist();
     }
 }

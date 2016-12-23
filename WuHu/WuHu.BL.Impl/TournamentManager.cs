@@ -60,7 +60,7 @@ namespace WuHu.BL.Impl
 
         public bool CreateTournament(Tournament tournament, IList<Player> players, int amountMatches, Credentials credentials)
         {
-            if (!Authenticate(credentials, true))
+            if (!Authenticate(credentials, true) || amountMatches < 1 || players.Count < 4)
             {
                 return false;
             }

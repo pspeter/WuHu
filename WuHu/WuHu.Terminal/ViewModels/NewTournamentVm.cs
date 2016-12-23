@@ -19,10 +19,17 @@ namespace WuHu.Terminal.ViewModels
         public ICommand CancelCommand { get; }
         public ICommand SubmitCommand { get; }
 
-        public NewTournamentVm(Action showMatchList, Action reloadParent)
+        public NewTournamentVm(Action showMatchList, Action<string> reloadParent)
         {
             _tournament = new Tournament("", DateTime.Now);
-            
+
+            var locked = TournamentManager.LockTournament(AuthenticationManager.AuthenticatedCredentials);
+            if (!locked)
+            {
+                reloadParent?.Invoke("Spielplan wird zur Zeit bearbeitet. Bitte warten.");
+                showMatchList?.Invoke();
+            }
+
             CancelCommand = new RelayCommand(_ => showMatchList?.Invoke());
 
             SubmitCommand = new RelayCommand(async _ =>
@@ -31,10 +38,10 @@ namespace WuHu.Terminal.ViewModels
                     .Select(p => p.PlayerItem).ToList();
                 _tournament.Datetime = DateTime.Now;
                 showMatchList?.Invoke();
-                await Task.Run(() => 
+                var success = await Task.Run(() => 
                     TournamentManager.CreateTournament(
                         _tournament, players, AmountMatches, AuthenticationManager.AuthenticatedCredentials));
-                reloadParent?.Invoke();
+                reloadParent?.Invoke(success ? "Neuer Spielplan erstellt." : "Fehler: Spielplan konnte nicht erstellt werden.");
             });
 
             LoadPlayersAsync();

@@ -19,7 +19,7 @@ namespace WuHu.Terminal.ViewModels
         public ICommand SubmitCommand { get; }
         public ICommand UploadCommand { get; }
 
-        public NewPlayerVm(Action showPlayerList, Action reloadParent)
+        public NewPlayerVm(Action showPlayerList, Action<string> reloadParent)
         {
             PlayerItem = new Player("", "", "", "", "", false,
                 false, false, false, false, false, false, false, null);
@@ -40,9 +40,9 @@ namespace WuHu.Terminal.ViewModels
                 PlayerItem.Salt = salt;
                 PlayerItem.Password = hash;
                 showPlayerList?.Invoke();
-                await Task.Run(() =>
+                var success = await Task.Run(() =>
                     PlayerManager.AddPlayer(PlayerItem, AuthenticationManager.AuthenticatedCredentials));
-                reloadParent?.Invoke();
+                reloadParent?.Invoke(success ? "Spieler erstellt" : "Fehler: Spieler konnte nicht erstellt werden.");
             });
 
             UploadCommand = new RelayCommand(o =>

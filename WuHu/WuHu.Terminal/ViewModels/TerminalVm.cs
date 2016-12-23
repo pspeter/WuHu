@@ -28,27 +28,29 @@ namespace WuHu.Terminal.ViewModels
 
         public TerminalVm()
         {
-            MessageQueue = new SnackbarMessageQueue();
+            MessageQueue = new SnackbarMessageQueue(TimeSpan.FromSeconds(2));
 
             var rankListVm = new RanklistVm();
-            var authenticationVm = new AuthenticationVm(() =>
+            var authenticationVm = new AuthenticationVm(msg =>
             {
                 OnAuthenticatedChanged(this);
                 ChangeAuthHeader();
+                MessageQueue.Enqueue(msg);
+
             });
             var statisticsVm = new StatisticsVm();
-            var playerPageVm = new PlayerPageVm(() =>
+            var playerPageVm = new PlayerPageVm(msg =>
             {
                 statisticsVm.Reload();
                 rankListVm.Reload();
-                MessageQueue.Enqueue("Neuen Spieler erstellt.");
+                MessageQueue.Enqueue(msg);
             });
 
-            var tournamentVm = new TournamentVm(() =>
+            var tournamentVm = new TournamentVm(msg =>
             {
+                MessageQueue.Enqueue(msg);
                 statisticsVm.Reload();
                 rankListVm.Reload();
-                MessageQueue.Enqueue("Neuer Spielplan erstellt.");
             });
 
             _authenticationTab = new TabItemVm("LOGIN", "LoginVariant", authenticationVm);
@@ -86,7 +88,6 @@ namespace WuHu.Terminal.ViewModels
             OnPropertyChanged(sender, nameof(MatchVm.CanEdit));
             _playerTab.IsEnabled = IsAuthenticated;
             _statTab.IsEnabled = IsAuthenticated;
-            MessageQueue.Enqueue(IsAuthenticated ? "Erfolgreich angemeldet." : "Abgemeldet.");
         }
     }
 }

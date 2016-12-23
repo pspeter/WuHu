@@ -15,7 +15,6 @@ namespace WuHu.Terminal.ViewModels
             LogoutCommand = new RelayCommand(_ =>
             {
                 AuthenticationManager.Logout();
-                // todo notify logout
                 OnAuthenticatedChanged(this);
                 notifyAuthenticationChanged?.Invoke();
             });

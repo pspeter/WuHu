@@ -17,14 +17,21 @@
                         Margin="10"
                         Command="{Binding RevertChangesCommand}"
                         IsCancel="True">
-                Änderungen verwerfen
+                Zurücksetzen
             </Button>
             <Button HorizontalAlignment="Right"
                         MinWidth="100"
                         Margin="10"
                         Command="{Binding SavePlayerCommand}"
                         IsDefault="True">
-                Änderungen speichern
+                Speichern
+            </Button>
+
+            <Button HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="10"
+                    Command="{Binding UploadCommand}">
+                Bild hochladen
             </Button>
         </StackPanel>
         <ScrollViewer>

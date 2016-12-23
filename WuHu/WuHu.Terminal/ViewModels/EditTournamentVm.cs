@@ -17,13 +17,13 @@ namespace WuHu.Terminal.ViewModels
         public ICommand CancelCommand { get; }
         public ICommand SubmitCommand { get; }
 
-        public EditTournamentVm(Tournament tournament, Action showMatchList, Action reloadParent)
+        public EditTournamentVm(Tournament tournament, Action showMatchList, Action<string> reloadParent)
         {
             _tournament = tournament;
             var locked = TournamentManager.LockTournament(AuthenticationManager.AuthenticatedCredentials);
             if (!locked)
             {
-                // TODO show UI error
+                reloadParent?.Invoke("Spielplan wird zur Zeit bearbeitet. Bitte warten.");
                 showMatchList?.Invoke();
             }
 
@@ -35,14 +35,14 @@ namespace WuHu.Terminal.ViewModels
                     .Select(p => p.PlayerItem).ToList();
                 _tournament.Datetime = DateTime.Now;
                 showMatchList?.Invoke();
-                await Task.Run(() =>
+                var success = await Task.Run(() =>
                 {
-                    TournamentManager.UpdateTournament(
+                    var updated = TournamentManager.UpdateTournament(
                         _tournament, players, AmountMatches, AuthenticationManager.AuthenticatedCredentials);
                     TournamentManager.UnlockTournament(AuthenticationManager.AuthenticatedCredentials);
+                    return updated;
                 });
-                // TODO show success or not
-                reloadParent?.Invoke();
+                reloadParent?.Invoke(success ? "Spielplan wurde geändert." : "Fehler: Spielplan konnte nicht geändert werden.");
             });
 
             LoadPlayersAsync();

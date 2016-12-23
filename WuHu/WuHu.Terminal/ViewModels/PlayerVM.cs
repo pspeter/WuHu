@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Microsoft.Win32;
 using WuHu.Domain;
 
 namespace WuHu.Terminal.ViewModels
@@ -26,10 +27,11 @@ namespace WuHu.Terminal.ViewModels
 
         public ICommand SavePlayerCommand { get; }
         public ICommand RevertChangesCommand { get; }
+        public ICommand UploadCommand { get; }
 
         public Player PlayerItem => _player;
 
-        public PlayerVm(Player player, Action reloadParent)
+        public PlayerVm(Player player, Action<string> reloadParent)
         {
             _player = player;
             _oldPlayer = new Player(_player.PlayerId ?? -1, _player.Firstname, _player.Lastname,
@@ -52,11 +54,9 @@ namespace WuHu.Terminal.ViewModels
                         _player.PlaysWednesdays,
                         _player.PlaysThursdays, _player.PlaysFridays, _player.PlaysSaturdays, _player.PlaysSundays,
                         _player.Picture);
-                    await Task.Run(() =>
-                    {
-                        PlayerManager.UpdatePlayer(_player, AuthenticationManager.AuthenticatedCredentials);
-                    });
-                    reloadParent?.Invoke();
+                    var success = await Task.Run(() =>
+                        PlayerManager.UpdatePlayer(_player, AuthenticationManager.AuthenticatedCredentials));
+                    reloadParent?.Invoke(success ? "Spieler geändert." : "Fehler: Spieler konnte nicht geändert werden.");
                 },
                 _ => IsDirty && IsAuthenticated
             );
@@ -86,6 +86,21 @@ namespace WuHu.Terminal.ViewModels
                     OnPropertyChanged(this, nameof(Image));
                 },
                 _ => IsDirty && IsAuthenticated
+            );
+
+            UploadCommand = new RelayCommand(o =>
+            {
+                var op = new OpenFileDialog
+                {
+                    Title = "Select a picture",
+                    Filter = "All supported graphics|*.jpg;*.jpeg|" +
+                             "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg)"
+                };
+                if (op.ShowDialog() == true)
+                {
+                    Image = new BitmapImage(new Uri(op.FileName));
+                }
+            }
             );
         }
 

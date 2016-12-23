@@ -40,6 +40,11 @@ namespace WuHu.BL.Test
             Assert.IsTrue(_mgr.Login(_creds.Username, _creds.Password));
             Assert.IsTrue(_mgr.IsUserAuthenticated());
             Assert.IsTrue(_mgr.AuthenticatedCredentials.Username.Equals(_creds.Username));
+            Assert.IsNotNull(_mgr.AuthenticatedUser);
+            _mgr.Logout();
+            Assert.IsFalse(_mgr.IsUserAuthenticated());
+            Assert.IsNull(_mgr.AuthenticatedCredentials);
+            Assert.IsNull(_mgr.AuthenticatedUser);
         }
     }
 }

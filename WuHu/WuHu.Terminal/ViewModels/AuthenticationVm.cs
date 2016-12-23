@@ -25,16 +25,16 @@ namespace WuHu.Terminal.ViewModels
             }
         }
 
-        public AuthenticationVm(Action notifyAuthenticationChanged)
+        public AuthenticationVm(Action<string> notifyAuthenticationChanged)
         {
-            _loginVm = new LoginVm(() =>
+            _loginVm = new LoginVm(msg =>
             {
-                notifyAuthenticationChanged?.Invoke();
+                notifyAuthenticationChanged?.Invoke(msg);
                 SetVm();
             });
             _logoutVm = new LogoutVm(() =>
             {
-                notifyAuthenticationChanged?.Invoke();
+                notifyAuthenticationChanged?.Invoke("Erfolgreich ausgeloggt.");
                 SetVm();
             });
 

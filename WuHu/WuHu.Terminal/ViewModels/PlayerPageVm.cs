@@ -12,12 +12,12 @@ namespace WuHu.Terminal.ViewModels
         private BaseVm _currentVm;
         private readonly PlayerListVm _playerListVm;
         
-        public PlayerPageVm(Action reloadTabs)
+        public PlayerPageVm(Action<string> reloadTabs)
         {
             _playerListVm = new PlayerListVm(
                 o => SwitchVm(new NewPlayerVm(
                     () => SwitchVm(_playerListVm),
-                    () => _playerListVm.Reload())
+                    (msg) => _playerListVm.Reload(msg))
                 ),
                 reloadTabs
             );
