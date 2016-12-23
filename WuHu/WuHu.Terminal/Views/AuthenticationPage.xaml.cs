@@ -16,9 +16,12 @@ using WuHu.Terminal.ViewModels;
 
 namespace WuHu.Terminal.Views
 {
-    public partial class RanklistPage
+    /// <summary>
+    /// Interaction logic for AuthenticationPage.xaml
+    /// </summary>
+    public partial class AuthenticationPage : UserControl
     {
-        public RanklistPage()
+        public AuthenticationPage()
         {
             InitializeComponent();
         }

@@ -4,54 +4,116 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:WuHu.Terminal.Views"
-             xmlns:chart="clr-namespace:Syncfusion.Windows.Chart.Resources;assembly=Syncfusion.Chart.Wpf"
+             xmlns:syncf="clr-namespace:Syncfusion.UI.Xaml.Charts;assembly=Syncfusion.SfChart.WPF"
              xmlns:sf="http://schemas.syncfusion.com/wpf"
+             xmlns:chart="http://schemas.syncfusion.com/wpf"
+             xmlns:viewModels="clr-namespace:WuHu.Terminal.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Width="1060" Height="650" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
-        <Border x:Name="root" Width="900" Height="550" Background="White" BorderBrush="#FFE6E6E6"  HorizontalAlignment="Left">
-            <Border.Effect>
-                <DropShadowEffect Direction="181" ShadowDepth="0" BlurRadius="15" Color="Black"/>
-            </Border.Effect>
-            <Grid x:Name="GridRoot"  >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+             d:DesignHeight="1000" d:DesignWidth="1200"
+             d:DataContext="{d:DesignInstance viewModels:StatisticsVm, IsDesignTimeCreatable=False}">
 
-                <Border Background="#FF3A2A48" Margin="0,-1,0,0" HorizontalAlignment="Center">
-                    <TextBlock Text="Multiple Series" Margin="10,5,10,5" Foreground="White" FontSize="20" VerticalAlignment="Center"  FontFamily="Segoe UI Bold"/>
-                </Border>
-                <Grid Grid.Row="1" Width="850">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <sf:Chart x:Name="lineChart" Height="450" Width="725" IsManipulationEnabled="True" Grid.Row="1" >
-                        <sf:ChartArea>
-                            <sf:ChartArea.PrimaryAxis>
-                                <sf:ChartAxis LabelFormat="mm:ss">
-                                    <sf:ChartAxis.Header>
-                                        <TextBlock Margin="10" Text="Minutes and Seconds" FontSize="16" FontFamily="SegoeUI"/>
-                                    </sf:ChartAxis.Header>
-                                </sf:ChartAxis>
-                            </sf:ChartArea.PrimaryAxis>
-                            <sf:ChartArea.SecondaryAxis>
-                                <sf:ChartAxis RangePadding="Normal"  EdgeLabelsDrawingMode="Fit" LabelFormat="0.00" Interval="50">
-                                    <sf:ChartAxis.Header>
-                                        <TextBlock Margin="10" Text="Value" FontSize="16" FontFamily="SegoeUI"/>
-                                    </sf:ChartAxis.Header>
-                                </sf:ChartAxis>
-                            </sf:ChartArea.SecondaryAxis>
-                        </sf:ChartArea>
-                    </sf:Chart>
-                    <StackPanel Margin="0,30,0,0" Grid.Column="1">
-                        <TextBlock x:Name="timeTaken" FontSize="14" Width="Auto" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Bottom"></TextBlock>
-                        <Button Grid.Column="1" HorizontalAlignment="Center" BorderThickness="3" Content="Load 500 * 500 Points"></Button>
+    <DockPanel>
+        <ListBox DockPanel.Dock="Left"
+                 ItemsSource="{Binding Players}"
+                 SelectedItem="{Binding SelectedPlayer}"
+                 IsSynchronizedWithCurrentItem="True">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" 
+                                Margin="10, 5"
+                                MaxWidth="250">
+                        <TextBlock Text="{Binding Firstname}"
+                                    Padding="3, 0"/>
+                        <TextBlock Text="{Binding Lastname}"
+                                    Padding="3, 0"/>
+                        <CheckBox IsChecked="{Binding IsChecked}" 
+                                    VerticalAlignment="Center"/>
                     </StackPanel>
-                </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
-            </Grid>
-        </Border>
-    </Grid>
+
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border Background="#0DDD" 
+                BorderBrush="#AAAAAAAA" 
+                HorizontalAlignment="Left">
+                <Border.Effect>
+                    <DropShadowEffect Direction="181" 
+                                  ShadowDepth="0" 
+                                  BlurRadius="15" 
+                                  Color="Black"/>
+                </Border.Effect>
+                <Grid x:Name="GridRoot"  >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Background="#FF3A2A48"
+                        HorizontalAlignment="Center">
+                        <TextBlock Text="Ratings"
+                               Margin="10,5,10,5" 
+                               Foreground="White" 
+                               FontSize="20" 
+                               VerticalAlignment="Center" 
+                               FontFamily="Segoe UI Bold"/>
+                    </Border>
+                    <chart:SfChart Grid.Row="1">
+                        <chart:LineSeries ItemsSource="{Binding Player1Entries}"
+                                      Label="{Binding Player1Name}"
+                                      XBindingPath="Date"
+                                      YBindingPath="Rating"
+                                      Interior="#FFFF">
+                        </chart:LineSeries>
+                        <chart:LineSeries ItemsSource="{Binding Player2Entries}"
+                                      Label="{Binding Player2Name}"
+                                      XBindingPath="Date"
+                                      YBindingPath="Rating"
+                                      Interior="#A3AE">
+                        </chart:LineSeries>
+                        <chart:LineSeries ItemsSource="{Binding Player3Entries}"
+                                      Label="{Binding Player3Name}"
+                                      XBindingPath="Date"
+                                      YBindingPath="Rating"
+                                      Interior="#AEC9">
+                        </chart:LineSeries>
+                        <chart:LineSeries ItemsSource="{Binding Player4Entries}"
+                                      Label="{Binding Player4Name}"
+                                      XBindingPath="Date"
+                                      YBindingPath="Rating"
+                                      Interior="#A8E4">
+                        </chart:LineSeries>
+                        <chart:SfChart.PrimaryAxis>
+                            <chart:DateTimeAxis Header="Date" 
+                                            FontSize="14"
+                                            LabelFormat="dd.MM.yyyy"
+                                            LabelsIntersectAction="Hide"/>
+                        </chart:SfChart.PrimaryAxis>
+
+                        <chart:SfChart.SecondaryAxis>
+                            <chart:NumericalAxis Header="Wertung" FontSize="14"/>
+                        </chart:SfChart.SecondaryAxis>
+                        
+                        <chart:SfChart.Legend>
+                            <chart:ChartLegend />
+                        </chart:SfChart.Legend>
+                    </chart:SfChart>
+                </Grid>
+            </Border>
+            
+            <Button Grid.Row="1" 
+                    HorizontalAlignment="Right"
+                    MinWidth="100"
+                    Margin="5"
+                    Command="{Binding RefreshCommand}"
+                    IsDefault="True">
+                Refresh
+            </Button>
+        </Grid>
+    </DockPanel>
 </UserControl>

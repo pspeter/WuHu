@@ -20,9 +20,10 @@ namespace WuHu.Terminal.ViewModels
 
             SetScoreCommand = new RelayCommand(async _ =>
                 {
+                    IsDone = true;
                     await Task.Run(() =>
                     {
-                        Manager.SetScore(_match, Manager.AuthenticatedCredentials);
+                        MatchManager.SetScore(_match, AuthenticationManager.AuthenticatedCredentials);
                     });
                     reloadParent?.Invoke();
                 }

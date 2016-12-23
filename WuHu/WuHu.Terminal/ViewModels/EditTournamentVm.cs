@@ -20,7 +20,7 @@ namespace WuHu.Terminal.ViewModels
         public EditTournamentVm(Tournament tournament, Action showMatchList, Action reloadParent)
         {
             _tournament = tournament;
-            var locked = Manager.LockTournament(Manager.AuthenticatedCredentials);
+            var locked = TournamentManager.LockTournament(AuthenticationManager.AuthenticatedCredentials);
             if (!locked)
             {
                 // TODO show UI error
@@ -37,9 +37,9 @@ namespace WuHu.Terminal.ViewModels
                 showMatchList?.Invoke();
                 await Task.Run(() =>
                 {
-                    Manager.UpdateTournament(
-                        _tournament, players, AmountMatches, Manager.AuthenticatedCredentials);
-                    Manager.UnlockTournament(Manager.AuthenticatedCredentials);
+                    TournamentManager.UpdateTournament(
+                        _tournament, players, AmountMatches, AuthenticationManager.AuthenticatedCredentials);
+                    TournamentManager.UnlockTournament(AuthenticationManager.AuthenticatedCredentials);
                 });
                 // TODO show success or not
                 reloadParent?.Invoke();

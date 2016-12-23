@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Syncfusion.Windows.Shared;
 using WuHu.Domain;
 
 namespace WuHu.Terminal.ViewModels
@@ -14,10 +13,11 @@ namespace WuHu.Terminal.ViewModels
     {
 
         private PlayerVm _currentPlayer;
+        private readonly Action _reloadTabs;
 
         public ICommand ShowAddPlayerCommand { get; }
 
-        public PlayerListVm(Action<object>showAddPlayer)
+        public PlayerListVm(Action<object>showAddPlayer, Action reloadTabs)
         {
             ShowAddPlayerCommand = new RelayCommand(
                 showAddPlayer,
@@ -25,24 +25,8 @@ namespace WuHu.Terminal.ViewModels
             LoadPlayersAsync();
             OnPlayersLoaded += () =>
                 CurrentPlayer = Players.Count > 0 ? Players.First() : null;
+            _reloadTabs = reloadTabs;
         }
-
-        //public PlayerListVm(ObservableCollection<PlayerVm> players,
-        //    ObservableCollection<PlayerVm> sortedPlayers) 
-        //    : base(players, sortedPlayers)
-        //{
-        //    if (players != null)
-        //    {
-        //        CurrentPlayer = Players.Count > 0 ? Players.First() : null;
-        //    }
-        //    else
-        //    {
-        //        LoadPlayersAsync();
-        //    }
-
-        //    OnPlayersLoaded += () =>
-        //        CurrentPlayer = Players.Count > 0 ? Players.First() : null;
-        //}
         
         public PlayerVm CurrentPlayer
         {
@@ -54,7 +38,11 @@ namespace WuHu.Terminal.ViewModels
                 OnPropertyChanged(this);
             }
         }
-        
 
+        public override void Reload()
+        {
+            base.Reload();
+            _reloadTabs.Invoke();
+        }
     }
 }

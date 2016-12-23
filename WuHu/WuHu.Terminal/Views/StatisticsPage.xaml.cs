@@ -24,7 +24,6 @@ namespace WuHu.Terminal.Views
         public StatisticsPage()
         {
             InitializeComponent();
-            DataContext = new StatisticsVm();
         }
     }
 }

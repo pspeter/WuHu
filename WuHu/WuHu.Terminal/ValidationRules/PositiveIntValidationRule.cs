@@ -12,6 +12,10 @@ namespace WuHu.Terminal.ValidationRules
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
+            if (value == null)
+            {
+                return new ValidationResult(false, "");
+            }
             int num;
             try
             {

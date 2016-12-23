@@ -3,12 +3,11 @@ using WuHu.Terminal.ViewModels;
 
 namespace WuHu.Terminal.Views
 {
-    public partial class LoginPage
+    public partial class LoginControl
     {
-        public LoginPage()
+        public LoginControl()
         {
             InitializeComponent();
-            DataContext = new LoginVm();
         }
     }
 }

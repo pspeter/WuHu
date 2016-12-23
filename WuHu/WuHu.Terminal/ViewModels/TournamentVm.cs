@@ -18,9 +18,9 @@ namespace WuHu.Terminal.ViewModels
         
         private readonly MatchListVm _matchListVm;
         
-        public TournamentVm()
+        public TournamentVm(Action reloadTabs)
         {
-            _tournament = Manager.GetMostRecentTournament();
+            _tournament = TournamentManager.GetMostRecentTournament();
 
             _matchListVm = new MatchListVm(p => 
                 SwitchVm(new NewTournamentVm(
@@ -37,7 +37,8 @@ namespace WuHu.Terminal.ViewModels
                     {
                         _matchListVm.Reload();
                     }
-                ))
+                )),
+                reloadTabs
             );
             
             CurrentVm = _matchListVm;

@@ -15,13 +15,16 @@ namespace WuHu.Terminal.ViewModels
         private MatchVm _currentMatch;
         private Tournament _tournament;
         private readonly Action _onMatchesLoaded;
+        private readonly Action _reloadTabs;
 
         public ICommand ShowAddTournamentCommand { get; }
         public ICommand ShowEditTournamentCommand { get; }
 
-        public MatchListVm(Action<object> showAddTournament, Action<Tournament> showEditTournament)
+        public MatchListVm(Action<object> showAddTournament,
+            Action<Tournament> showEditTournament,
+            Action reloadTabs)
         {
-            _tournament = Manager.GetMostRecentTournament();
+            _tournament = TournamentManager.GetMostRecentTournament();
 
             ShowAddTournamentCommand = new RelayCommand(
                 showAddTournament,
@@ -35,6 +38,7 @@ namespace WuHu.Terminal.ViewModels
             LoadMatchesForTournamentAsync(_tournament);
             _onMatchesLoaded += () =>
                 CurrentMatch = Matches.Count > 0 ? Matches.First() : null;
+            _reloadTabs = reloadTabs;
         }
         public MatchVm CurrentMatch
         {
@@ -64,11 +68,11 @@ namespace WuHu.Terminal.ViewModels
 
         private async void LoadMatchesForTournamentAsync(Tournament tournament)
         {
-            Matches.Clear();
             var matchVms = await Task.Run(() =>
-                Manager.GetAllMatchesFor(tournament)
+                MatchManager.GetAllMatchesFor(tournament)
                 .Select(m => new MatchVm(m, Reload)).ToList());
-
+            
+            Matches.Clear();
             foreach (var match in matchVms)
             {
                 Matches.Add(match);
@@ -79,7 +83,8 @@ namespace WuHu.Terminal.ViewModels
 
         public override void Reload()
         {
-            _tournament = Manager.GetMostRecentTournament();
+            _tournament = TournamentManager.GetMostRecentTournament();
+            _reloadTabs?.Invoke();
             OnPropertyChanged(this, nameof(Name));
             LoadMatchesForTournamentAsync(_tournament);
         }

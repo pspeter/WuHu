@@ -12,13 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WuHu.Terminal.ViewModels;
 
 namespace WuHu.Terminal.Views
 {
-    public partial class RanklistPage
+    /// <summary>
+    /// Interaction logic for LogoutControl.xaml
+    /// </summary>
+    public partial class LogoutControl : UserControl
     {
-        public RanklistPage()
+        public LogoutControl()
         {
             InitializeComponent();
         }

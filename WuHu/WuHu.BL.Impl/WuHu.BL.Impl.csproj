@@ -49,10 +49,14 @@
   <ItemGroup>
     <Compile Include="Authenticator.cs" />
     <Compile Include="DefaultParameter.cs" />
-    <Compile Include="CommonManager.cs" />
     <Compile Include="ManagerFactory.cs" />
+    <Compile Include="MatchManager.cs" />
+    <Compile Include="PlayerManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RatingManager.cs" />
+    <Compile Include="ScoreParameterManager.cs" />
     <Compile Include="TerminalManager.cs" />
+    <Compile Include="TournamentManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

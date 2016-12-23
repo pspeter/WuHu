@@ -30,7 +30,7 @@ BEGIN
         [userName]           nvarchar(20)  UNIQUE NOT NULL ,
         [password]           VARBINARY(32)  NOT NULL ,
         [salt]               VARBINARY(32)   NOT NULL ,
-        [picture]            VARBINARY(5000)  NULL ,
+        [picture]            VARBINARY(MAX)  NULL ,
         [isAdmin]            bit    NOT NULL,
         [playsMondays]       bit    NOT NULL,
         [playsTuesdays]      bit    NOT NULL,

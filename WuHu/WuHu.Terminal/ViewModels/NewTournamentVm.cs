@@ -32,8 +32,8 @@ namespace WuHu.Terminal.ViewModels
                 _tournament.Datetime = DateTime.Now;
                 showMatchList?.Invoke();
                 await Task.Run(() => 
-                    Manager.CreateTournament(
-                        _tournament, players, AmountMatches, Manager.AuthenticatedCredentials));
+                    TournamentManager.CreateTournament(
+                        _tournament, players, AmountMatches, AuthenticationManager.AuthenticatedCredentials));
                 reloadParent?.Invoke();
             });
 

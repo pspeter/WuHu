@@ -67,11 +67,6 @@ namespace WuHu.Dal.SqlServer
                 command.Connection = connection;
                 return command.ExecuteNonQuery();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine("hi");
-                throw; 
-            }
             finally
             {
                 ReleaseConnection(connection);
@@ -87,7 +82,8 @@ namespace WuHu.Dal.SqlServer
                 command.Connection = connection;
                 var behavior = Transaction.Current == null ?
                     CommandBehavior.CloseConnection : CommandBehavior.Default;
-                
+
+
                 return command.ExecuteReader(behavior);
             }
             catch

@@ -56,20 +56,8 @@
       <HintPath>..\packages\MaterialDesignThemes.2.2.1.750\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Calculate.Base, Version=14.4451.0.15, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Calculate.Base451.14.4.0.15\lib\net451\Syncfusion.Calculate.Base.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Syncfusion.Calculate.WPF, Version=14.4451.0.15, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Calculate.WPF451.14.4.0.15\lib\net451\Syncfusion.Calculate.WPF.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Syncfusion.Chart.Wpf, Version=14.4451.0.15, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Chart.WPF451.14.4.0.15\lib\net451\Syncfusion.Chart.Wpf.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Syncfusion.Shared.Wpf, Version=14.4451.0.15, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Shared.WPF451.14.4.0.15\lib\net451\Syncfusion.Shared.Wpf.dll</HintPath>
+    <Reference Include="Syncfusion.SfChart.WPF, Version=14.4451.0.15, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.SfChart.WPF451.14.4.0.15\lib\net451\Syncfusion.SfChart.WPF.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -105,9 +93,11 @@
     </Compile>
     <Compile Include="Converter\HighlightedTabConverter.cs" />
     <Compile Include="Converter\RowNumberConverter.cs" />
+    <Compile Include="ViewModels\AuthenticationVm.cs" />
     <Compile Include="ViewModels\BaseVm.cs" />
     <Compile Include="ViewModels\EditTournamentVm.cs" />
     <Compile Include="ViewModels\LoginVm.cs" />
+    <Compile Include="ViewModels\LogoutVm.cs" />
     <Compile Include="ViewModels\MatchListVm.cs" />
     <Compile Include="ViewModels\MatchVm.cs" />
     <Compile Include="ViewModels\NewPlayerVm.cs" />
@@ -121,13 +111,19 @@
     <Compile Include="ViewModels\TabItemVm.cs" />
     <Compile Include="ViewModels\TerminalVm.cs" />
     <Compile Include="ViewModels\TournamentVm.cs" />
+    <Compile Include="Views\AuthenticationPage.xaml.cs">
+      <DependentUpon>AuthenticationPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EditTournamentControl.xaml.cs">
       <DependentUpon>EditTournamentControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LoginPage.xaml.cs">
-      <DependentUpon>LoginPage.xaml</DependentUpon>
+    <Compile Include="Views\LoginControl.xaml.cs">
+      <DependentUpon>LoginControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\NewTournamentVm.cs" />
+    <Compile Include="Views\LogoutControl.xaml.cs">
+      <DependentUpon>LogoutControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MatchControl.xaml.cs">
       <DependentUpon>MatchControl.xaml</DependentUpon>
     </Compile>
@@ -217,11 +213,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\AuthenticationPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\EditTournamentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\LoginPage.xaml">
+    <Page Include="Views\LoginControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LogoutControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -37,52 +37,56 @@ namespace WuHu.Terminal.ViewModels
                         _player.Password, _player.Salt, _player.IsAdmin, _player.PlaysMondays, _player.PlaysTuesdays,
                         _player.PlaysWednesdays, _player.PlaysThursdays, _player.PlaysFridays, _player.PlaysSaturdays, 
                         _player.PlaysSundays, _player.Picture);
-            _currentRating = Manager.GetCurrentRatingFor(player);
+            _currentRating = RatingManager.GetCurrentRatingFor(player);
+
             SetChecked();
+
             IsDirty = false;
             
             SavePlayerCommand = new RelayCommand(async _ =>
-            {
-                IsDirty = false;
-                _oldPlayer = new Player(_player.PlayerId ?? -1, _player.Firstname, _player.Lastname,
-                    _player.Nickname, _player.Username,
-                    _player.Password, _player.Salt, _player.IsAdmin, _player.PlaysMondays, _player.PlaysTuesdays,
-                    _player.PlaysWednesdays,
-                    _player.PlaysThursdays, _player.PlaysFridays, _player.PlaysSaturdays, _player.PlaysSundays,
-                    _player.Picture);
-                await Task.Run(() =>
                 {
-                    Manager.UpdatePlayer(_player, Manager.AuthenticatedCredentials);
-                });
-                reloadParent?.Invoke();
-            },
-            _ => IsDirty && IsAuthenticated);
+                    IsDirty = false;
+                    _oldPlayer = new Player(_player.PlayerId ?? -1, _player.Firstname, _player.Lastname,
+                        _player.Nickname, _player.Username,
+                        _player.Password, _player.Salt, _player.IsAdmin, _player.PlaysMondays, _player.PlaysTuesdays,
+                        _player.PlaysWednesdays,
+                        _player.PlaysThursdays, _player.PlaysFridays, _player.PlaysSaturdays, _player.PlaysSundays,
+                        _player.Picture);
+                    await Task.Run(() =>
+                    {
+                        PlayerManager.UpdatePlayer(_player, AuthenticationManager.AuthenticatedCredentials);
+                    });
+                    reloadParent?.Invoke();
+                },
+                _ => IsDirty && IsAuthenticated
+            );
 
             RevertChangesCommand = new RelayCommand(_ =>
-            {
+                {
                 
-                IsDirty = false;
-                _player = _oldPlayer;
-                _oldPlayer = new Player(_player.PlayerId ?? -1, _player.Firstname, _player.Lastname, _player.Nickname, _player.Username,
-                    _player.Password, _player.Salt, _player.IsAdmin, _player.PlaysMondays, _player.PlaysTuesdays, _player.PlaysWednesdays,
-                    _player.PlaysThursdays, _player.PlaysFridays, _player.PlaysSaturdays, _player.PlaysSundays, _player.Picture);
-                OnPropertyChanged(this);
-                OnPropertyChanged(this, nameof(IsChecked));
-                OnPropertyChanged(this, nameof(Firstname));
-                OnPropertyChanged(this, nameof(Nickname));
-                OnPropertyChanged(this, nameof(Lastname));
-                OnPropertyChanged(this, nameof(Username));
-                OnPropertyChanged(this, nameof(IsAdmin));
-                OnPropertyChanged(this, nameof(PlaysMondays));
-                OnPropertyChanged(this, nameof(PlaysTuesdays));
-                OnPropertyChanged(this, nameof(PlaysWednesdays));
-                OnPropertyChanged(this, nameof(PlaysThursdays));
-                OnPropertyChanged(this, nameof(PlaysFridays));
-                OnPropertyChanged(this, nameof(PlaysSaturdays));
-                OnPropertyChanged(this, nameof(PlaysSundays));
-                OnPropertyChanged(this, nameof(Image));
-            },
-            _ => IsDirty && IsAuthenticated);
+                    IsDirty = false;
+                    _player = _oldPlayer;
+                    _oldPlayer = new Player(_player.PlayerId ?? -1, _player.Firstname, _player.Lastname, _player.Nickname, _player.Username,
+                        _player.Password, _player.Salt, _player.IsAdmin, _player.PlaysMondays, _player.PlaysTuesdays, _player.PlaysWednesdays,
+                        _player.PlaysThursdays, _player.PlaysFridays, _player.PlaysSaturdays, _player.PlaysSundays, _player.Picture);
+                    OnPropertyChanged(this);
+                    OnPropertyChanged(this, nameof(IsChecked));
+                    OnPropertyChanged(this, nameof(Firstname));
+                    OnPropertyChanged(this, nameof(Nickname));
+                    OnPropertyChanged(this, nameof(Lastname));
+                    OnPropertyChanged(this, nameof(Username));
+                    OnPropertyChanged(this, nameof(IsAdmin));
+                    OnPropertyChanged(this, nameof(PlaysMondays));
+                    OnPropertyChanged(this, nameof(PlaysTuesdays));
+                    OnPropertyChanged(this, nameof(PlaysWednesdays));
+                    OnPropertyChanged(this, nameof(PlaysThursdays));
+                    OnPropertyChanged(this, nameof(PlaysFridays));
+                    OnPropertyChanged(this, nameof(PlaysSaturdays));
+                    OnPropertyChanged(this, nameof(PlaysSundays));
+                    OnPropertyChanged(this, nameof(Image));
+                },
+                _ => IsDirty && IsAuthenticated
+            );
         }
 
         public bool IsDirty

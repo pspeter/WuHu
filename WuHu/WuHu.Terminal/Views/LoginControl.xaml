@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="WuHu.Terminal.Views.LoginPage"
+﻿<UserControl x:Class="WuHu.Terminal.Views.LoginControl"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"

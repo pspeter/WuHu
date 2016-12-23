@@ -38,7 +38,7 @@ namespace WuHu.Dal.Test
             {
                 database.ExecuteNonQuery(cmd);
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 // ignored
             }

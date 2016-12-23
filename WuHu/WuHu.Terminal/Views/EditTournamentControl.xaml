@@ -22,9 +22,9 @@
 
         <Grid Margin="25">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="5*"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -90,7 +90,7 @@
                         ItemsSource="{Binding Players}" 
                         AutoGenerateColumns="False" 
                         GridLinesVisibility="None"
-                      MaxWidth="330">
+                      MaxWidth="360">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Fullname}" Width="250"/>
                     <DataGridCheckBoxColumn Header="IsPlaying" Binding="{Binding IsChecked}" Width="80"/>

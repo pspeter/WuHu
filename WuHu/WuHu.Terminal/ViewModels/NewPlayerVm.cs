@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Microsoft.Win32;
 using WuHu.Common;
 using WuHu.Domain;
 
@@ -14,10 +15,9 @@ namespace WuHu.Terminal.ViewModels
 {
     public class NewPlayerVm : BaseVm
     {
-        private string _password; // for creating a new Player
-        
         public ICommand CancelCommand { get; }
         public ICommand SubmitCommand { get; }
+        public ICommand UploadCommand { get; }
 
         public NewPlayerVm(Action showPlayerList, Action reloadParent)
         {
@@ -41,9 +41,24 @@ namespace WuHu.Terminal.ViewModels
                 PlayerItem.Password = hash;
                 showPlayerList?.Invoke();
                 await Task.Run(() =>
-                    Manager.AddPlayer(PlayerItem, Manager.AuthenticatedCredentials));
+                    PlayerManager.AddPlayer(PlayerItem, AuthenticationManager.AuthenticatedCredentials));
                 reloadParent?.Invoke();
             });
+
+            UploadCommand = new RelayCommand(o =>
+                {
+                    OpenFileDialog op = new OpenFileDialog
+                    {
+                        Title = "Select a picture",
+                        Filter = "All supported graphics|*.jpg;*.jpeg|" +
+                                 "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg)"
+                    };
+                    if (op.ShowDialog() == true)
+                    {
+                        Image = new BitmapImage(new Uri(op.FileName));
+                    }
+                }
+            );
         }
 
         public Player PlayerItem { get; }
@@ -208,9 +223,9 @@ namespace WuHu.Terminal.ViewModels
             set
             {
                 var img = SaveImage(value);
-                if (PlayerItem.Picture != SaveImage(value))
+                if (PlayerItem.Picture != img)
                 {
-                    PlayerItem.Picture = SaveImage(value);
+                    PlayerItem.Picture = img;
                     OnPropertyChanged(this);
                 }
             }
@@ -244,12 +259,6 @@ namespace WuHu.Terminal.ViewModels
             encoder.Frames.Add(BitmapFrame.Create(image));
             encoder.Save(memStream);
             return memStream.ToArray();
-        }
-
-        private bool ChangePassword(string newPassword)
-        {
-            return Manager.ChangePassword(
-                PlayerItem.Username, newPassword, Manager.AuthenticatedCredentials);
         }
     }
 }

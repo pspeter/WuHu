@@ -9,7 +9,7 @@ namespace WuHu.BL.Test
     [TestClass]
     public class ScoreParameterManagerTests
     {
-        private static ICommonManager _mgr;
+        private static IScoreParameterManager _mgr;
         private static IScoreParameterDao _paramDao;
         private static Credentials _creds;
 
@@ -18,7 +18,7 @@ namespace WuHu.BL.Test
         {
             var database = DalFactory.CreateDatabase();
             _paramDao = DalFactory.CreateScoreParameterDao(database);
-            _mgr = ManagerFactory.GetTerminalManager();
+            _mgr = ManagerFactory.GetScoreParameterManager();
             var user = TestHelper.GenerateName();
             var admin = new Player("admin", "last", "nick", user, "pass",
                     true, false, false, false, false, true, true, true, null);

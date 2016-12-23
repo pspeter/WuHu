@@ -24,7 +24,6 @@ namespace WuHu.Terminal.Views
         public PlayerPage()
         {
             InitializeComponent();
-            DataContext = new PlayerPageVm();
         }
     }
 }

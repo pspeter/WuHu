@@ -33,7 +33,7 @@
             <views:TournamentPage DataContext="{Binding}" />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:LoginVm}">
-            <views:LoginPage DataContext="{Binding}" />
+            <views:LoginControl DataContext="{Binding}" />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:PlayerPageVm}">
             <views:PlayerPage DataContext="{Binding}" />
@@ -41,9 +41,12 @@
         <DataTemplate DataType="{x:Type vm:StatisticsVm}">
             <views:StatisticsPage DataContext="{Binding}" />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AuthenticationVm}">
+            <views:AuthenticationPage DataContext="{Binding}" />
+        </DataTemplate>
         <DataTemplate x:Key="TabItemTemplate" DataType="{x:Type tabItems:TabItemVm}">
             <StackPanel Orientation="Horizontal"
-                                Margin="5, 20">
+                        Margin="5, 20">
                 <wpf:PackIcon Kind="{Binding IconName}"
                                       Margin="5, 0"/>
                 <TextBlock Text="{Binding Header}"
@@ -55,79 +58,23 @@
             <ContentControl Content="{Binding Content}"></ContentControl>
         </DataTemplate>
     </Window.Resources>
+    <Grid>
+        <TabControl BorderThickness="1"
+                    Margin="0"
+                    ItemsSource="{Binding TabItems}"
+                    ContentTemplate="{StaticResource TabContentTemplate}"
+                    ItemTemplate="{StaticResource TabItemTemplate}"
+                    IsSynchronizedWithCurrentItem="True">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
+                    <Setter Property="IsEnabled" Value="{Binding IsEnabled}"/>
+                    <Setter Property="Background" Value="{Binding Background}"></Setter>
+                </Style>
+            </TabControl.ItemContainerStyle>
+        </TabControl>
 
-    <TabControl BorderThickness="1"
-                Margin="0"
-                ItemsSource="{Binding TabItems}"
-                ContentTemplate="{StaticResource TabContentTemplate}"
-                ItemTemplate="{StaticResource TabItemTemplate}"
-                IsSynchronizedWithCurrentItem="True">
-        
-        <!--
-        <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent">
-            <TabItem.Header>
-                <StackPanel Orientation="Horizontal"
-                            Margin="5, 20">
-                    <wpf:PackIcon Kind="Trophy"
-                                      Margin="5, 0"></wpf:PackIcon>
-                    <TextBlock Text="RANGLISTE"
-                                   Margin="5, 0"/>
-                </StackPanel>
-            </TabItem.Header>
-            <views:RanklistPage/>
-        </TabItem>
-        <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent">
-            <TabItem.Header>
-                <StackPanel Orientation="Horizontal"
-                            Margin="5, 20">
-                    <wpf:PackIcon Kind="FormatListBulleted"
-                                      Margin="5, 0"></wpf:PackIcon>
-                    <TextBlock Text="SPIELPLAN"
-                                   Margin="5, 0"/>
-                </StackPanel>
-            </TabItem.Header>
-            <views:TournamentPage/>
-        </TabItem>
-        <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent"
-                     IsEnabled="True">
-            <TabItem.Header>
-                <StackPanel Orientation="Horizontal"
-                            Margin="5, 20">
-                    <wpf:PackIcon Kind="AccountCardDetails"
-                                      Margin="5, 0"></wpf:PackIcon>
-                    <TextBlock Text="SPIELER"
-                                   Margin="5, 0"/>
-                </StackPanel>
-            </TabItem.Header>
-            <views:PlayerPage/>
-        </TabItem>
-        <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent"
-                     IsEnabled="True">
-            <TabItem.Header>
-                <StackPanel Orientation="Horizontal"
-                            Margin="5, 20">
-                    <wpf:PackIcon Kind="TrendingUp"
-                                      Margin="5, 0"></wpf:PackIcon>
-                    <TextBlock Text="STATISTIK"
-                                   Margin="5, 0"/>
-                </StackPanel>
-            </TabItem.Header>
-            <views:StatisticsPage/>
-        </TabItem>
-        <TabItem wpf:FlyoutAssist.HeaderColorMode="Accent"
-                     IsEnabled="True">
-            <TabItem.Header>
-                <StackPanel Orientation="Horizontal"
-                            Margin="5, 20">
-                    <wpf:PackIcon Kind="LoginVariant"
-                                      Margin="5, 0"></wpf:PackIcon>
-                    <TextBlock Text="LOGIN"
-                                   Margin="5, 0"/>
-                </StackPanel>
-            </TabItem.Header>
-            <views:LoginPage/>
-        </TabItem>-->
-    </TabControl>
+        <wpf:Snackbar MessageQueue="{Binding MessageQueue}"/>
+    </Grid>
 </controls:MetroWindow>
 
  

@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using WuHu.Dal.Common;
 using WuHu.Domain;
 
 namespace WuHu.BL.Impl
 {
-    public class TerminalManager : CommonManager, ITerminalManager
+    public class TerminalManager : ITerminalManager
     {
+        protected readonly Authenticator Authentication;
+        protected readonly IPlayerDao PlayerDao;
+
+        public TerminalManager()
+        {
+            Authentication = Authenticator.GetInstance();
+            PlayerDao = DalFactory.CreatePlayerDao(DalFactory.CreateDatabase());
+        }
 
         public bool Login(string username, string password)
         {

@@ -8,7 +8,6 @@ namespace WuHu.Terminal.Views
         public TournamentPage()
         {
             InitializeComponent();
-            DataContext = new TournamentVm();
         }
     }
 }

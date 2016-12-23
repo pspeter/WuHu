@@ -9,7 +9,7 @@ namespace WuHu.BL.Test
     [TestClass]
     public class PlayerManagerTests
     {
-        private static ICommonManager _mgr;
+        private static IPlayerManager _mgr;
         private static IPlayerDao _playerDao;
         private static Credentials _creds;
 
@@ -18,7 +18,7 @@ namespace WuHu.BL.Test
         {
             var database = DalFactory.CreateDatabase();
             _playerDao = DalFactory.CreatePlayerDao(database);
-            _mgr = ManagerFactory.GetTerminalManager();
+            _mgr = ManagerFactory.GetPlayerManager();
 
             var user = TestHelper.GenerateName();
             var admin = new Player("admin", "last", "nick", user, "pass",

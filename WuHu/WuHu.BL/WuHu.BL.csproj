@@ -63,8 +63,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ICommonManager.cs" />
+    <Compile Include="IPlayerManager.cs" />
+    <Compile Include="IRatingManager.cs" />
+    <Compile Include="IMatchManager.cs" />
+    <Compile Include="IScoreParameterManager.cs" />
     <Compile Include="ITerminalManager.cs" />
+    <Compile Include="ITournamentManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

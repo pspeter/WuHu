@@ -13,7 +13,7 @@ namespace WuHu.BL.Test
     [TestClass]
     public class TournamentManagerTests
     {
-        private static ICommonManager _mgr;
+        private static ITournamentManager _mgr;
         private static IMatchDao _matchDao;
         private static ITournamentDao _tournamentDao;
         private static IPlayerDao _playerDao;
@@ -31,7 +31,7 @@ namespace WuHu.BL.Test
             _tournamentDao = DalFactory.CreateTournamentDao(database);
             _playerDao = DalFactory.CreatePlayerDao(database);
             _paramDao = DalFactory.CreateScoreParameterDao(database);
-            _mgr = ManagerFactory.GetTerminalManager();
+            _mgr = ManagerFactory.GetTournamentManager();
             var rand = new Random(42);
 
             _testPlayers = new List<Player>();

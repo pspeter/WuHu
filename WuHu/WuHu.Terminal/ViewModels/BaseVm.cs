@@ -21,12 +21,16 @@ namespace WuHu.Terminal.ViewModels
         public event Action OnPlayersLoaded;
         public event Action OnPlayersSortedByRankLoaded;
 
-        protected ITerminalManager Manager;
+        protected ITerminalManager AuthenticationManager;
+        protected IRatingManager RatingManager;
+        protected IPlayerManager PlayerManager;
+        protected IMatchManager MatchManager;
+        protected ITournamentManager TournamentManager;
 
-        public bool IsAuthenticated => Manager.IsUserAuthenticated();
-        public bool IsNotAuthenticated => !Manager.IsUserAuthenticated();
+        public bool IsAuthenticated => AuthenticationManager.IsUserAuthenticated();
+        public bool IsNotAuthenticated => !AuthenticationManager.IsUserAuthenticated();
 
-        protected void OnAuthenticatedChanged(object sender)
+        protected virtual void OnAuthenticatedChanged(object sender)
         {
             OnPropertyChanged(sender, nameof(IsAuthenticated));
             OnPropertyChanged(sender, nameof(IsNotAuthenticated));
@@ -43,7 +47,11 @@ namespace WuHu.Terminal.ViewModels
         protected BaseVm(ObservableCollection<PlayerVm> players = null,
             ObservableCollection<PlayerVm> sortedPlayers = null)
         {
-            Manager = ManagerFactory.GetTerminalManager();
+            AuthenticationManager = ManagerFactory.GetTerminalManager();
+            RatingManager = ManagerFactory.GetRatingManager();
+            PlayerManager = ManagerFactory.GetPlayerManager();
+            MatchManager = ManagerFactory.GetMatchManager();
+            TournamentManager = ManagerFactory.GetTournamentManager();
             Players = players ?? new ObservableCollection<PlayerVm>();
             PlayersSortedByRank = sortedPlayers ?? new ObservableCollection<PlayerVm>();
         }
@@ -53,12 +61,12 @@ namespace WuHu.Terminal.ViewModels
 
         protected async void LoadPlayersAsync()
         {
-            Players.Clear();
 
             var playerVms = await Task.Run(() => 
-                Manager.GetAllPlayers()
+                PlayerManager.GetAllPlayers()
                 .Select(player => new PlayerVm(player, Reload)).ToList());
 
+            Players.Clear();
             foreach (var vm in playerVms)
             {
                 Players.Add(vm); 
@@ -67,6 +75,7 @@ namespace WuHu.Terminal.ViewModels
             OnPlayersLoaded?.Invoke();
 
             var orderedPlayers = Players.OrderByDescending(p => p.CurrentRating?.Value ?? int.MinValue);
+            PlayersSortedByRank.Clear();
             foreach (var player in orderedPlayers)
             {
                 PlayersSortedByRank.Add(player);

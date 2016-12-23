@@ -12,18 +12,13 @@ namespace WuHu.Terminal.ViewModels
     internal class LoginVm : BaseVm
     {
         private string _username;
-        private readonly Action _onLoginAction;
+        private Action _notifyParent;
 
         public ICommand LoginCommand { get; private set; }
 
-        public LoginVm()
+        public LoginVm(Action notifyAuthenticationChanged)
         {
-            LoginCommand = new RelayCommand(Login);
-        }
-
-        public LoginVm(Action onLogin)
-        {
-            _onLoginAction = onLogin;
+            _notifyParent = notifyAuthenticationChanged;
             LoginCommand = new RelayCommand(Login);
         }
 
@@ -47,13 +42,14 @@ namespace WuHu.Terminal.ViewModels
             // don't save password in memory, just send it to the Manager right away
             if (pwBox == null) return;
 
-            var success = Manager.Login(Username, pwBox.Password);
+            var success = AuthenticationManager.Login(Username, pwBox.Password);
             pwBox.Password = null;
 
             if (success)
             {
                 OnAuthenticatedChanged(this);
-                _onLoginAction?.Invoke();
+                _notifyParent?.Invoke();
+                //TODO notify UI success
             }
         }
     }

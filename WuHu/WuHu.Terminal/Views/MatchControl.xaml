@@ -9,7 +9,7 @@
              xmlns:viewModels="clr-namespace:WuHu.Terminal.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="400"
-             d:DataContext="{d:DesignInstance Type=viewModels:MatchVm, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance Type=viewModels:MatchVm, IsDesignTimeCreatable=False}">
     <Grid Margin="20, 10"
           IsEnabled="{Binding CanEdit}">
         <Grid>

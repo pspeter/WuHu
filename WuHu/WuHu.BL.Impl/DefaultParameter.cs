@@ -12,5 +12,6 @@ namespace WuHu.BL.Impl
         public const string InitialScore = "1000";
         public const string Halflife = "20";
         public const string TimePenalty = "50";
+        public const string ScoredMatches = "50";
     }
 }

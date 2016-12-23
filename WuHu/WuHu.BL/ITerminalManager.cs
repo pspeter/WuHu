@@ -7,7 +7,7 @@ using WuHu.Domain;
 
 namespace WuHu.BL
 {
-    public interface ITerminalManager : ICommonManager
+    public interface ITerminalManager
     {
         bool Login(string username, string password);
         bool IsUserAuthenticated();
