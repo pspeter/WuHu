@@ -30,13 +30,14 @@ namespace WuHu.BL.Test
             _mgr = ManagerFactory.GetMatchManager();
             var rand = new Random(42);
             _testTournament = new Tournament("", DateTime.Now);
+            _tournamentDao.Insert(_testTournament);
             _testPlayers = new List<Player>();
             for (var i = 0; i < 10; ++i)
             {
                 var user = TestHelper.GenerateName();
                 var player = new Player(i.ToString(), "last", "nick", user, "pass",
                     true, false, false, false, false, true, true, true, null);
-                _playerDao.Insert(player);
+                Assert.IsTrue(_playerDao.Insert(player));
                 _ratingDao.Insert(new Rating(player, DateTime.Now, rand.Next(4000)));
                 _testPlayers.Add(player);
             }
@@ -99,14 +100,14 @@ namespace WuHu.BL.Test
 
 
         [TestMethod]
-        public void FindAllByPlayer()
+        public void GetAllByPlayer()
         {
             const int insertAmount = 10;
             var foundInitial = _mgr.GetAllMatchesFor(_testPlayers[1]).Count;
             for (var i = 0; i < insertAmount; ++i)
             {
                 var match = new Match(_testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false, 
-                    _testPlayers[0], _testPlayers[1], _testPlayers[1], _testPlayers[1]);
+                    _testPlayers[0], _testPlayers[2], _testPlayers[3], _testPlayers[4]);
                 _matchDao.Insert(match);
             }
 
@@ -123,7 +124,7 @@ namespace WuHu.BL.Test
         }
 
         [TestMethod]
-        public void FindAllByTournament()
+        public void GetAllByTournament()
         {
             const int insertAmount = 10;
             var foundInitial = _mgr.GetAllMatchesFor(_testTournament).Count;
@@ -131,7 +132,7 @@ namespace WuHu.BL.Test
             for (var i = 0; i < insertAmount; ++i)
             {
                 var match = new Match(_testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false,
-                    _testPlayers[0], _testPlayers[1], _testPlayers[1], _testPlayers[1]);
+                    _testPlayers[0], _testPlayers[1], _testPlayers[2], _testPlayers[3]);
                 _matchDao.Insert(match);
             }
 
@@ -144,6 +145,38 @@ namespace WuHu.BL.Test
                 Assert.Fail("No ArgumentException thrown.");
             }
             catch (ArgumentException) { }
+        }
+
+
+        [TestMethod]
+        public void Insert()
+        {
+            var cnt = _matchDao.Count();
+            var match = new Match(_testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false,
+                _testPlayers[0], _testPlayers[1], _testPlayers[2], _testPlayers[3]);
+            _matchDao.Insert(match);
+            Assert.IsNotNull(match.MatchId);
+            var newCnt = _matchDao.Count();
+            Assert.AreEqual(cnt + 1, newCnt);
+            Assert.IsTrue(match.MatchId.Value >= 0);
+        }
+
+
+        [TestMethod]
+        public void GetAllUnfinished()
+        {
+            const int insertAmount = 5;
+            var foundInitial = _mgr.GetAllUnfinishedMatches().Count;
+
+            for (var i = 0; i < insertAmount; ++i)
+            {
+                var match = new Match(_testTournament, new DateTime(2000, 1, 1), 0, 0, 0.5, false,
+                    _testPlayers[0], _testPlayers[1], _testPlayers[2], _testPlayers[3]);
+                _matchDao.Insert(match);
+            }
+
+            var foundAfterInsert = _mgr.GetAllUnfinishedMatches().Count;
+            Assert.AreEqual(insertAmount + foundInitial, foundAfterInsert);
         }
     }
 }

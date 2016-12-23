@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using WuHu.Dal.Common;
 
 namespace WuHu.BL.Test
 {
@@ -9,7 +10,9 @@ namespace WuHu.BL.Test
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext testContext)
         {
-            TestHelper.BackupDb();
+            var database = DalFactory.CreateDatabase();
+            TestHelper.DropTables(database);
+            TestHelper.CreateTables(database);
         }
     }
 }

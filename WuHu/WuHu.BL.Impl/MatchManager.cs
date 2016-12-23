@@ -49,9 +49,12 @@ namespace WuHu.BL.Impl
                 return false;
             }
 
+            // copying values over to oldMatch to avoid accidently changing any other values
             oldMatch.ScoreTeam1 = match.ScoreTeam1;
             oldMatch.ScoreTeam2 = match.ScoreTeam2;
             oldMatch.IsDone = true;
+            match.IsDone = true;
+
             var updated = MatchDao.Update(oldMatch);
 
             if (!updated)

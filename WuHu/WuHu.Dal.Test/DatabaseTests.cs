@@ -18,7 +18,8 @@ namespace WuHu.Dal.Test
         {
             var database = DalFactory.CreateDatabase();
             //TestHelper.InsertTestData(database);
-            TestHelper.BackupDb(database);
+            TestHelper.DropTables(database);
+            TestHelper.CreateTables(database);
         }
 
         [ClassInitialize]
