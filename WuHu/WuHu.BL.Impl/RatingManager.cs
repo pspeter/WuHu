@@ -29,10 +29,7 @@ namespace WuHu.BL.Impl
             ParamDao = DalFactory.CreateScoreParameterDao(database);
             Authentication = Authenticator.GetInstance();
         }
-
-
-
-        // Rating
+        
         public bool AddCurrentRatingFor(Player player, Credentials credentials)
         {
             if (!Authenticate(credentials, true)) // only admins can add players
@@ -55,11 +52,11 @@ namespace WuHu.BL.Impl
                 return true;
             }
 
-            var allMatches = MatchDao.FindAllByPlayer(player);
-            var matches = allMatches
+            var matches = MatchDao.FindAllByPlayer(player)
+                .OrderByDescending(m => m.Datetime)
+                .Take(scoredMatches)
                 .Where(m => m.IsDone)
-                .OrderBy(m => m.Datetime)
-                .Skip(Math.Max(0, allMatches.Count - scoredMatches));
+                .ToList();
 
             var rating = initialScore;
             var matchNr = matches.Count() - 1;

@@ -37,7 +37,7 @@ namespace WuHu.BL.Impl
         // Match
         public bool SetScore(Match match, Credentials credentials)
         {
-            if (!Authenticate(credentials, true) || match.MatchId == null)
+            if (!Authenticate(credentials, true) || match.MatchId == null || match.ScoreTeam1 == match.ScoreTeam2)
             {
                 return false;
             }

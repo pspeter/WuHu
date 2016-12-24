@@ -23,15 +23,14 @@ namespace WuHu.Dal.SqlServer
             @"SELECT *
             FROM Match
                 ORDER BY datetime DESC;";
-
+        
         private const string SqlFindAllByPlayer =
             @"SELECT *
             FROM Match m
                 WHERE player1 = @playerId
                     OR player2 = @playerId
                     OR player3 = @playerId
-                    OR player4 = @playerId
-                ORDER BY datetime DESC;";
+                    OR player4 = @playerId;";
 
         private const string SqlFindAllByTournament =
             @"SELECT *
@@ -76,10 +75,51 @@ namespace WuHu.Dal.SqlServer
         }
 
 
+        protected Match BuildVirtualMatch(IDataReader reader)
+        {
+            var playerDao = DalFactory.CreatePlayerDao(database);
+            /*
+            var tournament = DalFactory.CreateTournamentDao(database)
+                .FindById((int)reader["tournamentId"]);
+            
+            var p1 = playerDao.FindById((int)reader["player1"]);
+            var p2 = playerDao.FindById((int)reader["player2"]);
+            var p3 = playerDao.FindById((int)reader["player3"]);
+            var p4 = playerDao.FindById((int)reader["player4"]);*/
+
+            // to improve performance:
+
+            var tournament = new Tournament((int)reader["tournamentId"], "", DateTime.Now);
+            var p1 = new Player((int)reader["player1"], "", "", "", "", null, null, 
+                false, false, false, false, false, false, false, false, null);
+            var p2 = new Player((int)reader["player2"], "", "", "", "", null, null,
+                false, false, false, false, false, false, false, false, null);
+            var p3 = new Player((int)reader["player3"], "", "", "", "", null, null,
+                false, false, false, false, false, false, false, false, null);
+            var p4 = new Player((int)reader["player4"], "", "", "", "", null, null,
+                 false, false, false, false, false, false, false, false, null);
+
+            return new Match((int)reader["matchId"],
+                tournament,
+               (DateTime)reader["datetime"],
+               reader.IsDBNull(reader.GetOrdinal("scoreTeam1")) ? 
+                   null : 
+                   (byte?)reader["scoreTeam1"],
+               reader.IsDBNull(reader.GetOrdinal("scoreTeam2")) ?
+                   null :
+                   (byte?)reader["scoreTeam2"],
+               (double)reader["estimatedWinChance"],
+               (bool)reader["isDone"],
+               p1,
+               p2,
+               p3,
+               p4);
+        }
+
         protected Match BuildMatch(IDataReader reader)
         {
             var playerDao = DalFactory.CreatePlayerDao(database);
-
+       
             var tournament = DalFactory.CreateTournamentDao(database)
                 .FindById((int)reader["tournamentId"]);
             
@@ -91,8 +131,8 @@ namespace WuHu.Dal.SqlServer
             return new Match((int)reader["matchId"],
                 tournament,
                (DateTime)reader["datetime"],
-               reader.IsDBNull(reader.GetOrdinal("scoreTeam1")) ? 
-                   null : 
+               reader.IsDBNull(reader.GetOrdinal("scoreTeam1")) ?
+                   null :
                    (byte?)reader["scoreTeam1"],
                reader.IsDBNull(reader.GetOrdinal("scoreTeam2")) ?
                    null :
@@ -143,7 +183,7 @@ namespace WuHu.Dal.SqlServer
                 var result = new List<Match>();
                 while (reader.Read())
                 {
-                    result.Add(BuildMatch(reader));
+                    result.Add(BuildVirtualMatch(reader));
                 }
                 return result;
             }

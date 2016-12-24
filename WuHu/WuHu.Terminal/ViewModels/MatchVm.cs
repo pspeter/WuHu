@@ -14,17 +14,15 @@ namespace WuHu.Terminal.ViewModels
 
         public ICommand SetScoreCommand { get; }
 
-        public MatchVm(Match match, Action reloadParent)
+        public MatchVm(Match match, Action reloadParent, Action<string> queueMessage)
         {
             _match = match;
 
             SetScoreCommand = new RelayCommand(async _ =>
                 {
                     IsDone = true;
-                    await Task.Run(() =>
-                    {
-                        MatchManager.SetScore(_match, AuthenticationManager.AuthenticatedCredentials);
-                    });
+                    var success = await Task.Run(() => MatchManager.SetScore(_match, AuthenticationManager.AuthenticatedCredentials));
+                    queueMessage?.Invoke(success ? "Neue Wertungen berechnet." : "Fehler: Spielresultat konnte nicht gesetzt werden.");
                     reloadParent?.Invoke();
                 }
                 ,

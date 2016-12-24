@@ -16,6 +16,7 @@ namespace WuHu.Terminal.ViewModels
         private Tournament _tournament;
         private readonly Action _onMatchesLoaded;
         private readonly Action _reloadTabs;
+        private readonly Action<string> _queueMessage;
 
         public ICommand ShowAddTournamentCommand { get; }
         public ICommand ShowEditTournamentCommand { get; }
@@ -40,6 +41,7 @@ namespace WuHu.Terminal.ViewModels
             _onMatchesLoaded += () =>
                 CurrentMatch = Matches.Count > 0 ? Matches.First() : null;
             _reloadTabs = reloadTabs;
+            _queueMessage = queueMessage;
         }
         public MatchVm CurrentMatch
         {
@@ -71,7 +73,7 @@ namespace WuHu.Terminal.ViewModels
         {
             var matchVms = await Task.Run(() =>
                 MatchManager.GetAllMatchesFor(tournament)
-                .Select(m => new MatchVm(m, Reload)).ToList());
+                .Select(m => new MatchVm(m, Reload, _queueMessage)).ToList());
             
             Matches.Clear();
             foreach (var match in matchVms)

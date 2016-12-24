@@ -34,9 +34,8 @@ namespace WuHu.Terminal.ViewModels
             var authenticationVm = new AuthenticationVm(msg =>
             {
                 OnAuthenticatedChanged(this);
-                ChangeAuthHeader();
+                UpdateAuthHeader();
                 MessageQueue.Enqueue(msg);
-
             });
             var statisticsVm = new StatisticsVm();
             var playerPageVm = new PlayerPageVm(() =>
@@ -69,7 +68,7 @@ namespace WuHu.Terminal.ViewModels
             };
         }
 
-        private void ChangeAuthHeader()
+        private void UpdateAuthHeader()
         {
             _authenticationTab.Header = IsAuthenticated ? "LOGOUT" : "LOGIN";
             _authenticationTab.IconName = IsAuthenticated ? "LogoutVariant" : "LoginVariant";
