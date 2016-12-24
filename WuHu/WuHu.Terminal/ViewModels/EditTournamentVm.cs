@@ -17,13 +17,13 @@ namespace WuHu.Terminal.ViewModels
         public ICommand CancelCommand { get; }
         public ICommand SubmitCommand { get; }
 
-        public EditTournamentVm(Tournament tournament, Action showMatchList, Action<string> reloadParent)
+        public EditTournamentVm(Tournament tournament, Action showMatchList, Action reloadParent, Action<string> queueMessage)
         {
             _tournament = tournament;
             var locked = TournamentManager.LockTournament(AuthenticationManager.AuthenticatedCredentials);
             if (!locked)
             {
-                reloadParent?.Invoke("Spielplan wird zur Zeit bearbeitet. Bitte warten.");
+                queueMessage?.Invoke("Spielplan wird zur Zeit bearbeitet. Bitte warten.");
                 showMatchList?.Invoke();
             }
 
@@ -42,7 +42,8 @@ namespace WuHu.Terminal.ViewModels
                     TournamentManager.UnlockTournament(AuthenticationManager.AuthenticatedCredentials);
                     return updated;
                 });
-                reloadParent?.Invoke(success ? "Spielplan wurde geändert." : "Fehler: Spielplan konnte nicht geändert werden.");
+                reloadParent?.Invoke();
+                queueMessage?.Invoke(success ? "Spielplan wurde geändert." : "Fehler: Spielplan konnte nicht geändert werden.");
             });
 
             LoadPlayersAsync();

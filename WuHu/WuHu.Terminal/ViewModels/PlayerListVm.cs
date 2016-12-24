@@ -13,11 +13,11 @@ namespace WuHu.Terminal.ViewModels
     {
 
         private PlayerVm _currentPlayer;
-        private readonly Action<string> _reloadTabs;
+        private readonly Action _reloadTabs;
 
         public ICommand ShowAddPlayerCommand { get; }
 
-        public PlayerListVm(Action<object>showAddPlayer, Action<string> reloadTabs)
+        public PlayerListVm(Action<object>showAddPlayer, Action reloadTabs, Action<string> queueMessage)
         {
             ShowAddPlayerCommand = new RelayCommand(
                 showAddPlayer,
@@ -39,10 +39,10 @@ namespace WuHu.Terminal.ViewModels
             }
         }
 
-        public override void Reload(string msg = null)
+        public override void Reload()
         {
             base.Reload();
-            _reloadTabs.Invoke(msg);
+            _reloadTabs.Invoke();
         }
     }
 }

@@ -91,7 +91,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Converter\HighlightedTabConverter.cs" />
     <Compile Include="Converter\RowNumberConverter.cs" />
     <Compile Include="ViewModels\AuthenticationVm.cs" />
     <Compile Include="ViewModels\BaseVm.cs" />

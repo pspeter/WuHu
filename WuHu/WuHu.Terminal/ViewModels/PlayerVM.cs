@@ -31,7 +31,7 @@ namespace WuHu.Terminal.ViewModels
 
         public Player PlayerItem => _player;
 
-        public PlayerVm(Player player, Action<string> reloadParent)
+        public PlayerVm(Player player, Action reloadParent, Action<string> queueMessage)
         {
             _player = player;
             _oldPlayer = new Player(_player.PlayerId ?? -1, _player.Firstname, _player.Lastname,
@@ -56,7 +56,8 @@ namespace WuHu.Terminal.ViewModels
                         _player.Picture);
                     var success = await Task.Run(() =>
                         PlayerManager.UpdatePlayer(_player, AuthenticationManager.AuthenticatedCredentials));
-                    reloadParent?.Invoke(success ? "Spieler geändert." : "Fehler: Spieler konnte nicht geändert werden.");
+                    reloadParent?.Invoke();
+                    queueMessage?.Invoke(success ? "Spieler geändert." : "Fehler: Spieler konnte nicht geändert werden.");
                 },
                 _ => IsDirty && IsAuthenticated
             );
@@ -96,9 +97,16 @@ namespace WuHu.Terminal.ViewModels
                     Filter = "All supported graphics|*.jpg;*.jpeg|" +
                              "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg)"
                 };
-                if (op.ShowDialog() == true)
+                if (op?.ShowDialog() == true)
                 {
-                    Image = new BitmapImage(new Uri(op.FileName));
+                    try
+                    {
+                        Image = new BitmapImage(new Uri(op.FileName));
+                    }
+                    catch (NotSupportedException)
+                    {
+                        
+                    }
                 }
             }
             );

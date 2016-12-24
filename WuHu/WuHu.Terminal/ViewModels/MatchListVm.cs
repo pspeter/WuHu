@@ -15,14 +15,15 @@ namespace WuHu.Terminal.ViewModels
         private MatchVm _currentMatch;
         private Tournament _tournament;
         private readonly Action _onMatchesLoaded;
-        private readonly Action<string> _reloadTabs;
+        private readonly Action _reloadTabs;
 
         public ICommand ShowAddTournamentCommand { get; }
         public ICommand ShowEditTournamentCommand { get; }
 
         public MatchListVm(Action<object> showAddTournament,
             Action<Tournament> showEditTournament,
-            Action<string> reloadTabs)
+            Action reloadTabs,
+            Action<string> queueMessage)
         {
             _tournament = TournamentManager.GetMostRecentTournament();
 
@@ -70,7 +71,7 @@ namespace WuHu.Terminal.ViewModels
         {
             var matchVms = await Task.Run(() =>
                 MatchManager.GetAllMatchesFor(tournament)
-                .Select(m => new MatchVm(m, () => Reload())).ToList());
+                .Select(m => new MatchVm(m, Reload)).ToList());
             
             Matches.Clear();
             foreach (var match in matchVms)
@@ -81,9 +82,9 @@ namespace WuHu.Terminal.ViewModels
 
         }
 
-        public override void Reload(string msg = null)
+        public override void Reload()
         {
-            _reloadTabs?.Invoke(msg);
+            _reloadTabs?.Invoke();
             _tournament = TournamentManager.GetMostRecentTournament();
             OnPropertyChanged(this, nameof(Name));
             LoadMatchesForTournamentAsync(_tournament);

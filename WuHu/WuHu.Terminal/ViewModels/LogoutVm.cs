@@ -10,13 +10,13 @@ namespace WuHu.Terminal.ViewModels
     public class LogoutVm : BaseVm
     {
         public ICommand LogoutCommand { get; private set; }
-        public LogoutVm(Action notifyAuthenticationChanged)
+        public LogoutVm(Action<string> queueMessage)
         {
             LogoutCommand = new RelayCommand(_ =>
             {
                 AuthenticationManager.Logout();
                 OnAuthenticatedChanged(this);
-                notifyAuthenticationChanged?.Invoke();
+                queueMessage?.Invoke("Logged out.");
             });
         }
     }

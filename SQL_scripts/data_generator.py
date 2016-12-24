@@ -60,13 +60,13 @@ with open("dbo.Testdata.sql", "w") as f: # Player
 		k = random.randint(0, len(randomNames) - 1)
 		l = random.randint(0, len(randomNames) - 1)
 		admin = random.randint(0, 1)
-		f.write(insertInto("Tournament", ["name", "datetime"], [quote(randomCities[k]+"_"+randomNames[l]), "dateadd(day, " + str(i) + ", cast('2014-01-02 07:36:13.000' as datetime2))"]))
+		f.write(insertInto("Tournament", ["name", "datetime"], [quote(randomCities[k]+"_"+randomNames[l]), "dateadd(day, " + str(i) + ", cast('2014-12-12 07:36:13.000' as datetime2))"]))
 	
 	# Rating
 	for playerid in range(30):
 		rating = 2000
 		for i in range(365*2):
-			f.write(insertInto("Rating", ["playerId", "datetime", "value"], [playerid, "dateadd(day, " + str(i) + ", cast('2014-01-02 07:36:13.000' as datetime2))", rating]))
+			f.write(insertInto("Rating", ["playerId", "datetime", "value"], [playerid, "dateadd(day, " + str(i) + ", cast('2014-12-12 07:36:13.000' as datetime2))", rating]))
 			rating += random.randint(-50, 50)
 			if rating < 1: 
 				rating = 1
@@ -95,7 +95,7 @@ with open("dbo.Testdata.sql", "w") as f: # Player
 			
 			f.write(insertInto("Match", 
 				["tournamentId", "datetime", "player1", "player2", "player3", "player4", "scoreTeam1", "scoreTeam2", "EstimatedWinChance", "isDone"],
-				[STARTID + i, "dateadd(day, " + str(i) + ", '2014-01-02 07:36:13.000')", p1, p2, p3, p4, score1, score2, Ea, 1]))
+				[STARTID + i, "dateadd(day, " + str(i) + ", '2014-12-12 07:36:13.000')", p1, p2, p3, p4, score1, score2, Ea, 1]))
 				
 	f.write(insertInto("ScoreParameter", ["key", "value"], [quote("initialscore"), quote("2000")]))
 	f.write(insertInto("ScoreParameter", ["key", "value"], [quote("scoredMatches"), quote("100")]))

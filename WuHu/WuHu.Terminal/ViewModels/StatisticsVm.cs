@@ -35,7 +35,14 @@ namespace WuHu.Terminal.ViewModels
                 OnPropertyChanged(this, nameof(Player3Name));
                 OnPropertyChanged(this, nameof(Player4Name));
             });
-            OnPlayersLoaded += () => RefreshCommand.Execute(null);
+            OnPlayersLoaded += () =>
+            {
+                foreach (var player in Players)
+                {
+                    player.IsChecked = false;
+                }
+                RefreshCommand.Execute(null);
+            };
         }
 
         public PlayerVm SelectedPlayer

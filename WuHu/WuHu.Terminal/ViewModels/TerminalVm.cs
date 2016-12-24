@@ -39,19 +39,19 @@ namespace WuHu.Terminal.ViewModels
 
             });
             var statisticsVm = new StatisticsVm();
-            var playerPageVm = new PlayerPageVm(msg =>
+            var playerPageVm = new PlayerPageVm(() =>
             {
                 statisticsVm.Reload();
                 rankListVm.Reload();
-                MessageQueue.Enqueue(msg);
-            });
+            },
+            MessageQueue.Enqueue);
 
-            var tournamentVm = new TournamentVm(msg =>
+            var tournamentVm = new TournamentVm(() =>
             {
-                MessageQueue.Enqueue(msg);
                 statisticsVm.Reload();
                 rankListVm.Reload();
-            });
+            }, 
+            MessageQueue.Enqueue);
 
             _authenticationTab = new TabItemVm("LOGIN", "LoginVariant", authenticationVm);
             _playerTab = new TabItemVm("SPIELER", "AccountCardDetails", playerPageVm);

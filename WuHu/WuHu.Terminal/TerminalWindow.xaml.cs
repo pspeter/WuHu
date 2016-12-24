@@ -16,10 +16,5 @@ namespace WuHu.Terminal
             DataContext = vm;
             Closing += vm.OnWindowClosing;
         }
-
-        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

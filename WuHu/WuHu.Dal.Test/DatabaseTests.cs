@@ -17,9 +17,9 @@ namespace WuHu.Dal.Test
         public static void AssemblyInitialize(TestContext testContext)
         {
             var database = DalFactory.CreateDatabase();
-            //TestHelper.InsertTestData(database);
             TestHelper.DropTables(database);
             TestHelper.CreateTables(database);
+            //TestHelper.InsertTestData(database);
         }
 
         [ClassInitialize]

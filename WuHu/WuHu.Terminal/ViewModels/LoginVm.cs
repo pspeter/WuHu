@@ -12,13 +12,13 @@ namespace WuHu.Terminal.ViewModels
     internal class LoginVm : BaseVm
     {
         private string _username;
-        private Action<string> _notifyParent;
+        private Action<string> _queueMessage;
 
         public ICommand LoginCommand { get; private set; }
 
-        public LoginVm(Action<string> notifyAuthenticationChanged)
+        public LoginVm(Action<string> queueMessage)
         {
-            _notifyParent = notifyAuthenticationChanged;
+            _queueMessage = queueMessage;
             LoginCommand = new RelayCommand(Login);
         }
 
@@ -47,7 +47,7 @@ namespace WuHu.Terminal.ViewModels
 
        
             OnAuthenticatedChanged(this);
-            _notifyParent?.Invoke(success ? "Erfolgreich angemeldet." : "Falscher Nutzername oder Passwort");
+            _queueMessage?.Invoke(success ? "Erfolgreich angemeldet." : "Falscher Nutzername oder Passwort");
         }
     }
 }

@@ -19,7 +19,7 @@ namespace WuHu.Terminal.ViewModels
         public ICommand SubmitCommand { get; }
         public ICommand UploadCommand { get; }
 
-        public NewPlayerVm(Action showPlayerList, Action<string> reloadParent)
+        public NewPlayerVm(Action showPlayerList, Action reloadParent, Action<string> queueMessage)
         {
             PlayerItem = new Player("", "", "", "", "", false,
                 false, false, false, false, false, false, false, null);
@@ -42,20 +42,28 @@ namespace WuHu.Terminal.ViewModels
                 showPlayerList?.Invoke();
                 var success = await Task.Run(() =>
                     PlayerManager.AddPlayer(PlayerItem, AuthenticationManager.AuthenticatedCredentials));
-                reloadParent?.Invoke(success ? "Spieler erstellt" : "Fehler: Spieler konnte nicht erstellt werden.");
+                reloadParent?.Invoke();
+                queueMessage?.Invoke(success ? "Spieler erstellt" : "Fehler: Spieler konnte nicht erstellt werden.");
             });
 
             UploadCommand = new RelayCommand(o =>
                 {
                     var op = new OpenFileDialog
                     {
-                        Title = "Select a picture",
-                        Filter = "All supported graphics|*.jpg;*.jpeg|" +
+                        Title = "Wähle ein Bild aus",
+                        Filter = "Alle unterstützten Formate |*.jpg;*.jpeg|" +
                                  "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg)"
                     };
                     if (op.ShowDialog() == true)
                     {
-                        Image = new BitmapImage(new Uri(op.FileName));
+                        try
+                        {
+                            Image = new BitmapImage(new Uri(op.FileName));
+                        }
+                        catch (NotSupportedException)
+                        {
+                            queueMessage?.Invoke("Dateityp nicht unterstützt.");
+                        }
                     }
                 }
             );

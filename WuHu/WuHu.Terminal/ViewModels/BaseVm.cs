@@ -42,18 +42,15 @@ namespace WuHu.Terminal.ViewModels
             PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected BaseVm() : this(null) { }
-
-        protected BaseVm(ObservableCollection<PlayerVm> players = null,
-            ObservableCollection<PlayerVm> sortedPlayers = null)
+        protected BaseVm()
         {
             AuthenticationManager = ManagerFactory.GetTerminalManager();
             RatingManager = ManagerFactory.GetRatingManager();
             PlayerManager = ManagerFactory.GetPlayerManager();
             MatchManager = ManagerFactory.GetMatchManager();
             TournamentManager = ManagerFactory.GetTournamentManager();
-            Players = players ?? new ObservableCollection<PlayerVm>();
-            PlayersSortedByRank = sortedPlayers ?? new ObservableCollection<PlayerVm>();
+            Players = new ObservableCollection<PlayerVm>();
+            PlayersSortedByRank = new ObservableCollection<PlayerVm>();
         }
         
         public ObservableCollection<PlayerVm> Players { get; }
@@ -64,7 +61,7 @@ namespace WuHu.Terminal.ViewModels
 
             var playerVms = await Task.Run(() => 
                 PlayerManager.GetAllPlayers()
-                .Select(player => new PlayerVm(player, Reload)).ToList());
+                .Select(player => new PlayerVm(player, Reload, msg => {})).ToList());
 
             Players.Clear();
             foreach (var vm in playerVms)
@@ -84,7 +81,7 @@ namespace WuHu.Terminal.ViewModels
             OnPlayersSortedByRankLoaded?.Invoke();
         }
 
-        public virtual void Reload(string msg = null)
+        public virtual void Reload()
         {
             LoadPlayersAsync();
         }
