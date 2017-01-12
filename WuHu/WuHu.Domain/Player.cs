@@ -65,7 +65,7 @@ namespace WuHu.Domain
 
         public string Nickname { get; set; }
 
-        public string Username { get; set; }
+        public string Username { get; }
 
         public byte[] Password { get; set; }
 
@@ -89,9 +89,10 @@ namespace WuHu.Domain
         }
 
         //playerId can be null, username is a better unique identifier
-        protected bool Equals(Player other) 
+        public override bool Equals(object other)
         {
-            return string.Equals(Username, other.Username, StringComparison.OrdinalIgnoreCase);
+            var player = other as Player;
+            return player != null && string.Equals(Username, player.Username, StringComparison.OrdinalIgnoreCase);
         }
 
         public override int GetHashCode()

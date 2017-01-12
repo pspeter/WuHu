@@ -42,7 +42,7 @@ namespace WuHu.BL.Impl
             var inserted = PlayerDao.Insert(player);
             if (inserted)
             {
-                ManagerFactory.GetRatingManager().AddCurrentRatingFor(player, credentials);
+                BLFactory.GetRatingManager().AddCurrentRatingFor(player, credentials);
             }
             return inserted;
         }

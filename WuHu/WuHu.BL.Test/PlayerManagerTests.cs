@@ -19,7 +19,7 @@ namespace WuHu.BL.Test
         {
             var database = DalFactory.CreateDatabase();
             _playerDao = DalFactory.CreatePlayerDao(database);
-            _mgr = ManagerFactory.GetPlayerManager();
+            _mgr = BLFactory.GetPlayerManager();
             
             _admin = new Credentials(TestHelper.GenerateName(), "pass");
             var admin = new Player("admin", "last", "nick", _admin.Username, "pass",

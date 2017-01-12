@@ -49,7 +49,7 @@
   <ItemGroup>
     <Compile Include="Authenticator.cs" />
     <Compile Include="DefaultParameter.cs" />
-    <Compile Include="ManagerFactory.cs" />
+    <Compile Include="BLFactory.cs" />
     <Compile Include="MatchManager.cs" />
     <Compile Include="PlayerManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

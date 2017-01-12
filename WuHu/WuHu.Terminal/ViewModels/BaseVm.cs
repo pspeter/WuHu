@@ -44,11 +44,11 @@ namespace WuHu.Terminal.ViewModels
 
         protected BaseVm()
         {
-            AuthenticationManager = ManagerFactory.GetTerminalManager();
-            RatingManager = ManagerFactory.GetRatingManager();
-            PlayerManager = ManagerFactory.GetPlayerManager();
-            MatchManager = ManagerFactory.GetMatchManager();
-            TournamentManager = ManagerFactory.GetTournamentManager();
+            AuthenticationManager = BLFactory.GetTerminalManager();
+            RatingManager = BLFactory.GetRatingManager();
+            PlayerManager = BLFactory.GetPlayerManager();
+            MatchManager = BLFactory.GetMatchManager();
+            TournamentManager = BLFactory.GetTournamentManager();
             Players = new ObservableCollection<PlayerVm>();
             PlayersSortedByRank = new ObservableCollection<PlayerVm>();
         }

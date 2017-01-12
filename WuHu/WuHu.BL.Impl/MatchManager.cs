@@ -30,7 +30,7 @@ namespace WuHu.BL.Impl
             RatingDao = DalFactory.CreateRatingDao(database);
             TournamentDao = DalFactory.CreateTournamentDao(database);
             ParamDao = DalFactory.CreateScoreParameterDao(database);
-            RatingManager = ManagerFactory.GetRatingManager();
+            RatingManager = BLFactory.GetRatingManager();
             Authentication = Authenticator.GetInstance();
         }
 

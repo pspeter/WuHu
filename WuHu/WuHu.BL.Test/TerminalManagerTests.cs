@@ -18,7 +18,7 @@ namespace WuHu.BL.Test
         {
             var database = DalFactory.CreateDatabase();
             _playerDao = DalFactory.CreatePlayerDao(database);
-            _mgr = ManagerFactory.GetTerminalManager();
+            _mgr = BLFactory.GetTerminalManager();
 
             var user = TestHelper.GenerateName();
             _creds = new Credentials(user, "pass");

@@ -18,7 +18,7 @@ namespace WuHu.BL.Test
         {
             var database = DalFactory.CreateDatabase();
             _paramDao = DalFactory.CreateScoreParameterDao(database);
-            _mgr = ManagerFactory.GetScoreParameterManager();
+            _mgr = BLFactory.GetScoreParameterManager();
             var user = TestHelper.GenerateName();
             var admin = new Player("admin", "last", "nick", user, "pass",
                     true, false, false, false, false, true, true, true, null);

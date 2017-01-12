@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WuHu.BL.Impl
 {
-    public static class ManagerFactory
+    public static class BLFactory
     {
         private static ITerminalManager _terminalManager;
         private static IMatchManager _matchManager;

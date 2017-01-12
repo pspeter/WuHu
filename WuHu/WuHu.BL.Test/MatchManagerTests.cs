@@ -28,7 +28,7 @@ namespace WuHu.BL.Test
             _ratingDao = DalFactory.CreateRatingDao(database);
             _tournamentDao = DalFactory.CreateTournamentDao(database);
             _playerDao = DalFactory.CreatePlayerDao(database);
-            _mgr = ManagerFactory.GetMatchManager();
+            _mgr = BLFactory.GetMatchManager();
             var rand = new Random(42);
             _testTournament = new Tournament("", DateTime.Now);
             _tournamentDao.Insert(_testTournament);

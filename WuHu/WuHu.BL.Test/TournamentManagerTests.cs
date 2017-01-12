@@ -31,7 +31,7 @@ namespace WuHu.BL.Test
             _tournamentDao = DalFactory.CreateTournamentDao(database);
             _playerDao = DalFactory.CreatePlayerDao(database);
             _paramDao = DalFactory.CreateScoreParameterDao(database);
-            _mgr = ManagerFactory.GetTournamentManager();
+            _mgr = BLFactory.GetTournamentManager();
             var rand = new Random(42);
 
             _testPlayers = new List<Player>();
