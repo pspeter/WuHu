@@ -252,3 +252,4 @@ paket-files/
 *.sln.iml
 SQL_scripts/dbo.Testdata.sql
 WuHu-Ausbaustufe1.pdf
+swagger-codegen-cli-2.2.1.jar

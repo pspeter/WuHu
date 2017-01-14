@@ -14,6 +14,7 @@ namespace WuHu.BL.Impl
         private static IScoreParameterManager _scoreParameterManager;
         private static IPlayerManager _playerManager;
         private static ITournamentManager _tournamentManager;
+        private static IUserManager _userManager;
 
         public static ITerminalManager GetTerminalManager()
         {
@@ -42,6 +43,10 @@ namespace WuHu.BL.Impl
         public static ITournamentManager GetTournamentManager()
         {
             return _tournamentManager ?? (_tournamentManager = new TournamentManager());
+        }
+        public static IUserManager GetUserManager()
+        {
+            return _userManager ?? (_userManager = new UserManager());
         }
     }
 }

@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="WuHu.WebService.Global" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="WuHu.WebService.WebApiApplication" Language="C#" %>

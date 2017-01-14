@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using WuHu.Common;
 
 namespace WuHu.Domain
 {
-    [Serializable]
+    [DataContract(Namespace = "http://WuHu.Domain")]
     public class Player
     {
         public Player(int playerId, string firstname, string lastname, string nickname, string username, 
@@ -58,29 +59,45 @@ namespace WuHu.Domain
             this.Picture = picture;
         }
 
+        [DataMember]
         public int? PlayerId { get; set; }
+        [DataMember]
         public string Firstname { get; set; }
 
+        [DataMember]
         public string Lastname { get; set; }
 
+        [DataMember]
         public string Nickname { get; set; }
 
+        [DataMember]
         public string Username { get; }
 
+        [DataMember]
         public byte[] Password { get; set; }
 
+        [DataMember]
         public byte[] Salt { get; set; }
 
+        [DataMember]
         public bool IsAdmin { get; set; }
+        [DataMember]
         public bool PlaysMondays { get; set; }
+        [DataMember]
         public bool PlaysTuesdays { get; set; }
+        [DataMember]
         public bool PlaysWednesdays { get; set; }
+        [DataMember]
         public bool PlaysThursdays { get; set; }
+        [DataMember]
         public bool PlaysFridays { get; set; }
+        [DataMember]
         public bool PlaysSaturdays { get; set; }
+        [DataMember]
         public bool PlaysSundays { get; set; }
 
         // https://stackoverflow.com/questions/25400555/save-and-retrieve-image-binary-from-sql-server-using-entity-framework-6
+        [DataMember]
         public byte[] Picture { get; set; }
 
         public override string ToString()
