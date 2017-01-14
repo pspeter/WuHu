@@ -29,10 +29,26 @@ namespace WuHu.BL.Impl
             ParamDao = DalFactory.CreateScoreParameterDao(database);
             Authentication = Authenticator.GetInstance();
         }
+
+        public bool AddAllCurrentRatings(Credentials credentials)
+        {
+            if (!Authenticate(credentials, true))
+            {
+                return false;
+            }
+
+            var players = PlayerDao.FindAll();
+            foreach (var player in players)
+            {
+                AddCurrentRatingFor(player, credentials);
+            }
+
+            return true;
+        }
         
         public bool AddCurrentRatingFor(Player player, Credentials credentials)
         {
-            if (!Authenticate(credentials, true)) // only admins can add players
+            if (!Authenticate(credentials, true))
             {
                 return false;
             }

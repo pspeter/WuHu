@@ -10,6 +10,7 @@ namespace WuHu.BL
     public interface IRatingManager
     {
         bool AddCurrentRatingFor(Player player, Credentials credentials);
+        bool AddAllCurrentRatings(Credentials credentials);
         IList<Rating> GetAllRatings();
         IList<Rating> GetAllRatingsFor(Player player);
         Rating GetCurrentRatingFor(Player player);

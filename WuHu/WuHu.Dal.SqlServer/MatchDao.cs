@@ -90,13 +90,13 @@ namespace WuHu.Dal.SqlServer
             // to improve performance:
 
             var tournament = new Tournament((int)reader["tournamentId"], "", DateTime.Now);
-            var p1 = new Player((int)reader["player1"], "", "", "", "", null, null, 
+            var p1 = new Player((int)reader["player1"], "", "", "", "1", null, null, 
                 false, false, false, false, false, false, false, false, null);
-            var p2 = new Player((int)reader["player2"], "", "", "", "", null, null,
+            var p2 = new Player((int)reader["player2"], "", "", "", "2", null, null,
                 false, false, false, false, false, false, false, false, null);
-            var p3 = new Player((int)reader["player3"], "", "", "", "", null, null,
+            var p3 = new Player((int)reader["player3"], "", "", "", "3", null, null,
                 false, false, false, false, false, false, false, false, null);
-            var p4 = new Player((int)reader["player4"], "", "", "", "", null, null,
+            var p4 = new Player((int)reader["player4"], "", "", "", "4", null, null,
                  false, false, false, false, false, false, false, false, null);
 
             return new Match((int)reader["matchId"],

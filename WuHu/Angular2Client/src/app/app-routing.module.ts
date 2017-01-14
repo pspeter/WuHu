@@ -4,6 +4,7 @@ import {LoginComponent} from "./pages/login/login.component";
 import {DashboardComponent} from "./pages/dashboard/dashboard.component";
 import {LoginGuard} from "./login-guard";
 import {PlayersComponent} from "./pages/players/players.component";
+import {AdminGuard} from "./admin-guard";
 
 const routes: Routes = [
     {path: '', pathMatch: 'full', redirectTo: '/dashboard'},
@@ -11,7 +12,7 @@ const routes: Routes = [
     /* Login */
     {path: "login", component: LoginComponent},
     {path: "dashboard", component: DashboardComponent}, //, canActivate: [LoginGuard]
-    {path: "players", component: PlayersComponent, canActivate:[LoginGuard]},
+    {path: "players", component: PlayersComponent, canActivate:[AdminGuard]},
 ];
 
 

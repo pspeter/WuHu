@@ -20,9 +20,9 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><button type="button" class="btn btn-default navbar-btn" [routerLinkActive]="['active']"
-                                *ngIf="!userService.isLoggedIn()" [routerLink]="['login']">Login</button></li>
+                                *ngIf="!userService.IsUser()" [routerLink]="['login']">Login</button></li>
                     <li><button type="button" class="btn btn-default navbar-btn" [routerLinkActive]="['active']"
-                                *ngIf="userService.isLoggedIn()" (click)="logout()">Logout</button></li>
+                                *ngIf="userService.IsUser()" (click)="logout()">Logout</button></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->

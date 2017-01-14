@@ -12,7 +12,6 @@ using WuHu.BL.Impl;
 namespace WuHu.WebService.Controllers
 {
     [RoutePrefix("api/player")]
-    [Authorize]
     public class PlayerController : ApiController
     {
         private IPlayerManager Logic { get; } = BLFactory.GetPlayerManager();

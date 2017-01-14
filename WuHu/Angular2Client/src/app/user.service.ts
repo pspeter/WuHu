@@ -7,10 +7,12 @@ import {Router} from "@angular/router";
 
 @Injectable()
 export class UserService {
-    private loggedIn = false;
+    private username: string = "";
+    private role: string = "Guest";
 
     constructor(private httpAuthenticated: HttpAuthService, private router: Router) {
-        this.loggedIn = !!localStorage.getItem('auth_token');
+        this.username = localStorage.getItem("username");
+        this.role = localStorage.getItem("role");
     }
 
     login(username, password) {
@@ -34,8 +36,11 @@ export class UserService {
             .map((res) => {
                 let json = res.json();
                 if (json) {
-                    localStorage.setItem('auth_token', json.access_token);
-                    this.loggedIn = true;
+                    localStorage.setItem("auth_token", json.access_token);
+                    localStorage.setItem("role", json.role);
+                    localStorage.setItem("username", json.username);
+                    this.username = json.username;
+                    this.role = json.role;
                     return true;
                 } else {
                     return false;
@@ -47,10 +52,15 @@ export class UserService {
     logout() {
         localStorage.removeItem('auth_token');
         this.router.navigate(["login"]);
-        this.loggedIn = false;
+        this.role = "Guest";
+        this.username = "";
     }
 
-    isLoggedIn() {
-        return this.loggedIn;
+    IsUser() {
+        return this.role == "User" || this.role == "Admin";
+    }
+
+    IsAdmin() {
+        return this.role == "Admin";
     }
 }

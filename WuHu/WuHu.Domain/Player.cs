@@ -71,7 +71,7 @@ namespace WuHu.Domain
         public string Nickname { get; set; }
 
         [DataMember]
-        public string Username { get; }
+        public string Username { get; set; }
 
         [DataMember]
         public byte[] Password { get; set; }
