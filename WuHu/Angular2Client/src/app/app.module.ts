@@ -10,10 +10,16 @@ import {HttpAuthService} from "./http-auth.service";
 import {NavComponent} from './components/nav/nav.component';
 import {LoginComponent} from './pages/login/login.component';
 import {DashboardComponent} from './pages/dashboard/dashboard.component';
-import {LoginGuard} from "./login-guard";
+import {LoginGuard} from "./guards/login-guard";
 import {NotfoundComponent} from './pages/notfound/notfound.component';
 import {PlayersComponent} from './pages/players/players.component';
-import {AdminGuard} from "./admin-guard";
+import {AdminGuard} from "./guards/admin-guard";
+import { RanklistComponent } from './pages/ranklist/ranklist.component';
+import { GameplanComponent } from './pages/gameplan/gameplan.component';
+import { StatisticsComponent } from './pages/statistics/statistics.component';
+import { ScoresComponent } from './pages/scores/scores.component';
+import { LiveComponent } from './pages/live/live.component';
+import {LogoutGuard} from "./guards/logout-guard";
 
 @NgModule({
     declarations: [
@@ -22,7 +28,12 @@ import {AdminGuard} from "./admin-guard";
         NavComponent,
         DashboardComponent,
         NotfoundComponent,
-        PlayersComponent
+        PlayersComponent,
+        RanklistComponent,
+        GameplanComponent,
+        StatisticsComponent,
+        ScoresComponent,
+        LiveComponent
     ],
     imports: [
         BrowserModule,
@@ -30,7 +41,7 @@ import {AdminGuard} from "./admin-guard";
         FormsModule,
         HttpModule
     ],
-    providers: [UserService, HttpAuthService, LoginGuard, AdminGuard],
+    providers: [UserService, HttpAuthService, LoginGuard, LogoutGuard, AdminGuard],
     bootstrap: [AppComponent]
 })
 export class AppModule {

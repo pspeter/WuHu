@@ -51,6 +51,8 @@ export class UserService {
 
     logout() {
         localStorage.removeItem('auth_token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('username');
         this.router.navigate(["login"]);
         this.role = "Guest";
         this.username = "";
