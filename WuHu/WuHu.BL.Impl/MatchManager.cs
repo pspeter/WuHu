@@ -34,10 +34,44 @@ namespace WuHu.BL.Impl
             Authentication = Authenticator.GetInstance();
         }
 
-        // Match
         public bool SetScore(Match match, Credentials credentials)
         {
-            if (!Authenticate(credentials, true) || match.MatchId == null || match.ScoreTeam1 == match.ScoreTeam2)
+
+            var issuer = PlayerDao.FindByUsername(credentials.Username);
+            if (match.MatchId == null || 
+                match.Player1.PlayerId == null || match.Player2.PlayerId == null || 
+                match.Player3.PlayerId == null || match.Player4.PlayerId == null)
+            {
+                return false;
+            }
+
+            var oldMatch = MatchDao.FindById(match.MatchId.Value);
+
+            if (oldMatch.IsDone || 
+                !(Authenticate(credentials, true) || ( // admins can set all scores
+                        Authenticate(credentials, false) && // users only their own
+                        (issuer.PlayerId == match.Player1.PlayerId.Value ||
+                         issuer.PlayerId == match.Player2.PlayerId.Value ||
+                         issuer.PlayerId == match.Player3.PlayerId.Value ||
+                         issuer.PlayerId == match.Player4.PlayerId.Value)
+                    )
+                ))
+            {
+                return false;
+            }
+
+            // copying values over to oldMatch to avoid accidently changing any other values
+            oldMatch.ScoreTeam1 = match.ScoreTeam1;
+            oldMatch.ScoreTeam2 = match.ScoreTeam2;
+
+            return MatchDao.Update(oldMatch);
+        }
+
+        // Match
+        public bool SetFinalScore(Match match, Credentials credentials)
+        {
+            if (!Authenticate(credentials, true) || match.MatchId == null ||
+                match.ScoreTeam1 == match.ScoreTeam2)
             {
                 return false;
             }
@@ -67,6 +101,12 @@ namespace WuHu.BL.Impl
             RatingManager.AddCurrentRatingFor(match.Player3, credentials);
             RatingManager.AddCurrentRatingFor(match.Player4, credentials);
             return true;
+        }
+
+        public Match GetCurrentMatchFor(int playerId)
+        {
+            var match = MatchDao.FindCurrentByPlayer(playerId);
+            return match.IsDone ? null : match;
         }
 
         public IList<Match> GetAllMatches()

@@ -24,6 +24,21 @@ namespace WuHu.Dal.SqlServer
             FROM Match
                 ORDER BY datetime DESC;";
         
+        private const string SqlFindCurrentByPlayer =
+            @"SELECT *
+            FROM Match mOuter
+                WHERE (mOuter.player1 = @playerId
+                    OR mOuter.player2 = @playerId
+                    OR mOuter.player3 = @playerId
+                    OR mOuter.player4 = @playerId)
+                    AND rOuter.datetime = 
+                        (SELECT MAX(datetime)
+                            FROM Match mInner
+                                WHERE (mOuter.player1 = @playerId
+                                    OR mOuter.player2 = @playerId
+                                    OR mOuter.player3 = @playerId
+                                    OR mOuter.player4 = @playerId);";
+
         private const string SqlFindAllByPlayer =
             @"SELECT *
             FROM Match m
@@ -186,6 +201,23 @@ namespace WuHu.Dal.SqlServer
                     result.Add(BuildVirtualMatch(reader));
                 }
                 return result;
+            }
+        }
+
+
+        protected DbCommand CreateFindCurrentByPlayerCmd(int playerId)
+        {
+            var findByIdCmd = database.CreateCommand(SqlFindCurrentByPlayer);
+            database.DefineParameter(findByIdCmd, "playerId", DbType.Int32, playerId);
+            return findByIdCmd;
+        }
+
+        public Match FindCurrentByPlayer(int playerId)
+        {
+            using (var command = CreateFindAllByPlayerCmd(playerId))
+            using (var reader = database.ExecuteReader(command))
+            {
+                return reader.Read() ? BuildMatch(reader) : null;
             }
         }
 

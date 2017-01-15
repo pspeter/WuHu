@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WuHu.Domain
 {
-    [Serializable]
+    [DataContract(Namespace = "http://WuHu.Domain")]
     public class Tournament
     {
         public Tournament(int tournamentId, string name, DateTime datetime)
@@ -22,8 +23,11 @@ namespace WuHu.Domain
             this.Datetime = datetime;
         }
 
+        [DataMember]
         public int? TournamentId { get; set; }
+        [DataMember]
         public string Name { get;  set; }
+        [DataMember]
         public DateTime Datetime { get; set; }
 
         public override string ToString()

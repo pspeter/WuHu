@@ -148,9 +148,14 @@ namespace WuHu.Dal.SqlServer
         {
             if (player?.PlayerId == null)
             {
-                throw new ArgumentException("PlayerId null on update for Player");
+                throw new ArgumentException("PlayerId null");
             }
-            using (var command = CreateFindCurrentRatingCommand(player.PlayerId.Value))
+            return FindCurrentRating(player.PlayerId.Value);
+        }
+
+        public Rating FindCurrentRating(int playerId)
+        {
+            using (var command = CreateFindCurrentRatingCommand(playerId))
             using (var reader = database.ExecuteReader(command))
             {
                 if (reader.Read())

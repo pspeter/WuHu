@@ -12,14 +12,14 @@ using WuHu.BL.Impl;
 namespace WuHu.WebService.Controllers
 {
     [RoutePrefix("api/player")]
-    public class PlayerController : ApiController
+    public class PlayerController : BaseController
     {
         private IPlayerManager Logic { get; } = BLFactory.GetPlayerManager();
 
         [HttpGet]
-        [Route("{playerId}", Name = "GetByIdRoute")]
-        [SwaggerResponse(HttpStatusCode.NotFound)]
-        [SwaggerResponse(HttpStatusCode.OK)]
+        [Route("{playerId}", Name = "GetPlayerByIdRoute")]
+        [SwaggerResponse(HttpStatusCode.NotFound, "Player not found")]
+        [SwaggerResponse(HttpStatusCode.OK, "Returns player with that id", typeof(Player))]
         public Player GetById(int playerId)
         {
             var player = Logic.GetPlayer(playerId);
@@ -32,9 +32,9 @@ namespace WuHu.WebService.Controllers
         }
 
         [HttpGet]
-        [Route("{username}", Name = "GetByUsernameRoute")]
-        [SwaggerResponse(HttpStatusCode.NotFound)]
-        [SwaggerResponse(HttpStatusCode.OK)]
+        [Route("{username}", Name = "GetPlayerByUsernameRoute")]
+        [SwaggerResponse(HttpStatusCode.NotFound, "Player not found")]
+        [SwaggerResponse(HttpStatusCode.OK, "Returns player with that username", Type = typeof(Player))]
         public Player GetByUsername(string username)
         {
             var player = Logic.GetPlayer(username);
@@ -46,10 +46,11 @@ namespace WuHu.WebService.Controllers
             return player;
         }
 
+        [Authorize]
         [HttpGet]
-        [Route("", Name = "GetAllRoute")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        public IList<Player> GetAll()
+        [Route("", Name = "GetAllPlayersRoute")]
+        [SwaggerResponse(HttpStatusCode.OK, "Returns all players", Type = typeof(IEnumerable<Player>))]
+        public IEnumerable<Player> GetAll()
         {
             var players = Logic.GetAllPlayers();
             return players;

@@ -1,0 +1,16 @@
+<div class="page-wrapper">
+    <h2>Spieler</h2>
+    <table>
+        <thead>
+        <th>Name</th>
+        <th>Wertung</th>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let player of (players | async);">
+            <td>{{ player.Name }}</td>
+            <td>{{ player.Email }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

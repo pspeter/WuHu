@@ -45,10 +45,10 @@ namespace WuHu.BL.Impl
 
             return true;
         }
-        
+
         public bool AddCurrentRatingFor(Player player, Credentials credentials)
         {
-            if (!Authenticate(credentials, true))
+            if (!Authenticate(credentials, true) || player.PlayerId == null)
             {
                 return false;
             }
@@ -88,8 +88,8 @@ namespace WuHu.BL.Impl
                 int playerWon;
                 double winChance;
 
-                if (player.Username == match.Player1.Username ||
-                    player.Username == match.Player2.Username)
+                if (player.PlayerId == match.Player1.PlayerId ||
+                    player.PlayerId == match.Player2.PlayerId)
                 {
                     playerWon = match.ScoreTeam1.Value > match.ScoreTeam2.Value ? 1 : 0;
                     winChance = match.EstimatedWinChance;
@@ -116,6 +116,11 @@ namespace WuHu.BL.Impl
         public IList<Rating> GetAllRatingsFor(Player player)
         {
             return RatingDao.FindAllByPlayer(player);
+        }
+
+        public Rating GetCurrentRatingFor(int playerId)
+        {
+            return RatingDao.FindCurrentRating(playerId);
         }
 
         public Rating GetCurrentRatingFor(Player player)

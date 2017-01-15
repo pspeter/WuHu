@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WuHu.Domain
 {
-    [Serializable]
+    [DataContract(Namespace = "http://WuHu.Domain")]
     public class ScoreParameter
     {
         public ScoreParameter(string key, string value)
@@ -14,8 +15,10 @@ namespace WuHu.Domain
             this.Key = key;
             this.Value = value;
         }
-        
+
+        [DataMember]
         public string Key { get; set; }
+        [DataMember]
         public string Value { get; set; }
     }
 }

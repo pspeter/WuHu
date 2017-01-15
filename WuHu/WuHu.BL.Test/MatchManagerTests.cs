@@ -80,7 +80,7 @@ namespace WuHu.BL.Test
             
             match = _matchDao.FindById(match.MatchId.Value);
 
-            Assert.IsTrue(match.IsDone);
+            Assert.IsFalse(match.IsDone);
             Assert.IsNotNull(match.ScoreTeam1);
         }
 

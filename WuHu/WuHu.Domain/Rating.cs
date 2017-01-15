@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WuHu.Domain
 {
-    [Serializable]
+    [DataContract(Namespace = "http://WuHu.Domain")]
     public class Rating
     {
         public Rating(int ratingId, Player player, DateTime datetime, int value)
@@ -24,9 +25,13 @@ namespace WuHu.Domain
             this.Value = value;
         }
 
+        [DataMember]
         public int? RatingId { get; set; }
+        [DataMember]
         public Player Player { get; set; }
+        [DataMember]
         public DateTime Datetime { get; set; }
+        [DataMember]
         public int Value { get; set; }
     }
 }

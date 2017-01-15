@@ -1,0 +1,16 @@
+<div class="page-wrapper">
+    <h2>Rangliste</h2>
+    <table class="table">
+        <tr>
+            <th>Platz</th>
+            <th>Name</th>
+            <th>Wertung</th>
+        </tr>
+
+        <tr *ngFor="let player of sortedPlayers; let i = index">
+            <td>#{{ i + 1 }}</td>
+            <td>{{ player.Firstname }} "{{player.Nickname}}" {{ player.Lastname }}</td>
+            <td>{{ player.CurrentRating?.Value }}</td>
+        </tr>
+    </table>
+</div>

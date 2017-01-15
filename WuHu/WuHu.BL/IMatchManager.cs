@@ -10,9 +10,11 @@ namespace WuHu.BL
     public interface IMatchManager
     {
         bool SetScore(Match match, Credentials credentials);
+        bool SetFinalScore(Match match, Credentials credentials);
         IList<Match> GetAllMatches();
         IList<Match> GetAllMatchesFor(Player player);
         IList<Match> GetAllMatchesFor(Tournament tournament);
         IList<Match> GetAllUnfinishedMatches();
+        Match GetCurrentMatchFor(int playerId);
     }
 }

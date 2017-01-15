@@ -12,6 +12,7 @@ namespace WuHu.Dal.Common
         IList<Match> FindAll();
         IList<Match> FindAllByPlayer(Player player);
         IList<Match> FindAllByTournament(Tournament tournament);
+        Match FindCurrentByPlayer(int playerId);
         Match FindById(int matchId);
         bool Insert(Match match);
         bool Update(Match match);

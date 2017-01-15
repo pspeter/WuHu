@@ -14,5 +14,6 @@ namespace WuHu.BL
         IList<Rating> GetAllRatings();
         IList<Rating> GetAllRatingsFor(Player player);
         Rating GetCurrentRatingFor(Player player);
+        Rating GetCurrentRatingFor(int playerId);
     }
 }

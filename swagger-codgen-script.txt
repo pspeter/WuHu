@@ -1,0 +1,1 @@
+java -jar swagger-codegen-cli-2.2.1.jar generate -o WuHu\WuHu.Angular2Client\src\app -i http:\\localhost:4649/swagger/docs/v1 -l typescript-angular2

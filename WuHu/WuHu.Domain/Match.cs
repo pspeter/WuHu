@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WuHu.Domain
 {
-    [Serializable]
+    [DataContract(Namespace = "http://WuHu.Domain")]
     public class Match
     {
         public Match(int? matchId, Tournament tournament, DateTime datetime, 
@@ -64,16 +65,27 @@ namespace WuHu.Domain
         }
 
 
+        [DataMember]
         public Player Player1 { get; set; }
+        [DataMember]
         public Player Player2 { get; set; }
+        [DataMember]
         public Player Player3 { get; set; }
+        [DataMember]
         public Player Player4 { get; set; }
+        [DataMember]
         public Tournament Tournament { get; set; }
+        [DataMember]
         public int? MatchId { get; set; }
+        [DataMember]
         public DateTime Datetime { get; set; }
+        [DataMember]
         public byte? ScoreTeam1 { get; set; }
+        [DataMember]
         public byte? ScoreTeam2 { get; set; }
+        [DataMember]
         public double EstimatedWinChance { get; set; }
+        [DataMember]
         public bool IsDone { get; set; }
 
     }

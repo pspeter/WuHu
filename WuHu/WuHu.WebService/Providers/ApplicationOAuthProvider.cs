@@ -10,6 +10,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using WuHu.BL.Impl;
+using WuHu.Domain;
 using WuHu.WebService.Models;
 
 namespace WuHu.WebService.Providers
@@ -30,7 +31,6 @@ namespace WuHu.WebService.Providers
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-             var owinManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
             var userManager = BLFactory.GetUserManager();
 
             var user = await Task.Run(() => userManager.FindUser(context.UserName, context.Password));
@@ -47,12 +47,7 @@ namespace WuHu.WebService.Providers
             };
             var identity = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
 
-            IDictionary<string, string> propertyData = new Dictionary<string, string>
-            {
-                { "username", user.Username },
-                { "role", user.IsAdmin ? "Admin" : "User" }
-            };
-            AuthenticationProperties properties = new AuthenticationProperties(propertyData);
+            AuthenticationProperties properties = CreateProperties(user);
             AuthenticationTicket ticket = new AuthenticationTicket(identity, properties);
             
             context.Validated(ticket);
@@ -95,11 +90,12 @@ namespace WuHu.WebService.Providers
             return Task.FromResult<object>(null);
         }
 
-        public static AuthenticationProperties CreateProperties(string userName)
+        public static AuthenticationProperties CreateProperties(Player user)
         {
             IDictionary<string, string> data = new Dictionary<string, string>
             {
-                { "userName", userName }
+                { "userName", user.Username},
+                { "role", user.IsAdmin ? "Admin" : "User" }
             };
             return new AuthenticationProperties(data);
         }

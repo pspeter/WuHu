@@ -1,0 +1,4 @@
+{
+    "modelPropertyNaming" : "original",
+    "supportsES6" : "true"
+}
