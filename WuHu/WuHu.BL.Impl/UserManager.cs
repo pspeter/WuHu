@@ -26,7 +26,7 @@ namespace WuHu.BL.Impl
             {
                 return null;
             }
-            var correctPw = CryptoService.CheckPassword(user.Username, user.Password, user.Salt);
+            var correctPw = CryptoService.CheckPassword(password, user.Password, user.Salt);
 
             return correctPw ? user : null;
         }
