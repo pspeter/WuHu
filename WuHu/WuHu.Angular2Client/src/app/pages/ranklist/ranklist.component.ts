@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {PlayerApi} from "../../api/PlayerApi";
 import {RatingApi} from "../../api/RatingApi";
 import {Player} from "../../model/Player";
+import {PlayerService} from "../../api/player-service";
+import {RatingService} from "../../api/rating-service";
 
 @Component({
     selector: 'app-ranklist',
@@ -77,7 +79,7 @@ export class RanklistComponent implements OnInit {
             });
     }
 
-    constructor(private playerService: PlayerApi, private ratingService: RatingApi) {
+    constructor(private playerService: PlayerService, private ratingService: RatingService) {
     }
 
     ngOnInit() {

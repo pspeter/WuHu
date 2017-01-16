@@ -31,7 +31,7 @@ import 'rxjs/Rx';
 /* tslint:disable:no-unused-variable member-ordering */
 
 'use strict';
-import {HttpAuthService} from "../http-auth.service";
+import {HttpAuthService} from "../services/http-auth.service";
 
 @Injectable()
 export class PlayerApi {
@@ -158,6 +158,37 @@ export class PlayerApi {
                     return undefined;
                 } else {
                     return response.json();
+                }
+            });
+    }
+
+    /**
+     * 
+     * 
+     * @param player 
+     */
+    public playerPutPlayer (player: models.Player, extraHttpRequestParams?: any ) : boolean | any {
+        const path = this.basePath + '/api/player';
+
+        let queryParameters = new URLSearchParams();
+        let headerParams = this.defaultHeaders;
+        // verify required parameter 'player' is not null or undefined
+        if (player === null || player === undefined) {
+            throw new Error('Required parameter player was null or undefined when calling playerPutPlayer.');
+        }
+        let requestOptions: RequestOptionsArgs = {
+            method: 'PUT',
+            headers: headerParams,
+            search: queryParameters
+        };
+        requestOptions.body = JSON.stringify(player);
+        console.log("put player");
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return true;
+                } else {
+                    return false;
                 }
             });
     }

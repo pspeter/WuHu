@@ -32,7 +32,7 @@ namespace WuHu.WebService.Providers
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
             var userManager = BLFactory.GetUserManager();
-
+            
             var user = await Task.Run(() => userManager.FindUser(context.UserName, context.Password));
             if (user == null)
             {

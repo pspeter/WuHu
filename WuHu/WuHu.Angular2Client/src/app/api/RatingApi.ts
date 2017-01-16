@@ -31,7 +31,7 @@ import 'rxjs/Rx';
 /* tslint:disable:no-unused-variable member-ordering */
 
 'use strict';
-import {HttpAuthService} from "../http-auth.service";
+import {HttpAuthService} from "../services/http-auth.service";
 
 @Injectable()
 export class RatingApi {

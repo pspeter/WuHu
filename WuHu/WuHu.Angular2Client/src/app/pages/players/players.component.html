@@ -1,16 +1,31 @@
 <div class="page-wrapper">
     <h2>Spieler</h2>
-    <table>
-        <thead>
-        <th>Name</th>
-        <th>Wertung</th>
-        </thead>
 
-        <tbody>
-        <tr *ngFor="let player of (players | async);">
-            <td>{{ player.Name }}</td>
-            <td>{{ player.Email }}</td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="list-group col-xs-4">
+                <button class="list-group-item" *ngFor="let player of players" (click)="selectPlayer(player)">
+                    {{ player.Firstname }} "{{player.Nickname}}" {{ player.Lastname }}
+                </button>
+            </div>
+
+            <div class="col-xs-8">
+                <form class="login-form" role="form" *ngIf="!!playerModel" (ngSubmit)="savePlayer()">
+                    <div class="form-group">
+                        <label for="firstname">Vorname</label>
+                        <input type="text" #firstname="ngModel" class="form-control" id="firstname"
+                               [(ngModel)]="playerModel.Firstname" name="firstname">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastname">Nachname</label>
+                        <input type="text" #firstname="ngModel" class="form-control" id="lastname"
+                               [(ngModel)]="playerModel.Lastname" name="lastname">
+                    </div>
+                    <button type="submit" class="btn btn-default">Änderungen speichern</button>
+                    <button type="button" class="btn btn-default" (click)="resetPlayer()">Änderungen verwerfen</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
 </div>

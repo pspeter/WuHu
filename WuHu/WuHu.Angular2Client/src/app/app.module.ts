@@ -1,12 +1,12 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from "./app-routing.module";
-import {UserService} from "./user.service";
-import {HttpAuthService} from "./http-auth.service";
+import {UserService} from "./services/user.service";
+import {HttpAuthService} from "./services/http-auth.service";
 import {NavComponent} from './components/nav/nav.component';
 import {LoginComponent} from './pages/login/login.component';
 import {DashboardComponent} from './pages/dashboard/dashboard.component';
@@ -22,6 +22,11 @@ import { LiveComponent } from './pages/live/live.component';
 import {LogoutGuard} from "./guards/logout-guard";
 import {PlayerApi} from "./api/PlayerApi";
 import {RatingApi} from "./api/RatingApi";
+import {AccountApi} from "./api/AccountApi";
+import {RestoreService} from "./services/restore.service";
+import {PlayerService} from "./api/player-service";
+import {RatingService} from "./api/rating-service";
+import {AccountService} from "./api/account-service";
 
 @NgModule({
     declarations: [
@@ -41,7 +46,8 @@ import {RatingApi} from "./api/RatingApi";
         BrowserModule,
         AppRoutingModule,
         FormsModule,
-        HttpModule
+        HttpModule,
+        ReactiveFormsModule
     ],
     providers: [
         LoginGuard,
@@ -49,8 +55,11 @@ import {RatingApi} from "./api/RatingApi";
         AdminGuard,
         UserService,
         HttpAuthService,
-        PlayerApi,
-        RatingApi,
+        PlayerService,
+        RatingService,
+        AccountService,
+        RestoreService,
+        FormBuilder,
     ],
     bootstrap: [AppComponent]
 })

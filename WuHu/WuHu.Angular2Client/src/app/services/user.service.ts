@@ -1,16 +1,17 @@
 import {Injectable} from '@angular/core';
 import {HttpAuthService} from "./http-auth.service";
-import {environment} from "../environments/environment";
+import {environment} from "../../environments/environment";
 import 'rxjs/add/operator/map'
 import {RequestOptionsArgs, Headers, URLSearchParams} from "@angular/http";
 import {Router} from "@angular/router";
+import {AccountService} from "../api/account-service";
 
 @Injectable()
 export class UserService {
     private username: string = "";
     private role: string = "Guest";
 
-    constructor(private httpAuthenticated: HttpAuthService, private router: Router) {
+    constructor(private httpAuthenticated: HttpAuthService, private accountService: AccountService, private router: Router) {
         this.username = localStorage.getItem("username");
         this.role = localStorage.getItem("role");
     }
@@ -56,6 +57,7 @@ export class UserService {
         this.router.navigate(["login"]);
         this.role = "Guest";
         this.username = "";
+        this.accountService.accountLogout();
     }
 
     IsUser() {
