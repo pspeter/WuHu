@@ -10,7 +10,6 @@ namespace WuHu.BL.Impl
 {
     public class TournamentManager : ITournamentManager
     {
-        protected readonly Authenticator Authentication;
         protected readonly IMatchDao MatchDao;
         protected readonly IPlayerDao PlayerDao;
         protected readonly ITournamentDao TournamentDao;
@@ -27,7 +26,6 @@ namespace WuHu.BL.Impl
             RatingDao = DalFactory.CreateRatingDao(database);
             TournamentDao = DalFactory.CreateTournamentDao(database);
             ParamDao = DalFactory.CreateScoreParameterDao(database);
-            Authentication = Authenticator.GetInstance();
         }
 
 
@@ -41,50 +39,42 @@ namespace WuHu.BL.Impl
             return TournamentDao.FindMostRecentTournament();
         }
 
-        public bool LockTournament(Credentials credentials)
+        public bool LockTournament()
         {
-            if (!Authenticate(credentials, true) || TournamentLocked)
+            if (TournamentLocked)
             {
                 return false;
             }
             return TournamentLocked = true;
         }
 
-        public void UnlockTournament(Credentials credentials)
+        public void UnlockTournament()
         {
-            if (Authenticate(credentials, true))
-            {
                 TournamentLocked = false;
-            }
         }
 
-        public bool CreateTournament(Tournament tournament, IList<Player> players, int amountMatches, Credentials credentials)
+        public bool CreateTournament(Tournament tournament, IList<Player> players, int amountMatches)
         {
-            if (!Authenticate(credentials, true) || amountMatches < 1 || players.Count < 4)
-            {
-                return false;
-            }
             var inserted = TournamentDao.Insert(tournament);
             if (!inserted)
             {
                 return false;
             }
-            LockTournament(credentials);
-            SetMatchesForTournament(tournament, players, amountMatches, credentials);
-            UnlockTournament(credentials);
+            LockTournament();
+            SetMatchesForTournament(tournament, players, amountMatches);
+            UnlockTournament();
             return true;
         }
 
 
-        public bool UpdateTournament(Tournament tournament, IList<Player> players, int amountMatches, Credentials credentials)
+        public bool UpdateTournament(Tournament tournament, IList<Player> players, int amountMatches)
         {
-            return SetMatchesForTournament(tournament, players, amountMatches, credentials);
+            return SetMatchesForTournament(tournament, players, amountMatches);
         }
 
-        private bool SetMatchesForTournament(Tournament tournament, IList<Player> players, int amount, Credentials credentials)
+        private bool SetMatchesForTournament(Tournament tournament, IList<Player> players, int amount)
         {
-            if (!Authenticate(credentials, true) || !TournamentLocked ||
-                players.Count() < 4 || amount < 1)
+            if ( !TournamentLocked || players.Count() < 4 || amount < 1)
             {
                 return false;
             }
@@ -145,7 +135,7 @@ namespace WuHu.BL.Impl
 
                 MatchDao.Insert(newMatch);
             }
-            UnlockTournament(credentials);
+            UnlockTournament();
             return true;
         }
 
@@ -180,11 +170,6 @@ namespace WuHu.BL.Impl
             {
                 MatchDao.Delete(match);
             }
-        }
-
-        private bool Authenticate(Credentials credentials, bool adminRequired)
-        {
-            return Authentication?.Authenticate(credentials, adminRequired) ?? false;
         }
     }
 }

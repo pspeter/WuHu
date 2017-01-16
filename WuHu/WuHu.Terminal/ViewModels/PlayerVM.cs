@@ -55,7 +55,7 @@ namespace WuHu.Terminal.ViewModels
                         _player.PlaysThursdays, _player.PlaysFridays, _player.PlaysSaturdays, _player.PlaysSundays,
                         _player.Picture);
                     var success = await Task.Run(() =>
-                        PlayerManager.UpdatePlayer(_player, AuthenticationManager.AuthenticatedCredentials));
+                        IsAuthenticated && PlayerManager.UpdatePlayer(_player));
                     reloadParent?.Invoke();
                     queueMessage?.Invoke(success ? "Spieler geändert." : "Fehler: Spieler konnte nicht geändert werden.");
                 },

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WuHu.Domain;
+using WuHu.Terminal.Services;
 
 namespace WuHu.Terminal.ViewModels
 {
@@ -20,7 +22,7 @@ namespace WuHu.Terminal.ViewModels
         public EditTournamentVm(Tournament tournament, Action showMatchList, Action reloadParent, Action<string> queueMessage)
         {
             _tournament = tournament;
-            var locked = TournamentManager.LockTournament(AuthenticationManager.AuthenticatedCredentials);
+            var locked = AuthenticationService.IsAuthenticated() && TournamentManager.LockTournament();
             if (!locked)
             {
                 queueMessage?.Invoke("Spielplan wird zur Zeit bearbeitet. Bitte warten.");
@@ -37,9 +39,9 @@ namespace WuHu.Terminal.ViewModels
                 showMatchList?.Invoke();
                 var success = await Task.Run(() =>
                 {
-                    var updated = TournamentManager.UpdateTournament(
-                        _tournament, players, AmountMatches, AuthenticationManager.AuthenticatedCredentials);
-                    TournamentManager.UnlockTournament(AuthenticationManager.AuthenticatedCredentials);
+                    var updated = AuthenticationService.IsAuthenticated() && TournamentManager.UpdateTournament(
+                        _tournament, players, AmountMatches);
+                    if (AuthenticationService.IsAuthenticated()) TournamentManager.UnlockTournament();
                     return updated;
                 });
                 reloadParent?.Invoke();

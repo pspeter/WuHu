@@ -8,18 +8,13 @@ namespace WuHu.BL.Impl
 {
     public static class BLFactory
     {
-        private static ITerminalManager _terminalManager;
         private static IMatchManager _matchManager;
         private static IRatingManager _ratingManager;
         private static IScoreParameterManager _scoreParameterManager;
         private static IPlayerManager _playerManager;
         private static ITournamentManager _tournamentManager;
         private static IUserManager _userManager;
-
-        public static ITerminalManager GetTerminalManager()
-        {
-            return _terminalManager ?? (_terminalManager = new TerminalManager());
-        }
+        
 
         public static IMatchManager GetMatchManager()
         {

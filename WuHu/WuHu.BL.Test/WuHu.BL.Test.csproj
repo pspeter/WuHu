@@ -60,7 +60,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatingManagerTests.cs" />
     <Compile Include="ScoreParameterManagerTests.cs" />
-    <Compile Include="TerminalManagerTests.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="TournamentManagerTests.cs" />
   </ItemGroup>

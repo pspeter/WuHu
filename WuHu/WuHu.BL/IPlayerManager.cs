@@ -9,9 +9,9 @@ namespace WuHu.BL
 {
     public interface IPlayerManager
     {
-        bool AddPlayer(Player player, Credentials credentials);
-        bool UpdatePlayer(Player player, Credentials credentials);
-        bool ChangePassword(string username, string newPassword, Credentials credentials);
+        bool AddPlayer(Player player);
+        bool UpdatePlayer(Player player);
+        bool ChangePassword(string username, string newPassword);
         Player GetPlayer(int playerId);
         Player GetPlayer(string username);
         IList<Player> GetAllPlayers();

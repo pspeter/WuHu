@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using WuHu.BL.Impl;
+using WuHu.Terminal.Services;
 
 namespace WuHu.Terminal.ViewModels
 {
@@ -42,7 +43,7 @@ namespace WuHu.Terminal.ViewModels
             // don't save password in memory, just send it to the Manager right away
             if (pwBox == null) return;
 
-            var success = AuthenticationManager.Login(Username, pwBox.Password);
+            var success = AuthenticationService.Login(Username, pwBox.Password);
             pwBox.Password = null;
 
        

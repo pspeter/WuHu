@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
+using WuHu.Terminal.Services;
 using WuHu.Terminal.ViewModels;
 using WuHu.Terminal.Views;
 
@@ -76,7 +77,7 @@ namespace WuHu.Terminal.ViewModels
 
         public void OnWindowClosing(object sender, CancelEventArgs e)
         {
-            AuthenticationManager.Logout();
+            AuthenticationService.Logout();
             OnAuthenticatedChanged(this);
         }
 

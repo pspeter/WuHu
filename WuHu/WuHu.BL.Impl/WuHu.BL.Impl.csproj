@@ -64,7 +64,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authenticator.cs" />
     <Compile Include="DefaultParameter.cs" />
     <Compile Include="BLFactory.cs" />
     <Compile Include="MatchManager.cs" />
@@ -72,7 +71,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatingManager.cs" />
     <Compile Include="ScoreParameterManager.cs" />
-    <Compile Include="TerminalManager.cs" />
     <Compile Include="TournamentManager.cs" />
     <Compile Include="UserManager.cs" />
   </ItemGroup>

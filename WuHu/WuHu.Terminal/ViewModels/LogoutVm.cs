@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WuHu.Terminal.Services;
 
 namespace WuHu.Terminal.ViewModels
 {
@@ -14,7 +15,7 @@ namespace WuHu.Terminal.ViewModels
         {
             LogoutCommand = new RelayCommand(_ =>
             {
-                AuthenticationManager.Logout();
+                AuthenticationService.Logout();
                 OnAuthenticatedChanged(this);
                 queueMessage?.Invoke("Logged out.");
             });

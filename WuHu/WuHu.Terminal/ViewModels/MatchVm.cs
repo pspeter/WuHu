@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WuHu.Domain;
+using WuHu.Terminal.Services;
 
 namespace WuHu.Terminal.ViewModels
 {
@@ -21,12 +22,12 @@ namespace WuHu.Terminal.ViewModels
             SetScoreCommand = new RelayCommand(async _ =>
                 {
                     IsDone = true;
-                    var success = await Task.Run(() => MatchManager.SetFinalScore(_match, AuthenticationManager.AuthenticatedCredentials));
+                    var success = await Task.Run(() => IsAuthenticated && MatchManager.SetFinalScore(_match));
                     queueMessage?.Invoke(success ? "Neue Wertungen berechnet." : "Fehler: Spielresultat konnte nicht gesetzt werden.");
                     reloadParent?.Invoke();
                 }
                 ,
-            o => AuthenticationManager.IsUserAuthenticated() &&
+            o => IsAuthenticated &&
                  ScoreTeam1 != null && ScoreTeam2 != null &&
                  ScoreTeam1 >= 0    && ScoreTeam2 >= 0
             );

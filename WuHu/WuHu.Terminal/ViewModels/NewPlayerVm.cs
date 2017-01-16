@@ -41,7 +41,7 @@ namespace WuHu.Terminal.ViewModels
                 PlayerItem.Password = hash;
                 showPlayerList?.Invoke();
                 var success = await Task.Run(() =>
-                    PlayerManager.AddPlayer(PlayerItem, AuthenticationManager.AuthenticatedCredentials));
+                    IsAuthenticated && PlayerManager.AddPlayer(PlayerItem));
                 reloadParent?.Invoke();
                 queueMessage?.Invoke(success ? "Spieler erstellt" : "Fehler: Spieler konnte nicht erstellt werden.");
             });

@@ -12,7 +12,6 @@ namespace WuHu.BL.Test
     {
         private static IPlayerManager _mgr;
         private static IPlayerDao _playerDao;
-        private static Credentials _admin;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
@@ -20,11 +19,6 @@ namespace WuHu.BL.Test
             var database = DalFactory.CreateDatabase();
             _playerDao = DalFactory.CreatePlayerDao(database);
             _mgr = BLFactory.GetPlayerManager();
-            
-            _admin = new Credentials(TestHelper.GenerateName(), "pass");
-            var admin = new Player("admin", "last", "nick", _admin.Username, "pass",
-                true, false, false, false, false, true, true, true, null);
-            _playerDao.Insert(admin);
         }
 
         [TestMethod]
@@ -94,17 +88,13 @@ namespace WuHu.BL.Test
             var user = TestHelper.GenerateName();
             var admin = new Player("admin", "last", "nick", user, "pass",
                     true, false, false, false, false, true, true, true, null);
-            var success = _mgr.AddPlayer(admin, _admin);
-            Assert.IsTrue(success);
-            var creds = new Credentials(user, "pass");
 
             var player = new Player("NotAdmin", "last", "nick", user, "pass",
                     false, false, false, false, false, true, true, true, null);
-            success = _mgr.AddPlayer(player, creds);
+            var success = _mgr.AddPlayer(player);
             Assert.IsFalse(success);
 
-
-            Assert.IsFalse(_mgr.AddPlayer(player, new Credentials("", "1234")));
+            
         }
 
         [TestMethod]
@@ -113,7 +103,6 @@ namespace WuHu.BL.Test
             var user = TestHelper.GenerateName();
             var player = new Player("first", "last", "nick", user, "pass",
                     false, false, false, false, false, true, true, true, null);
-            var creds = new Credentials(user, "pass");
 
             user = TestHelper.GenerateName();
             var otherPlayer = new Player("first", "last", "nick", user, "pass",
@@ -124,21 +113,21 @@ namespace WuHu.BL.Test
 
             // players can change their own values
             player.Nickname = "newNick";
-            var success = _mgr.UpdatePlayer(player, creds);
+            var success = _mgr.UpdatePlayer(player);
             Assert.IsTrue(success);
 
             // normal players can't change other players' values
             otherPlayer.Nickname = "newNick";
-            success = _mgr.UpdatePlayer(otherPlayer, creds);
+            success = _mgr.UpdatePlayer(otherPlayer);
             Assert.IsFalse(success);
 
             // normal players can't make themselves admin
             player.IsAdmin = true;
-            success = _mgr.UpdatePlayer(player, creds);
+            success = _mgr.UpdatePlayer(player);
             Assert.IsFalse(success);
             
             // other admins can change other players and even make them admin
-            success = _mgr.UpdatePlayer(player, _admin);
+            success = _mgr.UpdatePlayer(player);
             Assert.IsTrue(success);
 
 
@@ -146,10 +135,8 @@ namespace WuHu.BL.Test
             var notInsertedPlayer = new Player("first", "last", "nick", user, "pass",
                     false, false, false, false, false, true, true, true, null);
             // can't update players that aren't inserted
-            success = _mgr.UpdatePlayer(notInsertedPlayer, _admin);
+            success = _mgr.UpdatePlayer(notInsertedPlayer);
             Assert.IsFalse(success);
-        
-            Assert.IsFalse(_mgr.UpdatePlayer(player, new Credentials("", "1234")));
         }
 
         [TestMethod]
@@ -159,7 +146,7 @@ namespace WuHu.BL.Test
             var player = new Player("first", "last", "nick", user, "pass",
                     false, false, false, false, false, true, true, true, null);
             _playerDao.Insert(player);
-            Assert.IsTrue(_mgr.ChangePassword(user, "newPass", new Credentials(user, "pass")));
+            Assert.IsTrue(_mgr.ChangePassword(user, "newPass"));
 
             player = _playerDao.FindByUsername(user);
 

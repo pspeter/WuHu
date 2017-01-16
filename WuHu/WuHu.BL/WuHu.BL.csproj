@@ -84,7 +84,6 @@
     <Compile Include="IRatingManager.cs" />
     <Compile Include="IMatchManager.cs" />
     <Compile Include="IScoreParameterManager.cs" />
-    <Compile Include="ITerminalManager.cs" />
     <Compile Include="ITournamentManager.cs" />
     <Compile Include="IUserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

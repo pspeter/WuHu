@@ -11,7 +11,6 @@ namespace WuHu.BL.Impl
 {
     public class PlayerManager : IPlayerManager
     {
-        protected readonly Authenticator Authentication;
         protected readonly IMatchDao MatchDao;
         protected readonly IPlayerDao PlayerDao;
         protected readonly ITournamentDao TournamentDao;
@@ -28,53 +27,37 @@ namespace WuHu.BL.Impl
             RatingDao = DalFactory.CreateRatingDao(database);
             TournamentDao = DalFactory.CreateTournamentDao(database);
             ParamDao = DalFactory.CreateScoreParameterDao(database);
-            Authentication = Authenticator.GetInstance();
         }
 
 
         // Player
-        public bool AddPlayer(Player player, Credentials credentials)
+        public bool AddPlayer(Player player)
         {
-            if (!Authenticate(credentials, true)) // only admins can add players
-            {
-                return false;
-            }
             var inserted = PlayerDao.Insert(player);
             if (inserted)
             {
-                BLFactory.GetRatingManager().AddCurrentRatingFor(player, credentials);
+                BLFactory.GetRatingManager().AddCurrentRatingFor(player);
             }
             return inserted;
         }
 
-        public bool UpdatePlayer(Player player, Credentials credentials)
+        public bool UpdatePlayer(Player player)
         {
-            if (player.PlayerId == null || credentials == null)
+            if (player.PlayerId == null)
             {
                 return false;
             }
 
-            // only admins can update other players and users can't make themselves admin
-            if (credentials.Username != player.Username || player.IsAdmin)
-            {
-                return Authenticate(credentials, true) && PlayerDao.Update(player);
-            }
-            // normal users can edit themselves
-            return Authenticate(credentials, false) && PlayerDao.Update(player);
+            return PlayerDao.Update(player);
         }
 
-        public bool ChangePassword(string username, string newPassword, Credentials credentials)
+        public bool ChangePassword(string username, string newPassword)
         {
             var player = PlayerDao.FindByUsername(username);
-
-            if ((Authenticate(credentials, true)) ||
-                (credentials.Username == player.Username && Authenticate(credentials, false)))
-            {
-                player.Salt = CryptoService.GenerateSalt();
-                player.Password = CryptoService.HashPassword(newPassword, player.Salt);
-                return PlayerDao.Update(player); ;
-            }
-            return false;
+            
+            player.Salt = CryptoService.GenerateSalt();
+            player.Password = CryptoService.HashPassword(newPassword, player.Salt);
+            return PlayerDao.Update(player);
         }
 
         public Player GetPlayer(int playerId)
@@ -90,11 +73,6 @@ namespace WuHu.BL.Impl
         public IList<Player> GetAllPlayers()
         {
             return PlayerDao.FindAll();
-        }
-
-        private bool Authenticate(Credentials credentials, bool adminRequired)
-        {
-            return Authentication?.Authenticate(credentials, adminRequired) ?? false;
         }
     }
 }

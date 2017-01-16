@@ -10,7 +10,6 @@ namespace WuHu.BL.Impl
 {
     public class RatingManager : IRatingManager
     {
-        protected readonly Authenticator Authentication;
         protected readonly IMatchDao MatchDao;
         protected readonly IPlayerDao PlayerDao;
         protected readonly ITournamentDao TournamentDao;
@@ -27,28 +26,22 @@ namespace WuHu.BL.Impl
             RatingDao = DalFactory.CreateRatingDao(database);
             TournamentDao = DalFactory.CreateTournamentDao(database);
             ParamDao = DalFactory.CreateScoreParameterDao(database);
-            Authentication = Authenticator.GetInstance();
         }
 
-        public bool AddAllCurrentRatings(Credentials credentials)
+        public bool AddAllCurrentRatings()
         {
-            if (!Authenticate(credentials, true))
-            {
-                return false;
-            }
-
             var players = PlayerDao.FindAll();
             foreach (var player in players)
             {
-                AddCurrentRatingFor(player, credentials);
+                AddCurrentRatingFor(player);
             }
 
             return true;
         }
 
-        public bool AddCurrentRatingFor(Player player, Credentials credentials)
+        public bool AddCurrentRatingFor(Player player)
         {
-            if (!Authenticate(credentials, true) || player.PlayerId == null)
+            if (player.PlayerId == null)
             {
                 return false;
             }
@@ -70,8 +63,8 @@ namespace WuHu.BL.Impl
 
             var matches = MatchDao.FindAllByPlayer(player)
                 .OrderByDescending(m => m.Datetime)
-                .Take(scoredMatches)
                 .Where(m => m.IsDone)
+                .Take(scoredMatches)
                 .ToList();
 
             var rating = initialScore;
@@ -126,13 +119,6 @@ namespace WuHu.BL.Impl
         public Rating GetCurrentRatingFor(Player player)
         {
             return RatingDao.FindCurrentRating(player);
-        }
-
-
-
-        private bool Authenticate(Credentials credentials, bool adminRequired)
-        {
-            return Authentication?.Authenticate(credentials, adminRequired) ?? false;
         }
     }
 }

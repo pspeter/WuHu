@@ -18,7 +18,6 @@ namespace WuHu.BL.Test
         private static IRatingDao _ratingDao;
         private static IScoreParameterDao _paramDao;
         private static IList<Player> _testPlayers;
-        private static Credentials _creds;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
@@ -42,7 +41,6 @@ namespace WuHu.BL.Test
                 _ratingDao.Insert(new Rating(player, DateTime.Now, rand.Next(4000)));
                 _testPlayers.Add(player);
             }
-            _creds = new Credentials(_testPlayers[0].Username, "pass");
         }
 
         [TestMethod]
@@ -58,7 +56,7 @@ namespace WuHu.BL.Test
             var player = new Player("first", "last", "nick", user, "pass",
                 true, false, false, false, false, true, true, true, null);
             _playerDao.Insert(player);
-            _mgr.AddCurrentRatingFor(player, _creds);
+            _mgr.AddCurrentRatingFor(player);
 
             var rating = _ratingDao.FindCurrentRating(player);
             Assert.AreEqual(rating.Value, int.Parse(_paramDao.FindById("initialScore")
@@ -69,7 +67,7 @@ namespace WuHu.BL.Test
             var wonMatch = new Match(tournament, DateTime.Now, 0, 10, 0.5, true, 
                 _testPlayers[0], _testPlayers[1], player, _testPlayers[2]);
             Assert.IsTrue(_matchDao.Insert(wonMatch));
-            _mgr.AddCurrentRatingFor(player, _creds);
+            _mgr.AddCurrentRatingFor(player);
 
             var higherRating = _ratingDao.FindCurrentRating(player);
             Assert.IsTrue(higherRating.Value > rating.Value);
@@ -77,7 +75,7 @@ namespace WuHu.BL.Test
             var lostMatch = new Match(tournament, DateTime.Now, 0, 10, 0.5, true,
                 player, _testPlayers[0], _testPlayers[1], _testPlayers[2]);
             Assert.IsTrue(_matchDao.Insert(lostMatch));
-            _mgr.AddCurrentRatingFor(player, _creds);
+            _mgr.AddCurrentRatingFor(player);
 
             var lowerRating = _ratingDao.FindCurrentRating(player);
             Assert.IsTrue(higherRating.Value > lowerRating.Value);
@@ -88,7 +86,7 @@ namespace WuHu.BL.Test
             Assert.IsTrue(_matchDao.Insert(lostMatch));
             try
             {
-                _mgr.AddCurrentRatingFor(player, _creds);
+                _mgr.AddCurrentRatingFor(player);
                 Assert.Fail("No Exception thrown");
             }
             catch (ArgumentException) { }
@@ -96,13 +94,13 @@ namespace WuHu.BL.Test
             matchWithoutScores.ScoreTeam2 = 10;
             _matchDao.Update(matchWithoutScores);
 
-            Assert.IsFalse(_mgr.AddCurrentRatingFor(player, new Credentials("", "1234")));
+            Assert.IsFalse(_mgr.AddCurrentRatingFor(player));
         }
 
         [TestMethod]
         public void GetCurrent()
         {
-            var rating = 623;
+            const int rating = 623;
             var datetime = DateTime.Now;
             _ratingDao.Insert(new Rating(_testPlayers[0], datetime, rating));
             var foundRating = _mgr.GetCurrentRatingFor(_testPlayers[0]);
@@ -141,7 +139,7 @@ namespace WuHu.BL.Test
             var initCnt = _ratingDao.FindAll().Count;
             for (var i = 0; i < 5; ++i)
             {
-                _mgr.AddCurrentRatingFor(_testPlayers[0], _creds);
+                _mgr.AddCurrentRatingFor(_testPlayers[0]);
             }
 
             var newCnt = _ratingDao.FindAll().Count;

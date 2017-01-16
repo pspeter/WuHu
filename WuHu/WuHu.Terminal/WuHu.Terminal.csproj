@@ -92,6 +92,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converter\RowNumberConverter.cs" />
+    <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="ViewModels\AuthenticationVm.cs" />
     <Compile Include="ViewModels\BaseVm.cs" />
     <Compile Include="ViewModels\EditTournamentVm.cs" />

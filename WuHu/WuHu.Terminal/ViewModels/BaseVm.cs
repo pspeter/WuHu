@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.Services.Client;
 using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 using WuHu.BL;
 using WuHu.BL.Impl;
 using WuHu.Domain;
+using WuHu.Terminal.Services;
 
 namespace WuHu.Terminal.ViewModels
 {
@@ -20,15 +22,14 @@ namespace WuHu.Terminal.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         public event Action OnPlayersLoaded;
         public event Action OnPlayersSortedByRankLoaded;
-
-        protected ITerminalManager AuthenticationManager;
+        
         protected IRatingManager RatingManager;
         protected IPlayerManager PlayerManager;
         protected IMatchManager MatchManager;
         protected ITournamentManager TournamentManager;
 
-        public bool IsAuthenticated => AuthenticationManager.IsUserAuthenticated();
-        public bool IsNotAuthenticated => !AuthenticationManager.IsUserAuthenticated();
+        public bool IsAuthenticated => AuthenticationService.IsAuthenticated();
+        public bool IsNotAuthenticated => !AuthenticationService.IsAuthenticated();
 
         protected virtual void OnAuthenticatedChanged(object sender)
         {
@@ -44,7 +45,6 @@ namespace WuHu.Terminal.ViewModels
 
         protected BaseVm()
         {
-            AuthenticationManager = BLFactory.GetTerminalManager();
             RatingManager = BLFactory.GetRatingManager();
             PlayerManager = BLFactory.GetPlayerManager();
             MatchManager = BLFactory.GetMatchManager();

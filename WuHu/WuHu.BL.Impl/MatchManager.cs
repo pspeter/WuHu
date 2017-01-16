@@ -12,7 +12,6 @@ namespace WuHu.BL.Impl
 {
     public class MatchManager : IMatchManager
     {
-        protected readonly Authenticator Authentication;
         protected readonly IMatchDao MatchDao;
         protected readonly IPlayerDao PlayerDao;
         protected readonly ITournamentDao TournamentDao;
@@ -31,13 +30,10 @@ namespace WuHu.BL.Impl
             TournamentDao = DalFactory.CreateTournamentDao(database);
             ParamDao = DalFactory.CreateScoreParameterDao(database);
             RatingManager = BLFactory.GetRatingManager();
-            Authentication = Authenticator.GetInstance();
         }
 
-        public bool SetScore(Match match, Credentials credentials)
+        public bool SetScore(Match match)
         {
-
-            var issuer = PlayerDao.FindByUsername(credentials.Username);
             if (match.MatchId == null || 
                 match.Player1.PlayerId == null || match.Player2.PlayerId == null || 
                 match.Player3.PlayerId == null || match.Player4.PlayerId == null)
@@ -47,15 +43,7 @@ namespace WuHu.BL.Impl
 
             var oldMatch = MatchDao.FindById(match.MatchId.Value);
 
-            if (oldMatch.IsDone || 
-                !(Authenticate(credentials, true) || ( // admins can set all scores
-                        Authenticate(credentials, false) && // users only their own
-                        (issuer.PlayerId == match.Player1.PlayerId.Value ||
-                         issuer.PlayerId == match.Player2.PlayerId.Value ||
-                         issuer.PlayerId == match.Player3.PlayerId.Value ||
-                         issuer.PlayerId == match.Player4.PlayerId.Value)
-                    )
-                ))
+            if (oldMatch.IsDone)
             {
                 return false;
             }
@@ -68,10 +56,9 @@ namespace WuHu.BL.Impl
         }
 
         // Match
-        public bool SetFinalScore(Match match, Credentials credentials)
+        public bool SetFinalScore(Match match)
         {
-            if (!Authenticate(credentials, true) || match.MatchId == null ||
-                match.ScoreTeam1 == match.ScoreTeam2)
+            if (match.MatchId == null || match.ScoreTeam1 == match.ScoreTeam2)
             {
                 return false;
             }
@@ -96,10 +83,10 @@ namespace WuHu.BL.Impl
                 return false;
             }
 
-            RatingManager.AddCurrentRatingFor(match.Player1, credentials);
-            RatingManager.AddCurrentRatingFor(match.Player2, credentials);
-            RatingManager.AddCurrentRatingFor(match.Player3, credentials);
-            RatingManager.AddCurrentRatingFor(match.Player4, credentials);
+            RatingManager.AddCurrentRatingFor(match.Player1);
+            RatingManager.AddCurrentRatingFor(match.Player2);
+            RatingManager.AddCurrentRatingFor(match.Player3);
+            RatingManager.AddCurrentRatingFor(match.Player4);
             return true;
         }
 
@@ -127,11 +114,6 @@ namespace WuHu.BL.Impl
         public IList<Match> GetAllUnfinishedMatches()
         {
             return new List<Match>(MatchDao.FindAll().Where(m => !m.IsDone));
-        }
-
-        private bool Authenticate(Credentials credentials, bool adminRequired)
-        {
-            return Authentication?.Authenticate(credentials, adminRequired) ?? false;
         }
     }
 }

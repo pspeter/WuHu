@@ -23,7 +23,7 @@ namespace WuHu.Terminal.ViewModels
         {
             _tournament = new Tournament("", DateTime.Now);
 
-            var locked = TournamentManager.LockTournament(AuthenticationManager.AuthenticatedCredentials);
+            var locked = IsAuthenticated && TournamentManager.LockTournament();
             if (!locked)
             {
                 queueMessage?.Invoke("Spielplan wird zur Zeit bearbeitet. Bitte warten.");
@@ -39,9 +39,10 @@ namespace WuHu.Terminal.ViewModels
                     .Select(p => p.PlayerItem).ToList();
                 _tournament.Datetime = DateTime.Now;
                 showMatchList?.Invoke();
-                var success = await Task.Run(() => 
+                var success = await Task.Run(() =>
+                IsAuthenticated &&
                     TournamentManager.CreateTournament(
-                        _tournament, players, AmountMatches, AuthenticationManager.AuthenticatedCredentials));
+                        _tournament, players, AmountMatches));
                 reloadParent?.Invoke();
                 queueMessage?.Invoke(success
                     ? "Neuer Spielplan erstellt."
