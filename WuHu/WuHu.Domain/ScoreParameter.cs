@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -17,8 +18,10 @@ namespace WuHu.Domain
         }
 
         [DataMember]
+        [Required]
         public string Key { get; set; }
         [DataMember]
+        [Required]
         public string Value { get; set; }
     }
 }

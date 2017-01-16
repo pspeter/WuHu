@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -26,8 +27,10 @@ namespace WuHu.Domain
         [DataMember]
         public int? TournamentId { get; set; }
         [DataMember]
+        [Required]
         public string Name { get;  set; }
         [DataMember]
+        [Required]
         public DateTime Datetime { get; set; }
 
         public override string ToString()

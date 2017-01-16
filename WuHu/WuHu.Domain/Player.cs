@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
@@ -12,6 +13,8 @@ namespace WuHu.Domain
     [DataContract(Namespace = "http://WuHu.Domain")]
     public class Player
     {
+        public Player() { }
+
         public Player(int playerId, string firstname, string lastname, string nickname, string username, 
             byte[] password, byte[] salt, bool isAdmin, bool playsMondays,
             bool playsTuesdays, bool playsWednesdays, bool playsThursdays, 
@@ -59,41 +62,47 @@ namespace WuHu.Domain
             this.Picture = picture;
         }
 
+        public byte[] Password { get; set; }
+        public byte[] Salt { get; set; }
+
+
         [DataMember]
         public int? PlayerId { get; set; }
         [DataMember]
+        [Required]
         public string Firstname { get; set; }
-
         [DataMember]
+        [Required]
         public string Lastname { get; set; }
-
         [DataMember]
+        [Required]
         public string Nickname { get; set; }
-
         [DataMember]
+        [Required]
         public string Username { get; set; }
-
         [DataMember]
-        public byte[] Password { get; set; }
-
-        [DataMember]
-        public byte[] Salt { get; set; }
-
-        [DataMember]
+        [Required]
         public bool IsAdmin { get; set; }
         [DataMember]
+        [Required]
         public bool PlaysMondays { get; set; }
         [DataMember]
+        [Required]
         public bool PlaysTuesdays { get; set; }
         [DataMember]
+        [Required]
         public bool PlaysWednesdays { get; set; }
         [DataMember]
+        [Required]
         public bool PlaysThursdays { get; set; }
         [DataMember]
+        [Required]
         public bool PlaysFridays { get; set; }
         [DataMember]
+        [Required]
         public bool PlaysSaturdays { get; set; }
         [DataMember]
+        [Required]
         public bool PlaysSundays { get; set; }
 
         // https://stackoverflow.com/questions/25400555/save-and-retrieve-image-binary-from-sql-server-using-entity-framework-6

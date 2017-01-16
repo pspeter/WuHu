@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -28,8 +29,10 @@ namespace WuHu.Domain
         [DataMember]
         public int? RatingId { get; set; }
         [DataMember]
+        [Required]
         public Player Player { get; set; }
         [DataMember]
+        [Required]
         public DateTime Datetime { get; set; }
         [DataMember]
         public int Value { get; set; }

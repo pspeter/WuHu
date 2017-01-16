@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -66,26 +67,34 @@ namespace WuHu.Domain
 
 
         [DataMember]
+        [Required]
         public Player Player1 { get; set; }
         [DataMember]
+        [Required]
         public Player Player2 { get; set; }
         [DataMember]
+        [Required]
         public Player Player3 { get; set; }
         [DataMember]
+        [Required]
         public Player Player4 { get; set; }
         [DataMember]
+        [Required]
         public Tournament Tournament { get; set; }
         [DataMember]
         public int? MatchId { get; set; }
         [DataMember]
+        [Required]
         public DateTime Datetime { get; set; }
         [DataMember]
         public byte? ScoreTeam1 { get; set; }
         [DataMember]
         public byte? ScoreTeam2 { get; set; }
         [DataMember]
+        [Required]
         public double EstimatedWinChance { get; set; }
         [DataMember]
+        [Required]
         public bool IsDone { get; set; }
 
     }
