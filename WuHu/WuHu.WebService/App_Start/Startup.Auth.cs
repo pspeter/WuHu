@@ -48,16 +48,6 @@ namespace WuHu.WebService
             // Enable the application to use bearer tokens to authenticate users
             app.UseOAuthBearerTokens(OAuthOptions);
 
-            app.CreatePerOwinContext<ApplicationRoleManager>(ApplicationRoleManager.Create);
-
-            var manager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
-            manager.Create(new IdentityRole {Name = "Admin"});
-            manager.Create(new IdentityRole {Name = "User"});
-            var user = new ApplicationUser()
-            {
-                UserName = "a"
-            };
-
             // Uncomment the following lines to enable logging in with third party login providers
             //app.UseMicrosoftAccountAuthentication(
             //    clientId: "",

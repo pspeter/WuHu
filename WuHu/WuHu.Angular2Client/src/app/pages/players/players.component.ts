@@ -64,7 +64,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
                         this.displayError("Fehlerhafter Spieler");
                     }
                     else if (res.status == 500) {
-                        this.displayError("Oops. Da ging was schief");
+                        this.displayError("Oops. Da ging was schief " + res._body);
                     }
                     else {
                         this.displayError("Server offline");

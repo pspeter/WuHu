@@ -11,7 +11,5 @@ namespace WuHu.WebService.Controllers
 {
     public class BaseController : ApiController
     {
-        protected ApplicationRoleManager AppRoleManager => 
-            Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
     }
 }
