@@ -15,6 +15,6 @@ namespace WuHu.BL
         IList<Match> GetAllMatchesFor(Player player);
         IList<Match> GetAllMatchesFor(Tournament tournament);
         IList<Match> GetAllUnfinishedMatches();
-        Match GetCurrentMatchFor(int playerId);
+        Match GetCurrentMatchFor(string username);
     }
 }

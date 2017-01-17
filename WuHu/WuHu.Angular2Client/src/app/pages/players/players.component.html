@@ -2,27 +2,120 @@
     <h2>Spieler</h2>
 
     <div class="container-fluid">
+        <div class="row player-head">
+            <div class="col-xs-4">
+                <button class="btn-success new-player" (click)="newPlayer()">+</button>
+            </div>
+            <div class="col-xs-8">
+                <div class="alert alert-success" *ngIf="!!successMessage">{{successMessage}}</div>
+                <div class="alert alert-danger" *ngIf="!!errorMessage">{{errorMessage}}</div>
+            </div>
+        </div>
         <div class="row">
-            <div class="list-group col-xs-4">
-                <button class="list-group-item" *ngFor="let player of players" (click)="selectPlayer(player)">
-                    {{ player.Firstname }} "{{player.Nickname}}" {{ player.Lastname }}
-                </button>
+            <div class="col-xs-4">
+                <div class="list-group">
+                    <div class="player-list">
+                        <button class="list-group-item" *ngFor="let player of players" (click)="selectPlayer(player)">
+                            {{ player.Firstname }} "{{player.Nickname}}" {{ player.Lastname }}
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="col-xs-8">
-                <form class="login-form" role="form" *ngIf="!!playerModel" (ngSubmit)="savePlayer()">
-                    <div class="form-group">
-                        <label for="firstname">Vorname</label>
-                        <input type="text" #firstname="ngModel" class="form-control" id="firstname"
-                               [(ngModel)]="playerModel.Firstname" name="firstname">
+                <form class="edit-player-form" #playerForm="ngForm" *ngIf="!!playerModel" (ngSubmit)="onSubmit()">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-8">
+                                <div class="form-group">
+                                    <label for="firstname">Vorname</label>
+                                    <input type="text" #firstname="ngModel" class="form-control" id="firstname"
+                                           [(ngModel)]="playerModel.Firstname" name="firstname" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastname">Nachname</label>
+                                    <input type="text" #firstname="ngModel" class="form-control" id="lastname"
+                                           [(ngModel)]="playerModel.Lastname" name="lastname" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="nickname">Spitzname</label>
+                                    <input type="text" #nickname="ngModel" class="form-control" id="nickname"
+                                           [(ngModel)]="playerModel.Nickname" name="nickname" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="checkbox">
+                                        <input type="checkbox" #admin="ngModel" id="admin"
+                                               [(ngModel)]="playerModel.IsAdmin" name="admin">Admin
+                                    </label>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" #monday="ngModel" id="monday"
+                                               [(ngModel)]="playerModel.PlaysMondays" name="monday">Montag
+                                    </label>
+
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" #tuesday="ngModel" id="tuesday"
+                                               [(ngModel)]="playerModel.PlaysTuesdays" name="tuesday">Dienstag
+                                    </label>
+
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" #wednesday="ngModel" id="wednesday"
+                                               [(ngModel)]="playerModel.PlaysWednesdays" name="wednesday">Mittwoch
+                                    </label>
+
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" #thursday="ngModel" id="thursday"
+                                               [(ngModel)]="playerModel.PlaysThursdays" name="thursday">Donnerstag
+                                    </label>
+
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" #friday="ngModel" id="friday"
+                                               [(ngModel)]="playerModel.PlaysFridays" name="friday">Freitag
+                                    </label>
+
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" #saturday="ngModel" id="saturday"
+                                               [(ngModel)]="playerModel.PlaysSaturdays" name="saturday">Samstag
+                                    </label>
+
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" #sunday="ngModel" id="sunday"
+                                               [(ngModel)]="playerModel.PlaysSundays" name="sunday">Sonntag
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4">
+                                <img *ngIf="!!playerModel.Picture" [src]="playerModel.SafePicture" width="100%"/>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="lastname">Nachname</label>
-                        <input type="text" #firstname="ngModel" class="form-control" id="lastname"
-                               [(ngModel)]="playerModel.Lastname" name="lastname">
+                    <div class="form-group" *ngIf="editMode">
+                        <button type="submit" class="btn btn-primary"
+                                [disabled]="!playerForm.form.valid || playerForm.form.pristine">
+                            Änderungen speichern
+                        </button>
+                        <button type="button" class="btn btn-default" (click)="resetPlayer();">
+                            Änderungen verwerfen
+                        </button>
                     </div>
-                    <button type="submit" class="btn btn-default">Änderungen speichern</button>
-                    <button type="button" class="btn btn-default" (click)="resetPlayer()">Änderungen verwerfen</button>
+
+                    <div class="form-group" *ngIf="!editMode">
+                        <button type="submit" class="btn btn-default"
+                                [disabled]="!playerForm.form.valid || playerForm.form.pristine">Spieler erstellen
+                        </button>
+                        <button type="button" class="btn btn-default">Abbrechen</button>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="img-upload">Bild hochladen</label>
+                        <input type="file" accept="image/jpeg" id="img-upload" class="btn btn-default"
+                               (change)="fileChange($event); playerForm.form.markAsDirty();">
+                    </div>
                 </form>
             </div>
         </div>

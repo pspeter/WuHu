@@ -28,4 +28,9 @@ export class RestoreService<T> {
     // super poor clone implementation
     return JSON.parse(JSON.stringify(item));
   }
+
+  reset(): void {
+      this.originalItem = null;
+      this.currentItem = null;
+  }
 }

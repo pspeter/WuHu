@@ -21,8 +21,14 @@ namespace WuHu.WebService.Controllers
         [Route("{playerId}", Name = "GetPlayerByIdRoute")]
         [SwaggerResponse(HttpStatusCode.NotFound, "Player not found")]
         [SwaggerResponse(HttpStatusCode.OK, "Returns player with that id", typeof(Player))]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
         public Player GetById(int playerId)
         {
+            if (playerId < 0)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+
             var player = Logic.GetPlayer(playerId);
 
             if (player == null)
@@ -36,8 +42,14 @@ namespace WuHu.WebService.Controllers
         [Route("{username}", Name = "GetPlayerByUsernameRoute")]
         [SwaggerResponse(HttpStatusCode.NotFound, "Player not found")]
         [SwaggerResponse(HttpStatusCode.OK, "Returns player with that username", Type = typeof(Player))]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
         public Player GetByUsername(string username)
         {
+            if (username == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+
             var player = Logic.GetPlayer(username);
 
             if (player == null)
@@ -61,15 +73,26 @@ namespace WuHu.WebService.Controllers
         [Route("", Name = "PostPlayerRoute")]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.Conflict)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         public void PostPlayer([FromBody] Player player)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
 
             var success = Logic.AddPlayer(player);
 
             if (!success)
             {
-                throw new HttpResponseException(HttpStatusCode.Forbidden);
+                var duplicate = Logic.GetPlayer(player.Username);
+                if (duplicate != null)
+                {
+                    throw new HttpResponseException(HttpStatusCode.Conflict);
+                }
+
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
         }
 

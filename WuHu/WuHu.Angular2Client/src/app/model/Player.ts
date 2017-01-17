@@ -24,6 +24,7 @@
 
 'use strict';
 import * as models from './models';
+import {SafeResourceUrl} from "@angular/platform-browser";
 
 export interface Player {
     
@@ -59,6 +60,8 @@ export interface Player {
     PlaysSundays?: boolean;
 
     Picture?: string;
+
+    SafePicture?: SafeResourceUrl;
 
     CurrentRating?: models.Rating;
 }

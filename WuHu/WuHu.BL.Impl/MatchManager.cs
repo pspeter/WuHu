@@ -90,10 +90,15 @@ namespace WuHu.BL.Impl
             return true;
         }
 
-        public Match GetCurrentMatchFor(int playerId)
+        public Match GetCurrentMatchFor(string username)
         {
-            var match = MatchDao.FindCurrentByPlayer(playerId);
-            return match.IsDone ? null : match;
+            var player = PlayerDao.FindByUsername(username);
+            if (player?.PlayerId == null)
+            {
+                return null;
+            }
+            var match = MatchDao.FindCurrentByPlayer(player.PlayerId.Value);
+            return match != null && !match.IsDone ? match : null;
         }
 
         public IList<Match> GetAllMatches()
