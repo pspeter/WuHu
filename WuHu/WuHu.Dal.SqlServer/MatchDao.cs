@@ -24,20 +24,14 @@ namespace WuHu.Dal.SqlServer
             FROM Match
                 ORDER BY datetime DESC;";
         
-        private const string SqlFindCurrentByPlayer =
+        private const string SqlFindUnfinishedByPlayer =
             @"SELECT *
-            FROM Match mOuter
-                WHERE (mOuter.player1 = @playerId
-                    OR mOuter.player2 = @playerId
-                    OR mOuter.player3 = @playerId
-                    OR mOuter.player4 = @playerId)
-                    AND rOuter.datetime = 
-                        (SELECT MAX(datetime)
-                            FROM Match mInner
-                                WHERE (mOuter.player1 = @playerId
-                                    OR mOuter.player2 = @playerId
-                                    OR mOuter.player3 = @playerId
-                                    OR mOuter.player4 = @playerId);";
+            FROM Match m
+                WHERE (player1 = @playerId
+                    OR player2 = @playerId
+                    OR player3 = @playerId
+                    OR player4 = @playerId)
+                    AND isDone = 0;";
 
         private const string SqlFindAllByPlayer =
             @"SELECT *
@@ -173,7 +167,7 @@ namespace WuHu.Dal.SqlServer
                 var result = new List<Match>();
                 while (reader.Read())
                 {
-                    result.Add(BuildMatch(reader));
+                    result.Add(BuildVirtualMatch(reader));
                 }
                 return result;
             }
@@ -205,19 +199,24 @@ namespace WuHu.Dal.SqlServer
         }
 
 
-        protected DbCommand CreateFindCurrentByPlayerCmd(int playerId)
+        protected DbCommand CreateFindUnfinishedByPlayerCmd(int playerId)
         {
-            var findByIdCmd = database.CreateCommand(SqlFindCurrentByPlayer);
+            var findByIdCmd = database.CreateCommand(SqlFindUnfinishedByPlayer);
             database.DefineParameter(findByIdCmd, "playerId", DbType.Int32, playerId);
             return findByIdCmd;
         }
 
-        public Match FindCurrentByPlayer(int playerId)
+        public IList<Match> FindUnfinishedByPlayer(int playerId)
         {
-            using (var command = CreateFindAllByPlayerCmd(playerId))
+            using (var command = CreateFindUnfinishedByPlayerCmd(playerId))
             using (var reader = database.ExecuteReader(command))
             {
-                return reader.Read() ? BuildMatch(reader) : null;
+                var result = new List<Match>();
+                while (reader.Read())
+                {
+                    result.Add(BuildMatch(reader));
+                }
+                return result;
             }
         }
 

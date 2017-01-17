@@ -94,7 +94,7 @@ namespace WuHu.WebService.Providers
         {
             IDictionary<string, string> data = new Dictionary<string, string>
             {
-                { "userName", user.Username},
+                { "username", user.Username},
                 { "role", user.IsAdmin ? "Admin" : "User" }
             };
             return new AuthenticationProperties(data);

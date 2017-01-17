@@ -31,9 +31,13 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><button type="button" class="btn btn-default navbar-btn" [routerLinkActive]="['active']"
-                                *ngIf="!userService.IsUser()" [routerLink]="['login']">Login</button></li>
+                                *ngIf="!userService.IsUser()" [routerLink]="['login']">
+                        Login <span class="glyphicon glyphicon-log-in"></span>
+                    </button></li>
                     <li><button type="button" class="btn btn-default navbar-btn" [routerLinkActive]="['active']"
-                                *ngIf="userService.IsUser()" (click)="logout()">Logout</button></li>
+                                *ngIf="userService.IsUser()" (click)="logout()">
+                        Logout <span class="glyphicon glyphicon-log-in"></span>
+                    </button></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->

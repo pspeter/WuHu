@@ -33,7 +33,7 @@ import 'rxjs/Rx';
 'use strict';
 
 @Injectable()
-export class AccountApi {
+export class MatchApi {
     protected basePath = 'http://localhost:4649';
     public defaultHeaders : Headers = new Headers();
 
@@ -46,17 +46,54 @@ export class AccountApi {
     /**
      * 
      * 
+     * @param username 
      */
-    public accountLogout (extraHttpRequestParams?: any ) : Observable<any> {
-        const path = this.basePath + '/api/account/logout';
+    public matchGetUnfinishedForPlayer (username: string, extraHttpRequestParams?: any ) : Observable<Array<models.Match>> {
+        const path = this.basePath + '/api/match/player/{username}'
+            .replace('{' + 'username' + '}', String(username));
 
         let queryParameters = new URLSearchParams();
         let headerParams = this.defaultHeaders;
+        // verify required parameter 'username' is not null or undefined
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling matchGetUnfinishedForPlayer.');
+        }
         let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
+            method: 'GET',
             headers: headerParams,
             search: queryParameters
         };
+
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+     * 
+     * 
+     * @param match 
+     */
+    public matchPostIntermediateResult (match: models.Match, extraHttpRequestParams?: any ) : Observable<{}> {
+        const path = this.basePath + '/api/match';
+        console.log("put", match);
+        let queryParameters = new URLSearchParams();
+        let headerParams = this.defaultHeaders;
+        // verify required parameter 'match' is not null or undefined
+        if (match === null || match === undefined) {
+            throw new Error('Required parameter match was null or undefined when calling matchPostIntermediateResult.');
+        }
+        let requestOptions: RequestOptionsArgs = {
+            method: 'PUT',
+            headers: headerParams,
+            search: queryParameters
+        };
+        requestOptions.body = JSON.stringify(match);
 
         return this.http.request(path, requestOptions)
             .map((response: Response) => {

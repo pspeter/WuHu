@@ -12,7 +12,7 @@ using WuHu.Domain;
 namespace WuHu.WebService.Controllers
 {
     [RoutePrefix("api/rating")]
-    public class RatingController : BaseController
+    public class RatingController : ApiController
     {
         private IRatingManager Logic { get; } = BLFactory.GetRatingManager();
 

@@ -11,6 +11,7 @@ namespace WuHu.Domain
     [DataContract(Namespace = "http://WuHu.Domain")]
     public class Rating
     {
+        public Rating() { }
         public Rating(int ratingId, Player player, DateTime datetime, int value)
         {
             this.RatingId = ratingId;

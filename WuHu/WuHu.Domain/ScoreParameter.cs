@@ -11,6 +11,7 @@ namespace WuHu.Domain
     [DataContract(Namespace = "http://WuHu.Domain")]
     public class ScoreParameter
     {
+        public ScoreParameter() { }
         public ScoreParameter(string key, string value)
         {
             this.Key = key;

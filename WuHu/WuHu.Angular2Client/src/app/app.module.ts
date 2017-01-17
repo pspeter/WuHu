@@ -27,6 +27,7 @@ import {RestoreService} from "./services/restore.service";
 import {PlayerService} from "./api/player-service";
 import {RatingService} from "./api/rating-service";
 import {AccountService} from "./api/account-service";
+import {MatchService} from "./api/match-service";
 
 @NgModule({
     declarations: [
@@ -54,12 +55,12 @@ import {AccountService} from "./api/account-service";
         LogoutGuard,
         AdminGuard,
         UserService,
+        MatchService,
         HttpAuthService,
         PlayerService,
         RatingService,
         AccountService,
         RestoreService,
-        FormBuilder,
     ],
     bootstrap: [AppComponent]
 })

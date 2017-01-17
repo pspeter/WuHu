@@ -76,11 +76,11 @@ namespace WuHu.BL.Test
             Assert.IsFalse(match.IsDone);
             Assert.IsNotNull(match.ScoreTeam1);
         }
-
+        /* ------ deprecated ------
         [TestMethod]
         public void GetAll()
         {
-            var foundInitial = _mgr.GetAllMatches().Count;
+            var foundInitial = _mgr.GetAllMatchesFor().Count;
             var cntInitial = _matchDao.Count();
             Assert.AreEqual(foundInitial, cntInitial);
 
@@ -97,7 +97,7 @@ namespace WuHu.BL.Test
 
             var foundAfterInsert = _mgr.GetAllMatches().Count;
             Assert.AreEqual(cntAfterInsert, foundAfterInsert);
-        }
+        }  */
 
 
         [TestMethod]

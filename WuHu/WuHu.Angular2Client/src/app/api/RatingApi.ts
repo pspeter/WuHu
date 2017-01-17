@@ -31,14 +31,13 @@ import 'rxjs/Rx';
 /* tslint:disable:no-unused-variable member-ordering */
 
 'use strict';
-import {HttpAuthService} from "../services/http-auth.service";
 
 @Injectable()
 export class RatingApi {
     protected basePath = 'http://localhost:4649';
     public defaultHeaders : Headers = new Headers();
 
-    constructor(protected http: HttpAuthService, @Optional() basePath: string) {
+    constructor(protected http: Http, @Optional() basePath: string) {
         if (basePath) {
             this.basePath = basePath;
         }

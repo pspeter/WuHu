@@ -364,7 +364,14 @@ namespace WuHu.Dal.SqlServer
                                             player.PlaysThursdays, player.PlaysFridays, player.PlaysSaturdays,
                                             player.PlaysSundays, player.Picture))
             {
-                return database.ExecuteNonQuery(command) == 1;
+                try
+                {
+                    return database.ExecuteNonQuery(command) == 1;
+                }
+                catch (SqlException)
+                {
+                    return false;
+                }
             }
         }
 

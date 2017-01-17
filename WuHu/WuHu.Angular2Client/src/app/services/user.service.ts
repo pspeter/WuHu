@@ -60,6 +60,10 @@ export class UserService {
         this.accountService.accountLogout();
     }
 
+    CurrentUser() {
+        return this.username;
+    }
+
     IsUser() {
         return this.role == "User" || this.role == "Admin";
     }

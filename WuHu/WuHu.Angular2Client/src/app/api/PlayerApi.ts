@@ -31,14 +31,13 @@ import 'rxjs/Rx';
 /* tslint:disable:no-unused-variable member-ordering */
 
 'use strict';
-import {HttpAuthService} from "../services/http-auth.service";
 
 @Injectable()
 export class PlayerApi {
     protected basePath = 'http://localhost:4649';
     public defaultHeaders : Headers = new Headers();
 
-    constructor(protected http: HttpAuthService, @Optional() basePath: string) {
+    constructor(protected http: Http, @Optional() basePath: string) {
         if (basePath) {
             this.basePath = basePath;
         }
@@ -167,7 +166,7 @@ export class PlayerApi {
      * 
      * @param player 
      */
-    public playerPutPlayer (player: models.Player, extraHttpRequestParams?: any ) : boolean | any {
+    public playerPutPlayer (player: models.Player, extraHttpRequestParams?: any ) : Observable<{}> {
         const path = this.basePath + '/api/player';
 
         let queryParameters = new URLSearchParams();
@@ -182,13 +181,13 @@ export class PlayerApi {
             search: queryParameters
         };
         requestOptions.body = JSON.stringify(player);
-        console.log("put player");
+
         return this.http.request(path, requestOptions)
             .map((response: Response) => {
                 if (response.status === 204) {
-                    return true;
+                    return undefined;
                 } else {
-                    return false;
+                    return response.json();
                 }
             });
     }

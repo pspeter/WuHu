@@ -12,6 +12,8 @@ namespace WuHu.Domain
     [DataContract(Namespace = "http://WuHu.Domain")]
     public class Match
     {
+        public Match() { }
+
         public Match(int? matchId, Tournament tournament, DateTime datetime, 
             byte? scoreteam1, byte? scoreteam2, double estimatedWinChance, bool isDone,
             Player player1, Player player2, Player player3, Player player4)

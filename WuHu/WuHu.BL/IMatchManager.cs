@@ -11,10 +11,10 @@ namespace WuHu.BL
     {
         bool SetScore(Match match);
         bool SetFinalScore(Match match);
-        IList<Match> GetAllMatches();
+        //IList<Match> GetAllMatches(); too many
         IList<Match> GetAllMatchesFor(Player player);
         IList<Match> GetAllMatchesFor(Tournament tournament);
         IList<Match> GetAllUnfinishedMatches();
-        Match GetCurrentMatchFor(string username);
+        IList<Match> GetUnfinishedMatchesFor(string username);
     }
 }

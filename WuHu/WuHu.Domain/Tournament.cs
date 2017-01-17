@@ -11,6 +11,7 @@ namespace WuHu.Domain
     [DataContract(Namespace = "http://WuHu.Domain")]
     public class Tournament
     {
+        public Tournament() { }
         public Tournament(int tournamentId, string name, DateTime datetime)
         {
             this.TournamentId = tournamentId;
@@ -27,7 +28,6 @@ namespace WuHu.Domain
         [DataMember]
         public int? TournamentId { get; set; }
         [DataMember]
-        [Required]
         public string Name { get;  set; }
         [DataMember]
         [Required]

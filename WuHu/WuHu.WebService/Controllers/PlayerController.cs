@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,7 +14,7 @@ using WuHu.BL.Impl;
 namespace WuHu.WebService.Controllers
 {
     [RoutePrefix("api/player")]
-    public class PlayerController : BaseController
+    public class PlayerController : ApiController
     {
         private IPlayerManager Logic { get; } = BLFactory.GetPlayerManager();
 
@@ -74,7 +75,6 @@ namespace WuHu.WebService.Controllers
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.Conflict)]
-        [SwaggerResponse(HttpStatusCode.InternalServerError)]
         public void PostPlayer([FromBody] Player player)
         {
             if (!ModelState.IsValid)
@@ -91,8 +91,8 @@ namespace WuHu.WebService.Controllers
                 {
                     throw new HttpResponseException(HttpStatusCode.Conflict);
                 }
-
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+                
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
         }
 
@@ -102,7 +102,6 @@ namespace WuHu.WebService.Controllers
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.NotFound, "Player not found")]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
-        [SwaggerResponse(HttpStatusCode.InternalServerError)]
         public void PutPlayer([FromBody] Player player)
         {
             if (!ModelState.IsValid)
@@ -125,7 +124,7 @@ namespace WuHu.WebService.Controllers
 
             if (!success)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
         }
     }
