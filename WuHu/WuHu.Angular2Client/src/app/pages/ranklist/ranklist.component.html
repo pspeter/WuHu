@@ -1,6 +1,19 @@
-<div class="page-wrapper">
-    <div class="page-header col-xs-12"><h2>Rangliste</h2></div>
-    <table class="table">
+<div class="page-header row"><h2>Rangliste</h2></div>
+
+<div class="row messages">
+    <div class="col-xs-12">
+        <div class="alert alert-danger" *ngIf="!!errorMessage">{{errorMessage}}</div>
+    </div>
+    <div class="col-xs-12">
+        <div class="alert alert-info" *ngIf="!!infoMessage">{{infoMessage}}</div>
+    </div>
+
+    <div *ngIf="loading" class="col-xs-12 center-children">
+        <div class="loader"></div>
+    </div>
+</div>
+<div class="row" *ngIf="!loading && !errorMessage">
+    <table class="table col-xs-12">
         <tr>
             <th>Platz</th>
             <th>Name</th>

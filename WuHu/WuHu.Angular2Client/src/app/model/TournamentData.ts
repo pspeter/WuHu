@@ -25,7 +25,7 @@
 'use strict';
 import * as models from './models';
 
-export interface Tournament {
+export interface TournamentData {
     
 
     TournamentId?: number;
@@ -33,4 +33,8 @@ export interface Tournament {
     Name?: string;
 
     Datetime?: Date;
+
+    Players?: Array<models.Player>;
+
+    Amount?: number;
 }

@@ -1,3 +1,37 @@
-<div class="page-wrapper">
-    <div class="page-header col-xs-12"><h2>Spielplan</h2></div>
+<div class="page-header row">
+    <h2>Spielplan</h2>
+</div>
+
+<div class="row player-head">
+    <nav class="nav navbar-default">
+        <button class="btn btn-lg btn-success navbar-btn" (click)="newTournament()">Neuer Spielplan</button>
+        <button class="btn btn-lg btn-default navbar-btn" (click)="editTournament()">Spielplan ändern</button>
+        <div class="alert alert-success" *ngIf="!!successMessage">{{successMessage}}</div>
+        <div class="alert alert-danger" *ngIf="!!errorMessage">{{errorMessage}}</div>
+    </nav>
+</div>
+
+
+<div class="row" *ngIf="!loading && !errorMessage">
+    <div class="col-xs-8">
+        <form class="tournament-form" #tournamentForm="ngForm" *ngIf="!!tournamentModel" (ngSubmit)="onSubmit()">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" #name="ngModel" class="form-control" id="name"
+                                   [(ngModel)]="tournamentModel.name" name="name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" #name="ngModel" class="form-control" id="name"
+                                   [(ngModel)]="tournamentModel.name" name="name">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>

@@ -33,7 +33,7 @@ import 'rxjs/Rx';
 'use strict';
 
 @Injectable()
-export class MatchApi {
+export class LiveMatchApi {
     protected basePath = 'http://localhost:4649';
     public defaultHeaders : Headers = new Headers();
 
@@ -46,18 +46,12 @@ export class MatchApi {
     /**
      * 
      * 
-     * @param username 
      */
-    public matchGetUnfinishedForPlayer (username: string, extraHttpRequestParams?: any ) : Observable<Array<models.Match>> {
-        const path = this.basePath + '/api/match/player/{username}'
-            .replace('{' + 'username' + '}', String(username));
+    public liveMatchGetLiveMatch (extraHttpRequestParams?: any ) : Observable<any> {
+        const path = this.basePath + '/api/live/matches';
 
         let queryParameters = new URLSearchParams();
         let headerParams = this.defaultHeaders;
-        // verify required parameter 'username' is not null or undefined
-        if (username === null || username === undefined) {
-            throw new Error('Required parameter username was null or undefined when calling matchGetUnfinishedForPlayer.');
-        }
         let requestOptions: RequestOptionsArgs = {
             method: 'GET',
             headers: headerParams,
@@ -77,23 +71,23 @@ export class MatchApi {
     /**
      * 
      * 
-     * @param match 
+     * @param message 
      */
-    public matchPostIntermediateResult (match: models.Match, extraHttpRequestParams?: any ) : Observable<{}> {
-        const path = this.basePath + '/api/match';
+    public liveMatchPostLiveMatch (message: string, extraHttpRequestParams?: any ) : Observable<any> {
+        const path = this.basePath + '/api/live/matches';
 
         let queryParameters = new URLSearchParams();
         let headerParams = this.defaultHeaders;
-        // verify required parameter 'match' is not null or undefined
-        if (match === null || match === undefined) {
-            throw new Error('Required parameter match was null or undefined when calling matchPostIntermediateResult.');
+        // verify required parameter 'message' is not null or undefined
+        if (message === null || message === undefined) {
+            throw new Error('Required parameter message was null or undefined when calling liveMatchPostLiveMatch.');
         }
         let requestOptions: RequestOptionsArgs = {
-            method: 'PUT',
+            method: 'POST',
             headers: headerParams,
             search: queryParameters
         };
-        requestOptions.body = JSON.stringify(match);
+        requestOptions.body = JSON.stringify(message);
 
         return this.http.request(path, requestOptions)
             .map((response: Response) => {

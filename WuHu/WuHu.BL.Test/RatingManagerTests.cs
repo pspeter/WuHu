@@ -93,8 +93,6 @@ namespace WuHu.BL.Test
             matchWithoutScores.ScoreTeam1 = 0;
             matchWithoutScores.ScoreTeam2 = 10;
             _matchDao.Update(matchWithoutScores);
-
-            Assert.IsFalse(_mgr.AddCurrentRatingFor(player));
         }
 
         [TestMethod]

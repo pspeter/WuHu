@@ -10,10 +10,11 @@ namespace WuHu.BL
     public interface ITournamentManager
     {
         IList<Tournament> GetAllTournaments();
+        Tournament GetTournamentById(int tournamentId);
         Tournament GetMostRecentTournament();
         bool CreateTournament(Tournament tournament, IList<Player> players, int amountMatches);
         bool UpdateTournament(Tournament tournament, IList<Player> players, int amountMatches);
-        bool LockTournament();
-        void UnlockTournament();
+        bool LockTournament(Tournament tournament);
+        void UnlockTournament(Tournament tournament);
     }
 }

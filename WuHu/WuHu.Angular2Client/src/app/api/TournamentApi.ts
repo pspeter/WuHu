@@ -33,7 +33,7 @@ import 'rxjs/Rx';
 'use strict';
 
 @Injectable()
-export class PlayerApi {
+export class TournamentApi {
     protected basePath = 'http://localhost:4649';
     public defaultHeaders : Headers = new Headers();
 
@@ -47,8 +47,8 @@ export class PlayerApi {
      * 
      * 
      */
-    public playerGetAll (extraHttpRequestParams?: any ) : Observable<Array<models.Player>> {
-        const path = this.basePath + '/api/player';
+    public tournamentGetCurrentTournament (extraHttpRequestParams?: any ) : Observable<models.TournamentData> {
+        const path = this.basePath + '/api/tournament/current';
 
         let queryParameters = new URLSearchParams();
         let headerParams = this.defaultHeaders;
@@ -71,85 +71,29 @@ export class PlayerApi {
     /**
      * 
      * 
-     * @param playerId 
+     * @param tournament 
+     * @param tournamentId 
      */
-    public playerGetById (playerId: number, extraHttpRequestParams?: any ) : Observable<models.Player> {
-        const path = this.basePath + '/api/player/id/{playerId}'
-            .replace('{' + 'playerId' + '}', String(playerId));
+    public tournamentLockTournament (tournament: models.TournamentData, tournamentId: string, extraHttpRequestParams?: any ) : Observable<{}> {
+        const path = this.basePath + '/api/tournament/lock/{tournamentId}'
+            .replace('{' + 'tournamentId' + '}', String(tournamentId));
 
         let queryParameters = new URLSearchParams();
         let headerParams = this.defaultHeaders;
-        // verify required parameter 'playerId' is not null or undefined
-        if (playerId === null || playerId === undefined) {
-            throw new Error('Required parameter playerId was null or undefined when calling playerGetById.');
+        // verify required parameter 'tournament' is not null or undefined
+        if (tournament === null || tournament === undefined) {
+            throw new Error('Required parameter tournament was null or undefined when calling tournamentLockTournament.');
         }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'GET',
-            headers: headerParams,
-            search: queryParameters
-        };
-
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
-    }
-
-    /**
-     * 
-     * 
-     * @param username 
-     */
-    public playerGetByUsername (username: string, extraHttpRequestParams?: any ) : Observable<models.Player> {
-        const path = this.basePath + '/api/player/username/{username}'
-            .replace('{' + 'username' + '}', String(username));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'username' is not null or undefined
-        if (username === null || username === undefined) {
-            throw new Error('Required parameter username was null or undefined when calling playerGetByUsername.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'GET',
-            headers: headerParams,
-            search: queryParameters
-        };
-
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
-    }
-
-    /**
-     * 
-     * 
-     * @param player 
-     */
-    public playerPostPlayer (player: models.Player, extraHttpRequestParams?: any ) : Observable<{}> {
-        const path = this.basePath + '/api/player';
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'player' is not null or undefined
-        if (player === null || player === undefined) {
-            throw new Error('Required parameter player was null or undefined when calling playerPostPlayer.');
+        // verify required parameter 'tournamentId' is not null or undefined
+        if (tournamentId === null || tournamentId === undefined) {
+            throw new Error('Required parameter tournamentId was null or undefined when calling tournamentLockTournament.');
         }
         let requestOptions: RequestOptionsArgs = {
             method: 'POST',
             headers: headerParams,
             search: queryParameters
         };
-        requestOptions.body = JSON.stringify(player);
+        requestOptions.body = JSON.stringify(tournament);
 
         return this.http.request(path, requestOptions)
             .map((response: Response) => {
@@ -164,23 +108,91 @@ export class PlayerApi {
     /**
      * 
      * 
-     * @param player 
+     * @param tournament 
      */
-    public playerPutPlayer (player: models.Player, extraHttpRequestParams?: any ) : Observable<{}> {
-        const path = this.basePath + '/api/player';
+    public tournamentPostTournament (tournament: models.TournamentData, extraHttpRequestParams?: any ) : Observable<{}> {
+        const path = this.basePath + '/api/tournament';
 
         let queryParameters = new URLSearchParams();
         let headerParams = this.defaultHeaders;
-        // verify required parameter 'player' is not null or undefined
-        if (player === null || player === undefined) {
-            throw new Error('Required parameter player was null or undefined when calling playerPutPlayer.');
+        // verify required parameter 'tournament' is not null or undefined
+        if (tournament === null || tournament === undefined) {
+            throw new Error('Required parameter tournament was null or undefined when calling tournamentPostTournament.');
+        }
+        let requestOptions: RequestOptionsArgs = {
+            method: 'POST',
+            headers: headerParams,
+            search: queryParameters
+        };
+        requestOptions.body = JSON.stringify(tournament);
+
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+     * 
+     * 
+     * @param tournament 
+     */
+    public tournamentPutTournament (tournament: models.TournamentData, extraHttpRequestParams?: any ) : Observable<{}> {
+        const path = this.basePath + '/api/tournament';
+
+        let queryParameters = new URLSearchParams();
+        let headerParams = this.defaultHeaders;
+        // verify required parameter 'tournament' is not null or undefined
+        if (tournament === null || tournament === undefined) {
+            throw new Error('Required parameter tournament was null or undefined when calling tournamentPutTournament.');
         }
         let requestOptions: RequestOptionsArgs = {
             method: 'PUT',
             headers: headerParams,
             search: queryParameters
         };
-        requestOptions.body = JSON.stringify(player);
+        requestOptions.body = JSON.stringify(tournament);
+
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+     * 
+     * 
+     * @param tournament 
+     * @param tournamentId 
+     */
+    public tournamentUnlockTournament (tournament: models.TournamentData, tournamentId: string, extraHttpRequestParams?: any ) : Observable<{}> {
+        const path = this.basePath + '/api/tournament/unlock/{tournamentId}'
+            .replace('{' + 'tournamentId' + '}', String(tournamentId));
+
+        let queryParameters = new URLSearchParams();
+        let headerParams = this.defaultHeaders;
+        // verify required parameter 'tournament' is not null or undefined
+        if (tournament === null || tournament === undefined) {
+            throw new Error('Required parameter tournament was null or undefined when calling tournamentUnlockTournament.');
+        }
+        // verify required parameter 'tournamentId' is not null or undefined
+        if (tournamentId === null || tournamentId === undefined) {
+            throw new Error('Required parameter tournamentId was null or undefined when calling tournamentUnlockTournament.');
+        }
+        let requestOptions: RequestOptionsArgs = {
+            method: 'POST',
+            headers: headerParams,
+            search: queryParameters
+        };
+        requestOptions.body = JSON.stringify(tournament);
 
         return this.http.request(path, requestOptions)
             .map((response: Response) => {

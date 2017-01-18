@@ -16,7 +16,6 @@ namespace WuHu.BL.Impl
         protected readonly IScoreParameterDao ParamDao;
         protected readonly IRatingDao RatingDao;
         protected readonly Random Rand = new Random();
-        protected bool TournamentLocked;
 
         public TournamentManager()
         {
@@ -39,18 +38,41 @@ namespace WuHu.BL.Impl
             return TournamentDao.FindMostRecentTournament();
         }
 
-        public bool LockTournament()
+        public Tournament GetTournamentById(int tournamentId)
         {
-            if (TournamentLocked)
+            return TournamentDao.FindById(tournamentId);
+        }
+
+        public bool LockTournament(Tournament tournament)
+        {
+            if (tournament?.TournamentId == null)
             {
                 return false;
             }
-            return TournamentLocked = true;
+
+            var savedTournament = GetTournamentById(tournament.TournamentId.Value);
+            if (savedTournament == null)
+            {
+                return false;
+            }
+
+            if (savedTournament.IsLocked)
+            {
+                return false;
+            }
+            savedTournament.IsLocked = true;
+            return UpdateTournament(tournament);
         }
 
-        public void UnlockTournament()
+        public void UnlockTournament(Tournament tournament)
         {
-                TournamentLocked = false;
+            if (tournament?.TournamentId == null)
+            {
+                return;
+            }
+            var savedTournament = GetTournamentById(tournament.TournamentId.Value);
+            savedTournament.IsLocked = false;
+            UpdateTournament(savedTournament);
         }
 
         public bool CreateTournament(Tournament tournament, IList<Player> players, int amountMatches)
@@ -60,21 +82,25 @@ namespace WuHu.BL.Impl
             {
                 return false;
             }
-            LockTournament();
-            SetMatchesForTournament(tournament, players, amountMatches);
-            UnlockTournament();
-            return true;
+            LockTournament(tournament);
+            var success = SetMatchesForTournament(tournament, players, amountMatches);
+            return success;
         }
 
 
         public bool UpdateTournament(Tournament tournament, IList<Player> players, int amountMatches)
         {
-            return SetMatchesForTournament(tournament, players, amountMatches);
+            return tournament.IsLocked && SetMatchesForTournament(tournament, players, amountMatches);
+        }
+
+        private bool UpdateTournament(Tournament tournament)
+        {
+            return TournamentDao.Update(tournament);
         }
 
         private bool SetMatchesForTournament(Tournament tournament, IList<Player> players, int amount)
         {
-            if ( !TournamentLocked || players.Count() < 4 || amount < 1)
+            if ( !tournament.IsLocked || players.Count() < 4 || amount < 1)
             {
                 return false;
             }
@@ -82,7 +108,18 @@ namespace WuHu.BL.Impl
             // if any matches that haven't been played exist, cancel them
             CancelMatches(tournament);
 
+            var finishedMatches = MatchDao.FindAllByTournament(tournament);
+
             var playersCopy = new List<Player>(players);
+            var maxGames = players.Select(p => finishedMatches
+                .Count(m => m.Player1.Equals(p) || m.Player2.Equals(p) ||
+                            m.Player3.Equals(p) || m.Player4.Equals(p))).Max(c => c);
+
+            players = players
+                .Where(p => finishedMatches
+                    .Count(m => m.Player1.Equals(p) || m.Player2.Equals(p) ||
+                                m.Player3.Equals(p) || m.Player4.Equals(p)) != maxGames)
+                    .ToList();
             for (var matchNr = 0; matchNr < amount; ++matchNr)
             {
                 // first, pick a random player
@@ -135,7 +172,7 @@ namespace WuHu.BL.Impl
 
                 MatchDao.Insert(newMatch);
             }
-            UnlockTournament();
+            UnlockTournament(tournament);
             return true;
         }
 

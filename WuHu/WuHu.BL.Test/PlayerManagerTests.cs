@@ -86,13 +86,10 @@ namespace WuHu.BL.Test
         public void Add()
         {
             var user = TestHelper.GenerateName();
-            var admin = new Player("admin", "last", "nick", user, "pass",
-                    true, false, false, false, false, true, true, true, null);
-
             var player = new Player("NotAdmin", "last", "nick", user, "pass",
                     false, false, false, false, false, true, true, true, null);
             var success = _mgr.AddPlayer(player);
-            Assert.IsFalse(success);
+            Assert.IsTrue(success);
 
             
         }
@@ -110,27 +107,11 @@ namespace WuHu.BL.Test
 
             Assert.IsTrue(_playerDao.Insert(player));
             Assert.IsTrue(_playerDao.Insert(otherPlayer));
-
-            // players can change their own values
+            
             player.Nickname = "newNick";
             var success = _mgr.UpdatePlayer(player);
             Assert.IsTrue(success);
-
-            // normal players can't change other players' values
-            otherPlayer.Nickname = "newNick";
-            success = _mgr.UpdatePlayer(otherPlayer);
-            Assert.IsFalse(success);
-
-            // normal players can't make themselves admin
-            player.IsAdmin = true;
-            success = _mgr.UpdatePlayer(player);
-            Assert.IsFalse(success);
             
-            // other admins can change other players and even make them admin
-            success = _mgr.UpdatePlayer(player);
-            Assert.IsTrue(success);
-
-
             user = TestHelper.GenerateName();
             var notInsertedPlayer = new Player("first", "last", "nick", user, "pass",
                     false, false, false, false, false, true, true, true, null);

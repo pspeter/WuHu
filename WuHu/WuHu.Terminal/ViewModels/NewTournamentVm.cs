@@ -23,7 +23,7 @@ namespace WuHu.Terminal.ViewModels
         {
             _tournament = new Tournament("", DateTime.Now);
 
-            var locked = IsAuthenticated && TournamentManager.LockTournament();
+            var locked = IsAuthenticated && TournamentManager.LockTournament(_tournament);
             if (!locked)
             {
                 queueMessage?.Invoke("Spielplan wird zur Zeit bearbeitet. Bitte warten.");

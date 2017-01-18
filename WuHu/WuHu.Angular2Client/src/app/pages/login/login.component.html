@@ -1,16 +1,14 @@
-<div class="page-wrapper">
-    <div class="login-page">
-        <div class="form">
-            <form class="login-form" #loginForm="ngForm" (submit)="login()">
-                <div class="form-group">
-                    <input type="text" #username="ngModel" class="form-control" name="username" (ngModelChange)="onChange()"
-                           [(ngModel)]="loginModel.username" placeholder="Benutzername" required>
-                    <input type="password" #password="ngModel" class="form-control" name="password" (ngModelChange)="onChange()"
-                           [(ngModel)]="loginModel.password" id="password" placeholder="Passwort" required>
-                </div>
-                <button class="btn btn-default" [disabled]="!loginForm.form.valid">Anmelden</button>
-                <div class="false-login">{{ errorMessage }}</div>
-            </form>
-        </div>
+<div class="row login-page">
+    <div class="form">
+        <form class="login-form" #loginForm="ngForm" (submit)="login()">
+            <div class="form-group">
+                <input type="text" #username="ngModel" class="form-control" name="username" (ngModelChange)="onChange()"
+                       [(ngModel)]="loginModel.username" placeholder="Benutzername" required>
+                <input type="password" #password="ngModel" class="form-control" name="password" (ngModelChange)="onChange()"
+                       [(ngModel)]="loginModel.password" id="password" placeholder="Passwort" required>
+            </div>
+            <button class="btn btn-default" [disabled]="!loginForm.form.valid">Anmelden</button>
+            <div class="false-login">{{ errorMessage }}</div>
+        </form>
     </div>
 </div>

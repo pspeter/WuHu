@@ -16,6 +16,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
     private players: Player[];
     private errorMessage: string;
     private successMessage: string;
+    private loading: boolean = true;
     private editMode: boolean = true;
 
     constructor(private playerService: PlayerService,
@@ -63,11 +64,15 @@ export class PlayersComponent implements OnInit, OnDestroy {
                     if (res.status == 400) {
                         this.displayError("Fehlerhafter Spieler");
                     }
+                    else if (res.status == 403) {
+                        this.displayError("Nicht eingeloggt");
+                        setTimeout(() => this.userService.logout(), 2000)
+                    }
                     else if (res.status == 500) {
                         this.displayError("Oops. Da ging was schief " + res._body);
                     }
                     else {
-                        this.displayError("Server offline");
+                        this.displayError("Verbindungsproblem");
                     }
                 }
             });
@@ -92,7 +97,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
                         this.displayError("Oops. Da ging was schief");
                     }
                     else {
-                        this.displayError("Server offline");
+                        this.displayError("Verbindungsproblem");
                     }
                 }
             });
@@ -137,13 +142,23 @@ export class PlayersComponent implements OnInit, OnDestroy {
     }
 
     getPlayers() {
+        this.loading = true;
         this.playerService.playerGetAll()
-            .subscribe({
-                next: p => {
+            .subscribe(
+                p => {
                     this.players = p;
-                    console.log(p);
+                },
+                error => {
+                    this.errorMessage = "Verbindungsproblem";
+                    this.successMessage = "";
+                    this.loading = false;
+                },
+                () => {
+                    this.errorMessage = "";
+                    this.successMessage = "";
+                    this.loading = false;
                 }
-            });
+            );
     }
 
     ngOnInit() {

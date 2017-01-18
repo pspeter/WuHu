@@ -70,7 +70,8 @@ BEGIN
     ( 
         [tournamentId]       int  NOT NULL  IDENTITY ( 0,1 ) ,
         [name]               nvarchar(50)  NOT NULL ,
-        [datetime]               Datetime2  NOT NULL
+        [datetime]           Datetime2  NOT NULL,
+        [isLocked]           bit NOT NULL DEFAULT 0
     );
 
     ALTER TABLE [dbo].[Tournament]

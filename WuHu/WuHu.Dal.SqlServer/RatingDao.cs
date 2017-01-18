@@ -35,7 +35,7 @@ namespace WuHu.Dal.SqlServer
                     AND rOuter.datetime = 
                     (SELECT MAX(datetime)
                         FROM Rating rInner 
-                        WHERE rInner.playerId = p.playerId);";
+                        WHERE rInner.playerId = @playerId);";
 
         private const string SqlInsert =
             @"INSERT INTO Rating (playerId, datetime, value)

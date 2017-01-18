@@ -13,6 +13,9 @@ import {RatingService} from "../../api/rating-service";
 export class RanklistComponent implements OnInit {
 
     private players : Array<Player>;
+    private errorMessage: string = "";
+    private infoMessage: string = "";
+    private loading: boolean = false;
 
     private sortedPlayers = [];
 
@@ -42,19 +45,35 @@ export class RanklistComponent implements OnInit {
     }
 
     getPlayers() {
+        this.loading = true;
         this.playerService.playerGetAll()
-            .subscribe({
-                next: p => this.players = p,
-                complete: () => {
+            .subscribe(
+                p => {
+                    this.players = p;
+                    this.errorMessage = "";
+                    this.infoMessage = "";
+                },
+                error => {
+                    this.errorMessage = "Verbindungsfehler";
+                    this.infoMessage = "";
+                    this.loading = false;
+                },
+                () => {
+                    this.loading = false;
+                    console.log(this.players);
                     for (let i = 0; i < this.players.length; ++i) {
                         this.ratingService
                             .ratingGetCurrentByPlayerId(this.players[i].PlayerId)
-                            .subscribe({
-                                next: r => {
+                            .subscribe(
+                                r => {
                                     this.players[i].CurrentRating = r;
                                     this.insertSorted(this.players[i], this.sortedPlayers)
+                                },
+                                error => {
+                                    console.log(error);
                                 }
-                            })
+                            )
+
                     }
                     /*
                     let sortStarter = setInterval(() => {
@@ -76,7 +95,7 @@ export class RanklistComponent implements OnInit {
                      }
                      })*/
                 }
-            });
+            );
     }
 
     constructor(private playerService: PlayerService, private ratingService: RatingService) {

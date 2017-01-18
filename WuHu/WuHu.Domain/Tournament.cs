@@ -32,6 +32,8 @@ namespace WuHu.Domain
         [DataMember]
         [Required]
         public DateTime Datetime { get; set; }
+        [DataMember]
+        public bool IsLocked { get; set; }
 
         public override string ToString()
         {
