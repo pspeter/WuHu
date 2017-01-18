@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, NgZone} from '@angular/core';
 import {MatchService} from "../../api/match-service";
 import {Match} from "../../model/Match";
 import {UserService} from "../../services/user.service";
@@ -10,40 +10,23 @@ import {WebsocketService} from "../../api/websocket.service";
     styleUrls: ['./scores.component.sass']
 })
 export class ScoresComponent implements OnInit, OnDestroy {
-    private matches: Match[];
+    private matches: Match[] = [];
     private subscription;
-    private errorString: string = "";
-    private message: string = "";
+    private errorSubscription;
+    private errorMessage: string = "";
+    private infoMessage: string = "";
     private loading: boolean;
 
-    constructor(private matchService: MatchService,
+    constructor(private ngZone: NgZone,
                 private userService: UserService,
                 private websocketService: WebsocketService) {
-        this.loading = true;
         this.websocketService.start();
     }
-
-    /*
-    private loadMatches() {
-        this.matchService.matchGetUnfinishedForPlayer(this.userService.CurrentUser())
-            .subscribe({
-                next: res => {
-                    this.matches = res;
-                    for (let i = 0; i < this.matches.length; ++i) {
-                        if (this.matches[i].ScoreTeam1 == null)
-                            this.matches[i].ScoreTeam1 = 0;
-                        if (this.matches[i].ScoreTeam2 == null)
-                            this.matches[i].ScoreTeam2 = 0;
-                    }
-                },
-                error: res => console.log(res)
-            });
-    }
-*/
 
     private incScore1(match: Match) {
         match.ScoreTeam1 += 1;
         this.websocketService.updateMatch(match);
+        console.log(this.subscription);
     }
 
     private incScore2(match: Match) {
@@ -52,9 +35,13 @@ export class ScoresComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscription = this.websocketService.matchListSubject.subscribe({
-            next: matchList => {
+        this.ngZone.run(() => this.loading = true);
+        this.subscription = this.websocketService.matchListSubject.subscribe(
+            matchList => {
+                console.log("hi");
                 this.matches = [];
+                this.ngZone.run(() => this.infoMessage = "");
+                this.ngZone.run(() => this.errorMessage = "");
                 for (let i = 0; i < matchList.length; ++i) {
                     if (matchList[i].ScoreTeam1 == null)
                         matchList[i].ScoreTeam1 = 0;
@@ -65,16 +52,36 @@ export class ScoresComponent implements OnInit, OnDestroy {
                         matchList[i].Player2.Username == user ||
                         matchList[i].Player3.Username == user ||
                         matchList[i].Player4.Username == user) {
-                        this.matches.push(matchList[i]);
+                        this.ngZone.run(() => this.matches.push(matchList[i]));
+                        console.log("push");
                     }
                 }
-                this.loading = false;
+
+                this.ngZone.run(() => this.errorMessage = "");
+                if (this.matches.length == 0) {
+                    this.ngZone.run(() => this.infoMessage = "Keine Spiele gefunden");
+                }
+                this.ngZone.run(() => this.loading = false);
                 console.log("matches", this.matches);
+            },
+            error => {
+                console.log("matchlist error")
+            },
+            () => console.log("matchlist closed")
+        );
+
+        this.errorSubscription = this.websocketService.errorSubject.subscribe(
+            error => {
+                console.error("connection error", error);
+                this.ngZone.run(() => this.loading = false);
+                this.ngZone.run(() => this.errorMessage = "Verbindungsfehler");
+                this.ngZone.run(() => this.infoMessage = "");
             }
-        })
+        )
     }
 
     ngOnDestroy() {
+        this.errorSubscription.unsubscribe();
         this.subscription.unsubscribe();
         this.websocketService.stop();
     }

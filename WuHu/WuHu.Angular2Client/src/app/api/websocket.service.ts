@@ -1,6 +1,7 @@
 import {Injectable, Inject} from '@angular/core';
-import {Observable, Subject} from "rxjs";
+import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {Match} from "../model/Match";
+import any = jasmine.any;
 
 // wrapper for JQuery
 @Injectable()
@@ -10,13 +11,8 @@ export class SignalrWindow extends Window {
 
 @Injectable()
 export class WebsocketService {
-    starting$: Observable<any>;
-    error$: Observable<string>;
-
-    private startingSubject = new Subject<any>();
-    private errorSubject = new Subject<any>();
-
     public matchListSubject = new Subject<Array<Match>>();
+    public errorSubject = new Subject<any>();
 
     private hubConnection: any;
     private hubProxy: any;
@@ -25,9 +21,6 @@ export class WebsocketService {
         if (this.window.$ === undefined || this.window.$.hubConnection === undefined) {
             throw new Error("The variable '$' or the .hubConnection() function are not defined... please check the SignalR scripts have been loaded properly");
         }
-
-        this.starting$ = this.startingSubject.asObservable();
-        this.error$ = this.errorSubject.asObservable();
 
         this.hubConnection = this.window.$.hubConnection();
         this.hubConnection.url = "http://localhost:4649/signalr";
@@ -38,7 +31,7 @@ export class WebsocketService {
         });
 
         this.hubProxy.on("broadcastMatches", (matches: Array<Match>) => {
-            console.log(matches);
+            console.log("broadcast matches", matches);
             this.matchListSubject.next(matches);
         });
     }
@@ -46,10 +39,11 @@ export class WebsocketService {
     start(): void {
         this.hubConnection.start()
             .done(() => {
-                this.startingSubject.next();
+                console.log("Connection established");
             })
             .fail((error: any) => {
-                this.startingSubject.error(error);
+                this.errorSubject.next(error);
+                console.error("start() failed")
             });
     }
 
@@ -59,6 +53,7 @@ export class WebsocketService {
 
     updateMatch(match: Match) {
         console.log("matchSave", match);
-        this.hubProxy.invoke("matchSave", match);
+        this.hubProxy.invoke("matchSave", match.MatchId, match.ScoreTeam1, match.ScoreTeam2)
+            .fail(error => this.errorSubject.next(error));
     }
 }

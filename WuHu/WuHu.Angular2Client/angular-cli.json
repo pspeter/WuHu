@@ -19,7 +19,7 @@
       "mobile": false,
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.css",
-        "./bootstrap.min.css",
+        "./bootstrap-superhero.min.css",
         "styles.sass"
       ],
       "scripts": [

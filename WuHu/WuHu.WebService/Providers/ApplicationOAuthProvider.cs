@@ -11,7 +11,6 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using WuHu.BL.Impl;
 using WuHu.Domain;
-using WuHu.WebService.Models;
 
 namespace WuHu.WebService.Providers
 {

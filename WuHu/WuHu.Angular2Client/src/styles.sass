@@ -5,6 +5,9 @@ $gray:                   lighten($gray-base, 33.5%) !default // #555
 $gray-light:             #4E5D6C !default   // #999
 $gray-lighter:           #EBEBEB !default // #eee
 
+$text-color:             $gray-lighter
+
+
 $brand-primary:         #DF691A !default
 $brand-success:         #5cb85c !default
 $brand-info:            #5bc0de !default
@@ -24,4 +27,32 @@ tr, td
 h1, h2, h3, h4
     text-align: center
 
-    
+.loader
+    border: 16px solid $gray-light
+    border-top: 16px solid lighten($gray-light, 30%)
+    border-radius: 50%
+    width: 120px
+    height: 120px
+    animation: spin 2s linear infinite
+
+@keyframes spin
+    0%
+        transform: rotate(0deg)
+    100%
+        transform: rotate(360deg)
+
+a.active, a:active, a:hover
+    background-color: darken($gray-light, 4) !important
+
+
+li a.disabled
+    background-color: $gray-light !important
+    color: $gray-dark !important
+
+li a
+    font-size: 1.2em
+
+.center-children
+    display: flex
+    justify-content: center
+    align-items: center

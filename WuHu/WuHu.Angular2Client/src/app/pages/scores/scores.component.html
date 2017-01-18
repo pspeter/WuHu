@@ -1,51 +1,61 @@
 <div class="page-wrapper">
-    <div class="page-header"><h2>Spielstand</h2></div>
+    <div class="col-xs-12 page-header"><h2>Spielstand</h2></div>
 
-    <div class="container">
-        <div *ngIf="loading">Lade Spiele...</div>
-        <div *ngIf="!loading && matches.length == 0">Keine Spiele gefunden!</div>
-        <div class="row" *ngFor="let match of matches; let i = index;">
-            <div class="col-xs-12">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        Spiel {{i + 1}}
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                <div class="match-team">
-                                    <h2>Team 1</h2>
-                                    <div class="container-fluid">
-                                        <div class="row center-childs">
-                                            <div class="col-xs-6">
-                                                <div class="match-player"><span>{{match.Player1.Firstname}} {{match.Player1.Lastname}}</span></div>
-                                                <div class="match-player"><span>{{match.Player2.Firstname}} {{match.Player2.Lastname}}</span></div>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <div class="match-score">
-                                                    <p class="form-control-static match-score">{{match.ScoreTeam1}}</p>
-                                                    <button class="btn btn-primary inc-score" (click)="incScore1(match)"><span class="glyphicon glyphicon-plus"></span></button>
-                                                </div>
-                                            </div>
+    <div class="row messages">
+        <div class="col-xs-12">
+            <div class="alert alert-danger" *ngIf="!!errorMessage">{{errorMessage}}</div>
+        </div>
+        <div class="col-xs-12">
+            <div class="alert alert-info" *ngIf="!!infoMessage">{{infoMessage}}</div>
+        </div>
+
+        <div *ngIf="loading" class="col-xs-12 center-children">
+            <div class="loader"></div>
+        </div>
+    </div>
+    <div class="row" *ngFor="let match of matches; let i = index;">
+        <div class="col-xs-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Spiel {{i + 1}}
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6">
+                            <div class="match-team">
+                                <h2>Team 1</h2>
+                                <div class="row center-children">
+                                    <div class="col-xs-6">
+                                        <div class="match-player"><span>{{match.Player1.Firstname}} {{match.Player1.Lastname}}</span>
+                                        </div>
+                                        <div class="match-player"><span>{{match.Player2.Firstname}} {{match.Player2.Lastname}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="match-score">
+                                            <p class="form-control-static match-score">{{match.ScoreTeam1}}</p>
+                                            <button class="btn btn-primary inc-score" (click)="incScore1(match)">
+                                                <span class="glyphicon glyphicon-plus"></span></button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-md-6">
-                                <div class="match-team">
-                                    <h2>Team 2</h2>
-                                    <div class="container-fluid">
-                                        <div class="row center-childs">
-                                            <div class="col-xs-6">
-                                                <div class="match-player"><span>{{match.Player3.Firstname}} {{match.Player3.Lastname}}</span></div>
-                                                <div class="match-player"><span>{{match.Player4.Firstname}} {{match.Player4.Lastname}}</span></div>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <div class="match-score">
-                                                    <p class="form-control-static match-score">{{match.ScoreTeam2}}</p>
-                                                    <button class="btn btn-primary inc-score" (click)="incScore2(match)"><span class="glyphicon glyphicon-plus"></span></button>
-                                                </div>
-                                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            <div class="match-team">
+                                <h2>Team 2</h2>
+                                <div class="row center-children">
+                                    <div class="col-xs-6">
+                                        <div class="match-player"><span>{{match.Player3.Firstname}} {{match.Player3.Lastname}}</span>
+                                        </div>
+                                        <div class="match-player"><span>{{match.Player4.Firstname}} {{match.Player4.Lastname}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="match-score">
+                                            <p class="form-control-static match-score">{{match.ScoreTeam2}}</p>
+                                            <button class="btn btn-primary inc-score" (click)="incScore2(match)">
+                                                <span class="glyphicon glyphicon-plus"></span></button>
                                         </div>
                                     </div>
                                 </div>
@@ -54,9 +64,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-
-
 </div>
