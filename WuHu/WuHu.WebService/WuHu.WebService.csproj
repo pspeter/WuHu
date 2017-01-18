@@ -72,6 +72,14 @@
       <HintPath>..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.1\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.1\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -221,12 +229,14 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\LiveMatchController.cs" />
     <Compile Include="Controllers\MatchController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Controllers\RatingController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hub\LiveMatchHub.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -241,6 +251,8 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\jquery.signalR-2.2.1.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.1.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -260,6 +272,14 @@
     <ProjectReference Include="..\WuHu.BL\WuHu.BL.csproj">
       <Project>{133D0DE2-F6E3-4BEF-B3CD-BE74106B54C4}</Project>
       <Name>WuHu.BL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WuHu.Dal.Common\WuHu.Dal.Common.csproj">
+      <Project>{04f6460d-1635-43d4-8080-f4903b40db76}</Project>
+      <Name>WuHu.Dal.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WuHu.Dal.SqlServer\WuHu.Dal.SqlServer.csproj">
+      <Project>{25db2bee-95cf-4f82-b0bf-3c5ce3fca970}</Project>
+      <Name>WuHu.Dal.SqlServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\WuHu.Domain\WuHu.Domain.csproj">
       <Project>{3B5E2218-2C2F-4995-9B41-E382B34880B4}</Project>

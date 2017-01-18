@@ -19,7 +19,7 @@ namespace WuHu.WebService.Controllers
         private IPlayerManager Logic { get; } = BLFactory.GetPlayerManager();
 
         [HttpGet]
-        [Route("{playerId}", Name = "GetPlayerByIdRoute")]
+        [Route("id/{playerId}", Name = "GetPlayerByIdRoute")]
         [SwaggerResponse(HttpStatusCode.NotFound, "Player not found")]
         [SwaggerResponse(HttpStatusCode.OK, "Returns player with that id", typeof(Player))]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -40,7 +40,7 @@ namespace WuHu.WebService.Controllers
         }
 
         [HttpGet]
-        [Route("{username}", Name = "GetPlayerByUsernameRoute")]
+        [Route("username/{username}", Name = "GetPlayerByUsernameRoute")]
         [SwaggerResponse(HttpStatusCode.NotFound, "Player not found")]
         [SwaggerResponse(HttpStatusCode.OK, "Returns player with that username", Type = typeof(Player))]
         [SwaggerResponse(HttpStatusCode.BadRequest)]

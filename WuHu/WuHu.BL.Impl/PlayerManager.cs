@@ -22,9 +22,9 @@ namespace WuHu.BL.Impl
         public PlayerManager()
         {
             var database = DalFactory.CreateDatabase();
-            MatchDao = DalFactory.CreateMatchDao(database);
             PlayerDao = DalFactory.CreatePlayerDao(database);
             RatingDao = DalFactory.CreateRatingDao(database);
+            MatchDao = DalFactory.CreateMatchDao(database);
             TournamentDao = DalFactory.CreateTournamentDao(database);
             ParamDao = DalFactory.CreateScoreParameterDao(database);
         }

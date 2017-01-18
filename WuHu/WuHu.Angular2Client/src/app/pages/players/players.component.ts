@@ -132,7 +132,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
     getPlayers() {
         this.playerService.playerGetAll()
             .subscribe({
-                next: p => this.players = p
+                next: p => {this.players = p; console.log(p);}
             });
     }
 

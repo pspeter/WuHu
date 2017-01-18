@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WuHu.Dal.Common\WuHu.Dal.Common.csproj">
-      <Project>{04F6460D-1635-43D4-8080-F4903B40DB76}</Project>
+      <Project>{04f6460d-1635-43d4-8080-f4903b40db76}</Project>
       <Name>WuHu.Dal.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\WuHu.Domain\WuHu.Domain.csproj">

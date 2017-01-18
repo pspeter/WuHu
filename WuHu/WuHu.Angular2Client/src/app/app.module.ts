@@ -19,15 +19,13 @@ import { GameplanComponent } from './pages/gameplan/gameplan.component';
 import { StatisticsComponent } from './pages/statistics/statistics.component';
 import { ScoresComponent } from './pages/scores/scores.component';
 import { LiveComponent } from './pages/live/live.component';
-import {LogoutGuard} from "./guards/logout-guard";
-import {PlayerApi} from "./api/PlayerApi";
-import {RatingApi} from "./api/RatingApi";
-import {AccountApi} from "./api/AccountApi";
+import {LogoutGuard} from "./guards/logout-guard";;
 import {RestoreService} from "./services/restore.service";
 import {PlayerService} from "./api/player-service";
 import {RatingService} from "./api/rating-service";
 import {AccountService} from "./api/account-service";
 import {MatchService} from "./api/match-service";
+import {WebsocketService, SignalrWindow} from "./api/websocket.service";
 
 @NgModule({
     declarations: [
@@ -41,7 +39,7 @@ import {MatchService} from "./api/match-service";
         GameplanComponent,
         StatisticsComponent,
         ScoresComponent,
-        LiveComponent
+        LiveComponent,
     ],
     imports: [
         BrowserModule,
@@ -61,6 +59,8 @@ import {MatchService} from "./api/match-service";
         RatingService,
         AccountService,
         RestoreService,
+        WebsocketService,
+        {provide: SignalrWindow, useValue: window }
     ],
     bootstrap: [AppComponent]
 })

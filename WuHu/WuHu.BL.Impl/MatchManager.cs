@@ -118,7 +118,10 @@ namespace WuHu.BL.Impl
 
         public IList<Match> GetAllUnfinishedMatches()
         {
-            return new List<Match>(MatchDao.FindAll().Where(m => !m.IsDone));
+            var currentTournament = TournamentDao.FindMostRecentTournament();
+            return MatchDao.FindUnfinished()
+                .Where(m => m.Tournament?.TournamentId == currentTournament?.TournamentId)
+                .ToList();
         }
     }
 }

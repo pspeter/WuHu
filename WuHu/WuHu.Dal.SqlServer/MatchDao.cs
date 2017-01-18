@@ -16,26 +16,31 @@ namespace WuHu.Dal.SqlServer
     {
         private const string SqlFindById =
           @"SELECT *
-            FROM Match m
-            WHERE MatchId = @MatchId;";
+                FROM Match m
+                WHERE MatchId = @MatchId;";
 
         private const string SqlFindAll =
             @"SELECT *
-            FROM Match
+                FROM Match
                 ORDER BY datetime DESC;";
         
         private const string SqlFindUnfinishedByPlayer =
             @"SELECT *
-            FROM Match m
+                FROM Match m
                 WHERE (player1 = @playerId
                     OR player2 = @playerId
                     OR player3 = @playerId
                     OR player4 = @playerId)
                     AND isDone = 0;";
 
+        private const string SqlFindUnfinished =
+           @"SELECT *
+                FROM Match m
+                WHERE isDone = 0;";
+
         private const string SqlFindAllByPlayer =
             @"SELECT *
-            FROM Match m
+                FROM Match m
                 WHERE player1 = @playerId
                     OR player2 = @playerId
                     OR player3 = @playerId
@@ -43,7 +48,7 @@ namespace WuHu.Dal.SqlServer
 
         private const string SqlFindAllByTournament =
             @"SELECT *
-            FROM Match
+                FROM Match
                 WHERE tournamentId = @tournamentId;";
 
         private const string SqlInsert =
@@ -197,8 +202,7 @@ namespace WuHu.Dal.SqlServer
                 return result;
             }
         }
-
-
+        
         protected DbCommand CreateFindUnfinishedByPlayerCmd(int playerId)
         {
             var findByIdCmd = database.CreateCommand(SqlFindUnfinishedByPlayer);
@@ -209,6 +213,25 @@ namespace WuHu.Dal.SqlServer
         public IList<Match> FindUnfinishedByPlayer(int playerId)
         {
             using (var command = CreateFindUnfinishedByPlayerCmd(playerId))
+            using (var reader = database.ExecuteReader(command))
+            {
+                var result = new List<Match>();
+                while (reader.Read())
+                {
+                    result.Add(BuildMatch(reader));
+                }
+                return result;
+            }
+        }
+        protected DbCommand CreateFindUnfinishedCmd()
+        {
+            var findByIdCmd = database.CreateCommand(SqlFindUnfinished);
+            return findByIdCmd;
+        }
+
+        public IList<Match> FindUnfinished()
+        {
+            using (var command = CreateFindUnfinishedCmd())
             using (var reader = database.ExecuteReader(command))
             {
                 var result = new List<Match>();

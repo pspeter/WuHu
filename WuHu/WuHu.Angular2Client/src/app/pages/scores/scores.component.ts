@@ -1,21 +1,27 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {MatchService} from "../../api/match-service";
 import {Match} from "../../model/Match";
 import {UserService} from "../../services/user.service";
+import {WebsocketService} from "../../api/websocket.service";
 
 @Component({
     selector: 'app-scores',
     templateUrl: './scores.component.html',
     styleUrls: ['./scores.component.sass']
 })
-export class ScoresComponent implements OnInit {
-    private matches: Array<Match>;
+export class ScoresComponent implements OnInit, OnDestroy {
+    private matches: Match[];
+    private subscription;
     private errorString: string = "";
+    private message: string = "";
 
-    constructor(private matchService: MatchService, private userService: UserService) {
-        this.loadMatches();
+    constructor(private matchService: MatchService,
+                private userService: UserService,
+                private websocketService: WebsocketService) {
+        this.websocketService.start();
     }
 
+    /*
     private loadMatches() {
         this.matchService.matchGetUnfinishedForPlayer(this.userService.CurrentUser())
             .subscribe({
@@ -31,36 +37,43 @@ export class ScoresComponent implements OnInit {
                 error: res => console.log(res)
             });
     }
-
-    private submitMatch(match: Match) {
-        this.matchService.matchPostIntermediateResult(match)
-            .subscribe({
-                error: res => {
-                    console.log(res);
-                    if (res.status == 400) {
-                        //this.displayError("Fehlerhafter Spieler");
-                    }
-                    else if (res.status == 500) {
-                        //this.displayError("Oops. Da ging was schief " + res._body);
-                    }
-                    else {
-                        //this.displayError("Server offline");
-                    }
-                }
-            })
-    }
+*/
 
     private incScore1(match: Match) {
         match.ScoreTeam1 += 1;
-        this.submitMatch(match);
+        this.websocketService.updateMatch(match);
     }
 
     private incScore2(match: Match) {
         match.ScoreTeam2 += 1;
-        this.submitMatch(match);
+        this.websocketService.updateMatch(match);
     }
 
     ngOnInit() {
+        this.subscription = this.websocketService.matchListSubject.subscribe({
+            next: matchList => {
+                this.matches = [];
+                for (let i = 0; i < matchList.length; ++i) {
+                    if (matchList[i].ScoreTeam1 == null)
+                        matchList[i].ScoreTeam1 = 0;
+                    if (matchList[i].ScoreTeam2 == null)
+                        matchList[i].ScoreTeam2 = 0;
+                    let user = this.userService.CurrentUser();
+                    if (matchList[i].Player1.Username == user ||
+                        matchList[i].Player2.Username == user ||
+                        matchList[i].Player3.Username == user ||
+                        matchList[i].Player4.Username == user) {
+                        this.matches.push(matchList[i]);
+                    }
+                }
+                console.log(this.matches);
+            }
+        })
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+        this.websocketService.stop();
     }
 
 }
