@@ -2,6 +2,8 @@
     <div class="page-header"><h2>Spielstand</h2></div>
 
     <div class="container">
+        <div *ngIf="loading">Lade Spiele...</div>
+        <div *ngIf="!loading && matches.length == 0">Keine Spiele gefunden!</div>
         <div class="row" *ngFor="let match of matches; let i = index;">
             <div class="col-xs-12">
                 <div class="panel panel-primary">

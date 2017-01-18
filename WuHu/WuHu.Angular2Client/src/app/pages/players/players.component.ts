@@ -75,7 +75,8 @@ export class PlayersComponent implements OnInit, OnDestroy {
             let player = this.restoreService.getItemFinal();
             this.playerService.playerPostPlayer(player).subscribe({
                 next: res => {
-                    this.players.push(player);
+                    this.getPlayers();
+                    this.restoreService.reset();
                     this.displaySuccess("Spieler " + player.Firstname + " erfolgreich angelegt.")
                 },
                 error: res => {
@@ -105,15 +106,19 @@ export class PlayersComponent implements OnInit, OnDestroy {
         let reader = new FileReader();
         reader.onloadend = (e) => {
             this.playerModel.Picture = reader.result.substring(23);
-            this.playerModel.SafePicture = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;charset=utf-8;base64,' + this.playerModel.Picture);
+            this.playerModel.SafePicture = this.sanitizer
+                .bypassSecurityTrustResourceUrl('data:image/jpeg;charset=utf-8;base64,' +
+                    this.playerModel.Picture);
         };
         reader.readAsDataURL(file);
     }
 
     private newPlayer() {
-        let newPlayer: Player = { Firstname: "", Lastname: "", Nickname: "", IsAdmin: false,
+        let newPlayer: Player = {
+            Firstname: "", Lastname: "", Nickname: "", Username: "", PasswordString: "", IsAdmin: false,
             PlaysMondays: false, PlaysTuesdays: false, PlaysWednesdays: false, PlaysThursdays: false,
-            PlaysFridays: false, PlaysSaturdays: false, PlaysSundays: false};
+            PlaysFridays: false, PlaysSaturdays: false, PlaysSundays: false
+        };
         this.editMode = false;
         this.playerModel = newPlayer;
     }
@@ -125,14 +130,19 @@ export class PlayersComponent implements OnInit, OnDestroy {
 
     private selectPlayer(player) {
         this.playerModel = player;
-        this.playerModel.SafePicture = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;charset=utf-8;base64,' + this.playerModel.Picture);
+        this.playerModel.SafePicture = this.sanitizer
+            .bypassSecurityTrustResourceUrl('data:image/jpeg;charset=utf-8;base64,' +
+                this.playerModel.Picture);
         this.editMode = true;
     }
 
     getPlayers() {
         this.playerService.playerGetAll()
             .subscribe({
-                next: p => {this.players = p; console.log(p);}
+                next: p => {
+                    this.players = p;
+                    console.log(p);
+                }
             });
     }
 
@@ -142,6 +152,6 @@ export class PlayersComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-    this.restoreService.reset();
+        this.restoreService.reset();
     }
 }

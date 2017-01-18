@@ -44,6 +44,19 @@
                                            [(ngModel)]="playerModel.Nickname" name="nickname" required>
                                 </div>
 
+                                <div *ngIf="!editMode">
+                                    <div class="form-group">
+                                        <label for="username">Benutzername</label>
+                                        <input type="text" #username="ngModel" class="form-control" id="username"
+                                               [(ngModel)]="playerModel.Username" name="username" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Passwort</label>
+                                        <input type="password" #password="ngModel" class="form-control" id="password"
+                                               [(ngModel)]="playerModel.PasswordString" name="password" required>
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <label class="checkbox">
                                         <input type="checkbox" #admin="ngModel" id="admin"

@@ -49,10 +49,6 @@ namespace WuHu.WebService.Hub
             {
                 _matches = _matchManager.GetAllUnfinishedMatches();
             }
-            if (_matches == null || _matches.Count == 0)
-            {
-                return base.OnConnected();
-            }
             Clients.Caller.broadcastMatches(_matches);
             return base.OnConnected();
         }

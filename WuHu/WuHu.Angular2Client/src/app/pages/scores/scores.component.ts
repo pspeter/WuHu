@@ -14,10 +14,12 @@ export class ScoresComponent implements OnInit, OnDestroy {
     private subscription;
     private errorString: string = "";
     private message: string = "";
+    private loading: boolean;
 
     constructor(private matchService: MatchService,
                 private userService: UserService,
                 private websocketService: WebsocketService) {
+        this.loading = true;
         this.websocketService.start();
     }
 
@@ -66,7 +68,8 @@ export class ScoresComponent implements OnInit, OnDestroy {
                         this.matches.push(matchList[i]);
                     }
                 }
-                console.log(this.matches);
+                this.loading = false;
+                console.log("matches", this.matches);
             }
         })
     }

@@ -39,6 +39,8 @@ export interface Player {
 
     Username?: string;
 
+    PasswordString?: string;
+
     IsAdmin?: boolean;
 
     PlaysMondays?: boolean;

@@ -62,7 +62,18 @@ namespace WuHu.Domain
             this.Picture = picture;
         }
 
+        [DataMember]
+        public string PasswordString
+        {
+            set
+            {
+                Salt = CryptoService.GenerateSalt();
+                Password = CryptoService.HashPassword(value, Salt);
+            }
+        }
+
         public byte[] Password { get; set; }
+
         public byte[] Salt { get; set; }
 
 
