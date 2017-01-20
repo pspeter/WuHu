@@ -20,8 +20,7 @@ export class LineChartComponent implements OnInit {
                 private playerService: PlayerService) {
         this.options = {
             chart: {
-                zoomType: "x",
-                style: {"fill": "#444", "background-color": "red"}
+                zoomType: "x"
             },
 
             title: {
@@ -94,7 +93,7 @@ export class LineChartComponent implements OnInit {
     private createCharts() {
         console.log(this.ratings.slice(0, 10));
 
-        for (let i = 0; i < this.players.length; ++i) {
+        for (let i = 0; i < 3; ++i) {
             let playerSeries = [];
 
             for (let j = 0; j < this.ratings.length; ++j) {
