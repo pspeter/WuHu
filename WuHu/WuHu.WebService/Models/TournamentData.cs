@@ -34,7 +34,6 @@ namespace WuHu.WebService.Models
         public string Name { get; set; }
 
         [DataMember]
-        [Required]
         public DateTime Datetime { get; set; }
 
         [DataMember]

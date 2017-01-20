@@ -47,6 +47,31 @@ export class RatingService {
     /**
      *
      *
+     */
+    public ratingGetAllRatings (extraHttpRequestParams?: any ) : Observable<Array<models.Rating>> {
+        const path = this.basePath + '/api/rating';
+
+        let queryParameters = new URLSearchParams();
+        let headerParams = this.defaultHeaders;
+        let requestOptions: RequestOptionsArgs = {
+            method: 'GET',
+            headers: headerParams,
+            search: queryParameters
+        };
+
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+     *
+     *
      * @param playerId
      */
     public ratingGetCurrentByPlayerId (playerId: number, extraHttpRequestParams?: any ) : Observable<models.Rating> {

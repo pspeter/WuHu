@@ -3,6 +3,7 @@ import {MatchService} from "../../api/match-service";
 import {Match} from "../../model/Match";
 import {UserService} from "../../services/user.service";
 import {WebsocketService} from "../../api/websocket.service";
+import {TournamentService} from "../../api/tournament.service";
 
 @Component({
     selector: 'app-scores',
@@ -23,10 +24,14 @@ export class ScoresComponent implements OnInit, OnDestroy {
         this.websocketService.start();
     }
 
+    private displayError(message: string) {
+        this.ngZone.run(() => this.errorMessage = message);
+        setTimeout(() => this.ngZone.run(() => this.errorMessage = ""), 5000)
+    }
+
     private incScore1(match: Match) {
         match.ScoreTeam1 += 1;
         this.websocketService.updateMatch(match);
-        console.log(this.subscription);
     }
 
     private incScore2(match: Match) {
@@ -38,7 +43,6 @@ export class ScoresComponent implements OnInit, OnDestroy {
         this.ngZone.run(() => this.loading = true);
         this.subscription = this.websocketService.matchListSubject.subscribe(
             matchList => {
-                console.log("hi");
                 this.matches = [];
                 this.ngZone.run(() => this.infoMessage = "");
                 this.ngZone.run(() => this.errorMessage = "");
@@ -53,7 +57,6 @@ export class ScoresComponent implements OnInit, OnDestroy {
                         matchList[i].Player3.Username == user ||
                         matchList[i].Player4.Username == user) {
                         this.ngZone.run(() => this.matches.push(matchList[i]));
-                        console.log("push");
                     }
                 }
 
@@ -62,17 +65,15 @@ export class ScoresComponent implements OnInit, OnDestroy {
                     this.ngZone.run(() => this.infoMessage = "Keine Spiele gefunden");
                 }
                 this.ngZone.run(() => this.loading = false);
-                console.log("matches", this.matches);
             },
             error => {
-                console.log("matchlist error")
+                this.displayError("Verbindungsfehler");
             },
-            () => console.log("matchlist closed")
+            () => this.displayError("Verbindung beendet")
         );
 
         this.errorSubscription = this.websocketService.errorSubject.subscribe(
             error => {
-                console.error("connection error", error);
                 this.ngZone.run(() => this.loading = false);
                 this.ngZone.run(() => this.errorMessage = "Verbindungsfehler");
                 this.ngZone.run(() => this.infoMessage = "");

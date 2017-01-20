@@ -22,8 +22,9 @@ namespace WuHu.Terminal.ViewModels
         public NewTournamentVm(Action showMatchList, Action reloadParent, Action<string> queueMessage)
         {
             _tournament = new Tournament("", DateTime.Now);
-
-            var locked = IsAuthenticated && TournamentManager.LockTournament(_tournament);
+            
+            var locked = IsAuthenticated &&
+                TournamentManager.LockTournament();
             if (!locked)
             {
                 queueMessage?.Invoke("Spielplan wird zur Zeit bearbeitet. Bitte warten.");

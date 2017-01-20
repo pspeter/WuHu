@@ -24,41 +24,15 @@
 
 'use strict';
 import * as models from './models';
-import {SafeResourceUrl} from "@angular/platform-browser";
 
-export interface Player {
-    PlayerId?: number;
+export interface Tournament {
+    
 
-    Firstname?: string;
+    TournamentId?: number;
 
-    Lastname?: string;
+    Name?: string;
 
-    Nickname?: string;
+    Datetime?: Date;
 
-    Username?: string;
-
-    PasswordString?: string;
-
-    IsAdmin?: boolean;
-
-    PlaysMondays?: boolean;
-
-    PlaysTuesdays?: boolean;
-
-    PlaysWednesdays?: boolean;
-
-    PlaysThursdays?: boolean;
-
-    PlaysFridays?: boolean;
-
-    PlaysSaturdays?: boolean;
-
-    PlaysSundays?: boolean;
-
-    Picture?: string;
-
-    SafePicture?: SafeResourceUrl;
-
-    CurrentRating?: models.Rating;
-    IsSelected?: boolean;
+    IsLocked?: boolean;
 }

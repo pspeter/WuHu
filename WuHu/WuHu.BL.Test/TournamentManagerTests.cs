@@ -58,11 +58,12 @@ namespace WuHu.BL.Test
             var admin = _testPlayers.First();
             var tournament = new Tournament("", DateTime.Now);
             _tournamentDao.Insert(tournament);
+            Assert.IsNotNull(tournament.TournamentId);
             var matches = _matchDao.FindAllByTournament(tournament);
             Assert.AreEqual(0, matches.Count);
-            Assert.IsTrue(_mgr.LockTournament(tournament));
+            Assert.IsTrue(_mgr.LockTournament());
             var success = _mgr.CreateTournament(tournament, new List<Player>(_testPlayers), amountMatches);
-            _mgr.UnlockTournament(tournament);
+            _mgr.UnlockTournament();
             Assert.IsTrue(success);
             matches = _matchDao.FindAllByTournament(tournament);
             Assert.AreEqual(amountMatches, matches.Count);
@@ -104,11 +105,13 @@ namespace WuHu.BL.Test
         public void UpdateTournament()
         {
             var t = new Tournament("", DateTime.Now);
-            _mgr.LockTournament(t);
+
+            Assert.IsNotNull(t.TournamentId);
+            _mgr.LockTournament();
             _mgr.CreateTournament(t, new List<Player>(_testPlayers), 1);
             Assert.IsNotNull(t.TournamentId);
 
-            _mgr.LockTournament(t);
+            _mgr.LockTournament();
             Assert.IsTrue(_mgr.UpdateTournament(t, new List<Player>(_testPlayers), 2));
             var matchesAmount = _matchDao.FindAllByTournament(t).Count;
 

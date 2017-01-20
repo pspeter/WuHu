@@ -22,7 +22,8 @@ namespace WuHu.Terminal.ViewModels
         public EditTournamentVm(Tournament tournament, Action showMatchList, Action reloadParent, Action<string> queueMessage)
         {
             _tournament = tournament;
-            var locked = AuthenticationService.IsAuthenticated() && TournamentManager.LockTournament(_tournament);
+            var locked = AuthenticationService.IsAuthenticated() && 
+                TournamentManager.LockTournament();
             if (!locked)
             {
                 queueMessage?.Invoke("Spielplan wird zur Zeit bearbeitet. Bitte warten.");
@@ -41,7 +42,10 @@ namespace WuHu.Terminal.ViewModels
                 {
                     var updated = AuthenticationService.IsAuthenticated() && TournamentManager.UpdateTournament(
                         _tournament, players, AmountMatches);
-                    if (AuthenticationService.IsAuthenticated()) TournamentManager.UnlockTournament(_tournament);
+                    if (AuthenticationService.IsAuthenticated())
+                    {
+                        TournamentManager.UnlockTournament();
+                    }
                     return updated;
                 });
                 reloadParent?.Invoke();

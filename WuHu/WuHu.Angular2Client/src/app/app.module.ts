@@ -26,6 +26,9 @@ import {RatingService} from "./api/rating-service";
 import {AccountService} from "./api/account-service";
 import {MatchService} from "./api/match-service";
 import {WebsocketService, SignalrWindow} from "./api/websocket.service";
+import {TournamentService} from "./api/tournament.service";
+import { LineChartComponent } from './pages/statistics/line-chart/line-chart.component';
+import {ChartModule} from "angular2-highcharts";
 
 @NgModule({
     declarations: [
@@ -40,13 +43,15 @@ import {WebsocketService, SignalrWindow} from "./api/websocket.service";
         StatisticsComponent,
         ScoresComponent,
         LiveComponent,
+        LineChartComponent,
     ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         FormsModule,
         HttpModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        ChartModule
     ],
     providers: [
         LoginGuard,
@@ -60,7 +65,8 @@ import {WebsocketService, SignalrWindow} from "./api/websocket.service";
         AccountService,
         RestoreService,
         WebsocketService,
-        {provide: SignalrWindow, useValue: window }
+        {provide: SignalrWindow, useValue: window },
+        TournamentService,
     ],
     bootstrap: [AppComponent]
 })

@@ -14,6 +14,7 @@ namespace WuHu.BL
         //IList<Match> GetAllMatches(); too many
         IList<Match> GetAllMatchesFor(Player player);
         IList<Match> GetAllMatchesFor(Tournament tournament);
+        IList<Match> GetAllCurrentMatches();
         IList<Match> GetAllUnfinishedMatches();
         IList<Match> GetUnfinishedMatchesFor(string username);
     }

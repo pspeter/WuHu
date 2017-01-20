@@ -123,5 +123,11 @@ namespace WuHu.BL.Impl
                 .Where(m => m.Tournament?.TournamentId == currentTournament?.TournamentId)
                 .ToList();
         }
+
+        public IList<Match> GetAllCurrentMatches()
+        {
+            var currentTournament = TournamentDao.FindMostRecentTournament();
+            return MatchDao.FindAllByTournament(currentTournament);
+        }
     }
 }

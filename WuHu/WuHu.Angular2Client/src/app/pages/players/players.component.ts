@@ -60,7 +60,6 @@ export class PlayersComponent implements OnInit, OnDestroy {
                     this.displaySuccess("Spieler " + player.Firstname + " erfolgreich geändert");
                 },
                 error: res => {
-                    console.log(res);
                     if (res.status == 400) {
                         this.displayError("Fehlerhafter Spieler");
                     }
@@ -69,7 +68,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
                         setTimeout(() => this.userService.logout(), 2000)
                     }
                     else if (res.status == 500) {
-                        this.displayError("Oops. Da ging was schief " + res._body);
+                        this.displayError("Oops. Da ging was schief");
                     }
                     else {
                         this.displayError("Verbindungsproblem");
@@ -92,6 +91,9 @@ export class PlayersComponent implements OnInit, OnDestroy {
                     else if (res.status == 403) {
                         this.displayError("Nicht eingeloggt");
                         setTimeout(() => this.userService.logout(), 2000)
+                    }
+                    else if (res.status == 409) {
+                        this.displayError("Username existiert bereits");
                     }
                     else if (res.status == 500) {
                         this.displayError("Oops. Da ging was schief");

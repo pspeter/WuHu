@@ -36,38 +36,38 @@ namespace WuHu.WebService.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        [Route("lock/{tournamentId}", Name = "LockTournamentRoute")]
+        [Route("lock", Name = "LockTournamentRoute")]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.Forbidden)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
-        public void LockTournament([FromBody] TournamentData tournament)
+        public void LockTournament()
         {
             if (!ModelState.IsValid)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
 
-            var success = Logic.LockTournament(new Tournament(tournament.Name, tournament.Datetime));
+            var success = Logic.LockTournament();
 
             if (!success)
             {
-                throw new HttpResponseException(HttpStatusCode.Forbidden);
+                throw new HttpResponseException(HttpStatusCode.Conflict);
             }
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        [Route("unlock/{tournamentId}", Name = "UnlockTournamentRoute")]
+        [Route("unlock", Name = "UnlockTournamentRoute")]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
-        public void UnlockTournament([FromBody] TournamentData tournament)
+        public void UnlockTournament()
         {
             if (!ModelState.IsValid)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
 
-            Logic.UnlockTournament(new Tournament(tournament.Name, tournament.Datetime));
+            Logic.UnlockTournament();
         }
 
         [Authorize(Roles = "Admin")]
@@ -83,7 +83,7 @@ namespace WuHu.WebService.Controllers
             }
 
             var success = Logic.CreateTournament(
-                new Tournament(tournament.Name, tournament.Datetime),
+                new Tournament(tournament.Name, DateTime.Now),
                 tournament.Players, tournament.Amount);
 
             if (!success)
@@ -104,18 +104,10 @@ namespace WuHu.WebService.Controllers
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
-
-            var success = Logic.LockTournament(
-                new Tournament(tournament.TournamentId, tournament.Name, tournament.Datetime));
-
-            if (!success)
-            {
-                throw new HttpResponseException(HttpStatusCode.Conflict);
-            }
             
-            success = Logic.UpdateTournament(
+            var success = Logic.UpdateTournament(
                 new Tournament(tournament.TournamentId, tournament.Name, tournament.Datetime),
-                tournament.Players, tournament.Amount);
+                    tournament.Players, tournament.Amount);
 
             if (!success)
             {

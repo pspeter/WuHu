@@ -1,5 +1,7 @@
 
-<div class="col-xs-12 page-header"><h2>Live</h2></div>
+<div class="col-xs-12 page-header">
+        <h2>Live <small>{{tournamentName}}</small></h2>
+</div>
 
 <div class="row messages">
     <div class="col-xs-12">
@@ -16,9 +18,12 @@
 
 <div class="row" *ngFor="let match of matches; let i = index;">
     <div class="col-xs-12">
-        <div class="panel panel-primary">
+        <div class="panel" [class.panel-primary]="!match.IsDone" [class.panel-success]="match.IsDone">
             <div class="panel-heading">
-                Spiel {{i + 1}} {{message}}
+                <div>
+                    <strong>Spiel {{i + 1}}</strong>
+                    <span *ngIf="match.IsDone"> - Team {{ match.ScoreTeam1 > match.ScoreTeam2 ? 1 : 2}} hat gewonnen!</span>
+                </div>
             </div>
             <div class="panel-body">
                 <div class="row">

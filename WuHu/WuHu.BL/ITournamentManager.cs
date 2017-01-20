@@ -14,7 +14,7 @@ namespace WuHu.BL
         Tournament GetMostRecentTournament();
         bool CreateTournament(Tournament tournament, IList<Player> players, int amountMatches);
         bool UpdateTournament(Tournament tournament, IList<Player> players, int amountMatches);
-        bool LockTournament(Tournament tournament);
-        void UnlockTournament(Tournament tournament);
+        bool LockTournament();
+        void UnlockTournament();
     }
 }

@@ -12,17 +12,19 @@ namespace WuHu.Domain
     public class Tournament
     {
         public Tournament() { }
-        public Tournament(int tournamentId, string name, DateTime datetime)
+        public Tournament(int tournamentId, string name, DateTime datetime, bool isLocked = false)
         {
-            this.TournamentId = tournamentId;
-            this.Name = name;
-            this.Datetime = datetime;
+            TournamentId = tournamentId;
+            Name = name;
+            Datetime = datetime;
+            IsLocked = isLocked;
         }
 
-        public Tournament(string name, DateTime datetime)
+        public Tournament(string name, DateTime datetime, bool isLocked = false)
         {
-            this.Name = name;
-            this.Datetime = datetime;
+            Name = name;
+            Datetime = datetime;
+            IsLocked = isLocked;
         }
 
         [DataMember]

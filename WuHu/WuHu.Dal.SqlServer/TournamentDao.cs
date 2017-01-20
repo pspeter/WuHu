@@ -40,7 +40,8 @@ namespace WuHu.Dal.SqlServer
         private const string SqlUpdate =
             @"UPDATE Tournament
                 SET datetime = @datetime,
-                    name = @name
+                    name = @name,
+                    isLocked = @isLocked
                 WHERE tournamentId = @tournamentId";
 
         private readonly IDatabase database;
@@ -91,7 +92,8 @@ namespace WuHu.Dal.SqlServer
                 {
                     return new Tournament((int)reader["tournamentId"],
                                           (string)reader["name"],
-                                          (DateTime)reader["datetime"]);
+                                          (DateTime)reader["datetime"],
+                                          (bool)reader["isLocked"]);
                 }
                 else
                 {
@@ -109,7 +111,8 @@ namespace WuHu.Dal.SqlServer
                 {
                     return new Tournament((int)reader["tournamentId"],
                                           (string)reader["name"],
-                                          (DateTime)reader["datetime"]);
+                                          (DateTime)reader["datetime"],
+                                          (bool)reader["isLocked"]);
                 }
                 else
                 {
@@ -144,12 +147,13 @@ namespace WuHu.Dal.SqlServer
             }
         }
         
-        protected DbCommand CreateUpdateCmd(int tournamentId, string name, DateTime datetime)
+        protected DbCommand CreateUpdateCmd(int tournamentId, string name, DateTime datetime, bool isLocked)
         {
             var updateByIdCmd = database.CreateCommand(SqlUpdate);
             database.DefineParameter(updateByIdCmd, "tournamentId", DbType.Int32, tournamentId);
             database.DefineParameter(updateByIdCmd, "name", DbType.String, name);
             database.DefineParameter(updateByIdCmd, "datetime", DbType.DateTime2, datetime);
+            database.DefineParameter(updateByIdCmd, "isLocked", DbType.Boolean, isLocked);
 
             return updateByIdCmd;
         }
@@ -161,7 +165,7 @@ namespace WuHu.Dal.SqlServer
                 throw new ArgumentException("TournamentId null on update for Tournament");
             }
             using (var command = CreateUpdateCmd(tournament.TournamentId.Value, 
-                tournament.Name, tournament.Datetime))
+                tournament.Name, tournament.Datetime, tournament.IsLocked))
             {
                 return database.ExecuteNonQuery(command) == 1;
             }

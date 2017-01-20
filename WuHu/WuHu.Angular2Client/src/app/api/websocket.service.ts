@@ -2,6 +2,7 @@ import {Injectable, Inject} from '@angular/core';
 import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {Match} from "../model/Match";
 import any = jasmine.any;
+import {Tournament} from "../model/Tournament";
 
 // wrapper for JQuery
 @Injectable()
@@ -12,6 +13,7 @@ export class SignalrWindow extends Window {
 @Injectable()
 export class WebsocketService {
     public matchListSubject = new Subject<Array<Match>>();
+    public tournamentNameSubject = new Subject<string>();
     public errorSubject = new Subject<any>();
 
     private hubConnection: any;
@@ -31,8 +33,12 @@ export class WebsocketService {
         });
 
         this.hubProxy.on("broadcastMatches", (matches: Array<Match>) => {
-            console.log("broadcast matches", matches);
             this.matchListSubject.next(matches);
+        });
+
+        this.hubProxy.on("broadcastTournamentName", (name: string) => {
+            this.tournamentNameSubject.next(name);
+            console.log(name);
         });
     }
 
@@ -55,5 +61,13 @@ export class WebsocketService {
         console.log("matchSave", match);
         this.hubProxy.invoke("matchSave", match.MatchId, match.ScoreTeam1, match.ScoreTeam2)
             .fail(error => this.errorSubject.next(error));
+    }
+
+    refreshMatches() {
+        this.hubConnection.start()
+            .done(() => {
+                this.hubProxy.invoke("refreshMatches")
+                    .done(() => this.stop());
+            });
     }
 }

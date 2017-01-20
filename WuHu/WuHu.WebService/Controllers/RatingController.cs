@@ -17,6 +17,15 @@ namespace WuHu.WebService.Controllers
         private IRatingManager Logic { get; } = BLFactory.GetRatingManager();
 
         [HttpGet]
+        [Route("", Name = "GetAllRatings")]
+        [SwaggerResponse(HttpStatusCode.OK, "Returns rating for player with that id", typeof(IEnumerable<Rating>))]
+        public IEnumerable<Rating> GetAllRatings()
+        {
+            var ratings = Logic.GetAllRatings();
+            return ratings;
+        }
+
+        [HttpGet]
         [Route("player/{playerId}", Name = "GetCurrentRatingByPlayerIdRoute")]
         [SwaggerResponse(HttpStatusCode.NotFound, "Player not found")]
         [SwaggerResponse(HttpStatusCode.OK, "Returns rating for player with that id", typeof(Rating))]

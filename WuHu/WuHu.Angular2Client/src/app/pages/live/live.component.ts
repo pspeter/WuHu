@@ -9,7 +9,9 @@ import {WebsocketService} from "../../api/websocket.service";
 })
 export class LiveComponent implements OnInit, OnDestroy {
     private matches: Array<Match>;
-    private subscription;
+    private tournamentName: string;
+    private matchesSubscription;
+    private nameSubscription;
     private errorSubscription;
     private errorMessage: string = "";
     private infoMessage: string = "";
@@ -21,7 +23,10 @@ export class LiveComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.ngZone.run(() => this.loading = true);
-        this.subscription = this.websocketService.matchListSubject.subscribe({
+        this.nameSubscription = this.websocketService.tournamentNameSubject.subscribe(
+            name => this.ngZone.run(() => this.tournamentName = name)
+        );
+        this.matchesSubscription = this.websocketService.matchListSubject.subscribe({
             next: matchList => {
                 this.ngZone.run(() => this.infoMessage = "");
                 this.ngZone.run(() => this.errorMessage = "");
@@ -53,7 +58,7 @@ export class LiveComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        this.matchesSubscription.unsubscribe();
         this.websocketService.stop();
     }
 }

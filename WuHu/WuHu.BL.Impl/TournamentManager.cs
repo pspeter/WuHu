@@ -16,6 +16,7 @@ namespace WuHu.BL.Impl
         protected readonly IScoreParameterDao ParamDao;
         protected readonly IRatingDao RatingDao;
         protected readonly Random Rand = new Random();
+        private const int MAX_MATCHES = 50;
 
         public TournamentManager()
         {
@@ -43,14 +44,9 @@ namespace WuHu.BL.Impl
             return TournamentDao.FindById(tournamentId);
         }
 
-        public bool LockTournament(Tournament tournament)
+        public bool LockTournament()
         {
-            if (tournament?.TournamentId == null)
-            {
-                return false;
-            }
-
-            var savedTournament = GetTournamentById(tournament.TournamentId.Value);
+            var savedTournament = GetMostRecentTournament();
             if (savedTournament == null)
             {
                 return false;
@@ -61,16 +57,12 @@ namespace WuHu.BL.Impl
                 return false;
             }
             savedTournament.IsLocked = true;
-            return UpdateTournament(tournament);
+            return UpdateTournament(savedTournament);
         }
 
-        public void UnlockTournament(Tournament tournament)
+        public void UnlockTournament()
         {
-            if (tournament?.TournamentId == null)
-            {
-                return;
-            }
-            var savedTournament = GetTournamentById(tournament.TournamentId.Value);
+            var savedTournament = GetMostRecentTournament();
             savedTournament.IsLocked = false;
             UpdateTournament(savedTournament);
         }
@@ -78,11 +70,11 @@ namespace WuHu.BL.Impl
         public bool CreateTournament(Tournament tournament, IList<Player> players, int amountMatches)
         {
             var inserted = TournamentDao.Insert(tournament);
-            if (!inserted)
+            if (!inserted || tournament.TournamentId == null)
             {
                 return false;
             }
-            LockTournament(tournament);
+            tournament.IsLocked = true;
             var success = SetMatchesForTournament(tournament, players, amountMatches);
             return success;
         }
@@ -90,7 +82,9 @@ namespace WuHu.BL.Impl
 
         public bool UpdateTournament(Tournament tournament, IList<Player> players, int amountMatches)
         {
-            return tournament.IsLocked && SetMatchesForTournament(tournament, players, amountMatches);
+            if (tournament.TournamentId == null) return false;
+            var savedTournament = TournamentDao.FindById(tournament.TournamentId.Value);
+            return savedTournament.IsLocked && SetMatchesForTournament(tournament, players, amountMatches);
         }
 
         private bool UpdateTournament(Tournament tournament)
@@ -100,7 +94,7 @@ namespace WuHu.BL.Impl
 
         private bool SetMatchesForTournament(Tournament tournament, IList<Player> players, int amount)
         {
-            if ( !tournament.IsLocked || players.Count() < 4 || amount < 1)
+            if (players.Count() < 4 || amount < 1 || amount > MAX_MATCHES)
             {
                 return false;
             }
@@ -172,7 +166,8 @@ namespace WuHu.BL.Impl
 
                 MatchDao.Insert(newMatch);
             }
-            UnlockTournament(tournament);
+
+            if (tournament.TournamentId != null) UnlockTournament();
             return true;
         }
 
