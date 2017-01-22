@@ -49,12 +49,8 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void Count()
         {
-            var cnt1 = ratingDao.Count();
-            Assert.IsTrue(cnt1 >= 0);
-            ratingDao.Insert(new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000));
-
-            var cnt2 = ratingDao.Count();
-            Assert.AreEqual(cnt1 + 1, cnt2);
+            var cnt1 = ratingDao.PageCount();
+            Assert.IsTrue(cnt1 > 0);
         }
 
         [TestMethod]
@@ -74,9 +70,8 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void FindAll()
         {
-            var foundInitial = ratingDao.FindAll().Count;
-            var cntInitial = ratingDao.Count();
-            Assert.AreEqual(foundInitial, cntInitial);
+            var lastPage = ratingDao.PageCount() - 1;
+            var foundInitial = ratingDao.FindAll(lastPage).Count;
 
             const int insertAmount = 10;
             
@@ -85,11 +80,17 @@ namespace WuHu.Dal.Test
                 var rating = new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000);
                 ratingDao.Insert(rating);
             }
-            var cntAfterInsert = ratingDao.Count();
-            Assert.AreEqual(insertAmount + foundInitial, cntAfterInsert);
+            var lastPageAfterInsert = ratingDao.PageCount() - 1;
 
-            var foundAfterInsert = ratingDao.FindAll().Count;
-            Assert.AreEqual(cntAfterInsert, foundAfterInsert);
+            if (lastPage == lastPageAfterInsert)
+            {
+                var foundAfterInsert = ratingDao.FindAll(lastPageAfterInsert).Count;
+                Assert.AreEqual(foundInitial + insertAmount, foundAfterInsert);
+            }
+            else if (lastPage < lastPageAfterInsert)
+            {
+                Assert.Fail();
+            }
         }
         
         [TestMethod]
@@ -120,13 +121,18 @@ namespace WuHu.Dal.Test
         [TestMethod]
         public void Insert()
         {
-            var cnt = ratingDao.Count();
+            var pageCnt = ratingDao.PageCount();
+            var cnt = ratingDao.FindAll(pageCnt - 1).Count;
             var rating = new Rating(RatingTests.testPlayer, new DateTime(2000, 1, 1), 2000);
             ratingDao.Insert(rating);
             Assert.IsNotNull(rating.RatingId);
-            var newCnt = ratingDao.Count();
-            Assert.AreEqual(cnt + 1, newCnt);
             Assert.IsTrue(rating.RatingId >= 0);
+            var newPageCnt = ratingDao.PageCount();
+            var newCnt = ratingDao.FindAll(newPageCnt - 1).Count;
+            if (pageCnt == newPageCnt)
+            {
+                Assert.AreEqual(cnt + 1, newCnt);
+            }
         }
 
         [TestMethod]

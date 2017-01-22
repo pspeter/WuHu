@@ -105,9 +105,8 @@ namespace WuHu.BL.Test
         public void UpdateTournament()
         {
             var t = new Tournament("", DateTime.Now);
+            Assert.IsNull(t.TournamentId);
 
-            Assert.IsNotNull(t.TournamentId);
-            _mgr.LockTournament();
             _mgr.CreateTournament(t, new List<Player>(_testPlayers), 1);
             Assert.IsNotNull(t.TournamentId);
 
