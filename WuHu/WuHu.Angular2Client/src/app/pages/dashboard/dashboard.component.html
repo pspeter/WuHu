@@ -8,6 +8,9 @@
             <p *ngIf="isLoggedIn">Du hast derzeit <strong>{{ currentStats?.CurrentScore }}</strong> Punkte.</p>
             <p>Über die Menüpunkte oben kannst du die derzeitige Rangliste sowie Statistiken aller Spieler ansehen.</p>
             <p>Außerdem kannst du live die Spielstände der heutigen Spiele mitverfolgen.</p>
+            <p *ngIf="!isLoggedIn">Über den Login Knopf in der Menüleiste kommst du zur Login-Ansicht.
+                Als registrierter Benutzer kannst du dich dort mit deinen Nutzerdaten anmelden. Falls du noch keine Zugangsdaten hast
+                oder Probleme beim Anmelden auftreten, wende dich bitte an einen Systemadministrator. </p>
             <p *ngIf="isLoggedIn">Über den <i>Spielstand</i> Tab kannst du deine heutigen Spielstände mitführen.</p>
             <p *ngIf="isAdmin">Als Admin kannst du außerdem den heutigen Spielplan sowie die Spieler erstellen und verwalten.</p>
         </div>

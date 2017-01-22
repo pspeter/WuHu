@@ -8,7 +8,7 @@
                        [(ngModel)]="loginModel.password" id="password" placeholder="Passwort" required>
             </div>
             <button class="btn btn-default" [disabled]="!loginForm.form.valid">Anmelden</button>
-            <div class="false-login"><strong>Achtung!</strong> {{ errorMessage }}</div>
+            <div *ngIf="!!errorMessage" class="false-login"><strong>Achtung!</strong> {{ errorMessage }}</div>
         </form>
     </div>
 </div>

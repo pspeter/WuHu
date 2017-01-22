@@ -33,7 +33,7 @@ export class UserService {
 
 
         return this.httpAuthenticated
-            .post(environment.baseApiUrl + '/token', body, requestOptions)
+            .post(environment.baseApiUrl + '/api/token', body, requestOptions)
             .map((res) => {
                 let json = res.json();
                 if (json) {
@@ -58,6 +58,7 @@ export class UserService {
         this.role = "Guest";
         this.username = "";
         this.accountService.accountLogout();
+        location.reload();
     }
 
     CurrentUser() {

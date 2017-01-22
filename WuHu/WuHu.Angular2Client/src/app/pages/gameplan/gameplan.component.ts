@@ -38,8 +38,9 @@ export class GameplanComponent implements OnInit, OnDestroy {
                     this.tournamentModel = res;
                 },
                 error => {
-                   this.loading = false;
-                   this.displayError("Spieplan konnte nicht geladen werden");
+                    this.connectionLost = true;
+                    this.loading = false;
+                    this.errorMessage = "Verbindungsproblem";
                 }
             )
     }
@@ -191,9 +192,11 @@ export class GameplanComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loading = true;
+        this.connectionLost = false;
         this.playerService.playerGetAll()
             .subscribe(
                 res => {
+                    this.loading = false;
                     let players = res;
                     for (let i = 0; i < players.length; ++i) {
                         let day = new Date().getDay();
@@ -239,6 +242,7 @@ export class GameplanComponent implements OnInit, OnDestroy {
                     else {
                         this.errorMessage = "Verbindungsproblem";
                         this.loading = false;
+                        this.connectionLost = true;
                     }
                 }
             )
