@@ -79,7 +79,7 @@ export class StatisticsComponent implements OnInit {
     }
 
     onError() {
-        this.errorMessage = "Verbindungsproblem";
+        this.errorMessage = "Verbindungsfehler";
     }
 
 

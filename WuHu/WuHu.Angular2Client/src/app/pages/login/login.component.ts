@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
                         this.errorMessage = "Oops. Da ging was schief"
                     }
                     else {
-                        this.errorMessage = "Server offline"
+                        this.errorMessage = "Verbindungsproblem"
                     }
                 }
             );

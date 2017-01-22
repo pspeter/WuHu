@@ -1,9 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {PlayerApi} from "../../api/PlayerApi";
-import {RatingApi} from "../../api/RatingApi";
-import {Player} from "../../model/Player";
-import {PlayerService} from "../../api/player-service";
-import {RatingService} from "../../api/rating-service";
 import {StatisticsService} from "../../api/statistics-service";
 import {RanklistData} from "../../model/RanklistData";
 
@@ -43,7 +38,7 @@ export class RanklistComponent implements OnInit {
                     this.loading = false;
                 },
                 error => {
-                    this.errorMessage = "Verbindungsfehler";
+                    this.errorMessage = "Verbindungsproblem";
                     this.infoMessage = "";
                     this.loading = false;
                 }

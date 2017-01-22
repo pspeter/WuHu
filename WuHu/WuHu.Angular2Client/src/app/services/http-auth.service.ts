@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {Headers, Http, RequestOptionsArgs} from "@angular/http";
-import {AccountApi} from "../api/AccountApi";
 
 @Injectable()
 export class HttpAuthService {

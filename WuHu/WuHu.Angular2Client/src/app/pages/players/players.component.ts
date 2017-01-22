@@ -1,7 +1,5 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Observable} from "rxjs";
 import {Player} from "../../model/Player";
-import {PlayerApi} from "../../api/PlayerApi";
 import {RestoreService} from "../../services/restore.service";
 import {PlayerService} from "../../api/player-service";
 import {UserService} from "../../services/user.service";

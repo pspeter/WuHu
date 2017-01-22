@@ -19,11 +19,14 @@ export class GameplanComponent implements OnInit, OnDestroy {
     private editMode: boolean;
     private errorMessage: string;
     private successMessage: string;
+    private connectionLost: boolean;
 
     constructor(private tournamentService: TournamentService,
                 private playerService: PlayerService,
                 private userService: UserService,
-                private socketService: WebsocketService) { }
+                private socketService: WebsocketService) {
+        this.connectionLost = false;
+    }
 
     private getTournament() {
         this.loading = true;
@@ -63,6 +66,7 @@ export class GameplanComponent implements OnInit, OnDestroy {
                     if (error.status == 409) {
                         this.showWarning = true;
                     } else {
+                        this.connectionLost = true;
                         this.errorMessage = "Verbindungsproblem";
                     }
                 },
@@ -135,7 +139,8 @@ export class GameplanComponent implements OnInit, OnDestroy {
                             this.displayError("Oops. Da ging was schief");
                         }
                         else {
-                            this.displayError("Verbindungsproblem");
+                            this.connectionLost = true;
+                            this.errorMessage = "Verbindungsproblem";
                         }
                         this.loading = false;
                     },
@@ -163,7 +168,8 @@ export class GameplanComponent implements OnInit, OnDestroy {
                             this.displayError("Oops. Da ging was schief");
                         }
                         else {
-                            this.displayError("Verbindungsproblem");
+                            this.connectionLost = true;
+                            this.errorMessage = "Verbindungsproblem";
                         }
                         this.loading = false;
                     },
@@ -184,6 +190,7 @@ export class GameplanComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.loading = true;
         this.playerService.playerGetAll()
             .subscribe(
                 res => {
@@ -222,13 +229,16 @@ export class GameplanComponent implements OnInit, OnDestroy {
                 error => {
                     if (error.status == 403) {
                         this.displayError("Nicht eingeloggt");
+                        this.loading = false;
                         setTimeout(() => this.userService.logout(), 2000)
                     }
                     else if (error.status == 500) {
                         this.displayError("Oops. Da ging was schief");
+                        this.loading = false;
                     }
                     else {
                         this.errorMessage = "Verbindungsproblem";
+                        this.loading = false;
                     }
                 }
             )

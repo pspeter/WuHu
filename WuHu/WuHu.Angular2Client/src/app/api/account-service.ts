@@ -25,17 +25,17 @@
 import {Http, Headers, RequestOptionsArgs, Response, URLSearchParams} from '@angular/http';
 import {Injectable, Optional} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
-import * as models from '../model/models';
 import 'rxjs/Rx';
 
 /* tslint:disable:no-unused-variable member-ordering */
 
 'use strict';
 import {HttpAuthService} from "../services/http-auth.service";
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class AccountService {
-    protected basePath = 'http://localhost:4649';
+    protected basePath = environment.baseApiUrl;
     public defaultHeaders : Headers = new Headers();
 
     constructor(protected http: HttpAuthService, @Optional() basePath: string) {

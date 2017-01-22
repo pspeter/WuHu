@@ -32,10 +32,11 @@ import 'rxjs/Rx';
 
 'use strict';
 import {HttpAuthService} from "../services/http-auth.service";
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class PlayerService {
-    protected basePath = 'http://localhost:4649';
+    protected basePath = environment.baseApiUrl;
     public defaultHeaders : Headers = new Headers();
 
     constructor(protected http: HttpAuthService, @Optional() basePath: string) {

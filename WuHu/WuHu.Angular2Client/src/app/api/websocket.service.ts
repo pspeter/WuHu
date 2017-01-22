@@ -3,6 +3,7 @@ import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {Match} from "../model/Match";
 import any = jasmine.any;
 import {Tournament} from "../model/Tournament";
+import {environment} from "../../environments/environment";
 
 // wrapper for JQuery
 @Injectable()
@@ -12,6 +13,7 @@ export class SignalrWindow extends Window {
 
 @Injectable()
 export class WebsocketService {
+    protected basePath = environment.baseApiUrl;
     public matchListSubject = new Subject<Array<Match>>();
     public tournamentNameSubject = new Subject<string>();
     public errorSubject = new Subject<any>();
@@ -25,7 +27,7 @@ export class WebsocketService {
         }
 
         this.hubConnection = this.window.$.hubConnection();
-        this.hubConnection.url = "http://localhost:4649/signalr";
+        this.hubConnection.url = this.basePath + "/signalr";
         this.hubProxy = this.hubConnection.createHubProxy("liveMatchHub");
 
         this.hubConnection.error((error: any) => {

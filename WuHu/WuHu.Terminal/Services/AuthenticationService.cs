@@ -13,19 +13,13 @@ namespace WuHu.Terminal.Services
 {
     static class AuthenticationService
     {
-        private static readonly IPlayerManager PlayerMgr = BLFactory.GetPlayerManager();
+        private static readonly IUserManager UserMgr = BLFactory.GetUserManager();
 
 
         public static bool Login(string username, string password)
         {
-            if (!Authenticate(username, password))
-            {
-                Logout();
-                return false;
-            }
-
-            AuthenticatedUser = PlayerMgr.GetPlayer(username);
-            if (!AuthenticatedUser.IsAdmin)
+            AuthenticatedUser = UserMgr.FindUser(username, password);
+            if (AuthenticatedUser == null || !AuthenticatedUser.IsAdmin)
             {
                 Logout();
                 return false;
@@ -44,13 +38,5 @@ namespace WuHu.Terminal.Services
         }
 
         public static Player AuthenticatedUser { get; private set; }
-
-        private static bool Authenticate(string username, string password)
-        {
-            if (username == null || password == null) return false;
-            var user = PlayerMgr.GetPlayer(username);
-            return user != null && 
-                CryptoService.CheckPassword(password, user.Password, user.Salt);
-        }
     }
 }

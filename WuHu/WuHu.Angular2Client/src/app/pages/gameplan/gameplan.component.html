@@ -2,7 +2,7 @@
     <h2>Spielplan</h2>
 </div>
 
-<div class="col-xs-12">
+<div class="col-xs-12" *ngIf="connectionLost">
     <nav class="nav navbar-default tournament-nav">
         <button class="btn btn-lg btn-default navbar-btn" [disabled]="loading" (click)="addTournament()">Neuer
             Spielplan

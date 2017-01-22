@@ -67,7 +67,7 @@ export class ScoresComponent implements OnInit, OnDestroy {
                 this.ngZone.run(() => this.loading = false);
             },
             error => {
-                this.displayError("Verbindungsfehler");
+                this.displayError("Verbindungsproblem");
             },
             () => this.displayError("Verbindung beendet")
         );
