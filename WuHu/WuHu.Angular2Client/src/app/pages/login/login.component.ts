@@ -31,7 +31,6 @@ export class LoginComponent implements OnInit {
                     this.errorMessage = "";
                 },
                 error => {
-                    console.log(error);
                     if (error.status == 400) {
                         this.errorMessage = "Falscher Nutzername oder Passwort";
                     }

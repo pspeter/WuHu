@@ -4,6 +4,8 @@ import {RatingApi} from "../../api/RatingApi";
 import {Player} from "../../model/Player";
 import {PlayerService} from "../../api/player-service";
 import {RatingService} from "../../api/rating-service";
+import {StatisticsService} from "../../api/statistics-service";
+import {RanklistData} from "../../model/RanklistData";
 
 @Component({
     selector: 'app-ranklist',
@@ -12,93 +14,40 @@ import {RatingService} from "../../api/rating-service";
 })
 export class RanklistComponent implements OnInit {
 
-    private players : Array<Player>;
+    private data : Array<RanklistData>;
     private errorMessage: string = "";
     private infoMessage: string = "";
     private loading: boolean = false;
 
     private sortedPlayers = [];
 
-    private sortedIndex(value, array) {
-        let low = 0,
-            high = array.length;
-
-        while (low < high) {
-            let mid = (low + high) >>> 1;
-            if (array[mid].CurrentRating.Value > value) low = mid + 1;
-            else high = mid;
-        }
-        return low;
-    }
-
-    private insertSorted(value, array) {
-        array.splice(this.sortedIndex(value.CurrentRating.Value, array), 0, value);
-        return array;
-    }
+    constructor(private statsService: StatisticsService) { }
 
     sortByRank() {
-        this.players.sort((a, b) => {
-            if (!a.CurrentRating) return 1;
-            if (!b.CurrentRating) return -1;
-            return b.CurrentRating.Value - a.CurrentRating.Value
+        this.data.sort((a, b) => {
+            if (!a.CurrentScore) return 1;
+            if (!b.CurrentScore) return -1;
+            return b.CurrentScore - a.CurrentScore
         });
     }
 
     getPlayers() {
         this.loading = true;
-        this.playerService.playerGetAll()
+        this.statsService.statisticsGetRanklistData()
             .subscribe(
-                p => {
-                    this.players = p;
+                res => {
+                    this.data = res;
+                    this.sortByRank();
                     this.errorMessage = "";
                     this.infoMessage = "";
+                    this.loading = false;
                 },
                 error => {
                     this.errorMessage = "Verbindungsfehler";
                     this.infoMessage = "";
                     this.loading = false;
-                },
-                () => {
-                    this.loading = false;
-                    console.log(this.players);
-                    for (let i = 0; i < this.players.length; ++i) {
-                        this.ratingService
-                            .ratingGetCurrentByPlayerId(this.players[i].PlayerId)
-                            .subscribe(
-                                r => {
-                                    this.players[i].CurrentRating = r;
-                                    this.insertSorted(this.players[i], this.sortedPlayers)
-                                },
-                                error => {
-                                    console.log(error);
-                                }
-                            )
-
-                    }
-                    /*
-                    let sortStarter = setInterval(() => {
-                        if (done == this.players.length) {
-                            this.sortByRank();
-                            clearInterval(sortStarter);
-                        }
-                    }, 100);*/
-
-                    /*let allRatings;
-                     this.ratingService.ratingGetAll()
-                     .subscribe({
-                     next: all => allRatings = all,
-                     complete: () => {
-                     for(let i = 0; i < allRatings.length; ++i) {
-                     this.players.find(p => p.PlayerId == allRatings[i].PlayerId)
-                     .CurrentRating = allRatings[i];
-                     }
-                     }
-                     })*/
                 }
             );
-    }
-
-    constructor(private playerService: PlayerService, private ratingService: RatingService) {
     }
 
     ngOnInit() {

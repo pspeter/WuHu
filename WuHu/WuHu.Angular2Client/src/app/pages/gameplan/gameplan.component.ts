@@ -77,6 +77,7 @@ export class GameplanComponent implements OnInit, OnDestroy {
     }
 
     private addTournament() {
+        if (this.editMode) this.reset();
         this.editMode = false;
         this.errorMessage = "";
         this.successMessage = "";
@@ -189,27 +190,26 @@ export class GameplanComponent implements OnInit, OnDestroy {
                     let players = res;
                     for (let i = 0; i < players.length; ++i) {
                         let day = new Date().getDay();
-
                         switch(day) {
-                            case(1): {
+                            case(0): {
                                 players[i].IsSelected = players[i].PlaysMondays;
                             } break;
-                            case(2): {
+                            case(1): {
                                 players[i].IsSelected = players[i].PlaysTuesdays;
                             } break;
-                            case(3): {
+                            case(2): {
                                 players[i].IsSelected = players[i].PlaysWednesdays;
                             } break;
-                            case(4): {
+                            case(3): {
                                 players[i].IsSelected = players[i].PlaysThursdays;
                             } break;
-                            case(5): {
+                            case(4): {
                                 players[i].IsSelected = players[i].PlaysFridays;
                             } break;
-                            case(6): {
+                            case(5): {
                                 players[i].IsSelected = players[i].PlaysSaturdays;
                             } break;
-                            case(7): {
+                            case(6): {
                                 players[i].IsSelected = players[i].PlaysSundays;
                             } break;
                             default: {

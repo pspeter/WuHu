@@ -105,18 +105,7 @@ namespace WuHu.BL.Test
             Assert.AreEqual(rating, foundRating.Value);
         }
 
-        [TestMethod]
-        public void GetAll()
-        {
-            var initCnt = _mgr.GetAllRatings().Count;
-            for (var i = 0; i < 5; ++i)
-            {
-                _ratingDao.Insert(new Rating(_testPlayers[0], DateTime.Now, 0));
-            }
 
-            var newCnt = _mgr.GetAllRatings().Count;
-            Assert.AreEqual(initCnt + 5, newCnt);
-        }
 
         [TestMethod]
         public void GetAllFor()
@@ -134,14 +123,10 @@ namespace WuHu.BL.Test
         [TestMethod]
         public void Add()
         {
-            var initCnt = _ratingDao.FindAll().Count;
             for (var i = 0; i < 5; ++i)
             {
-                _mgr.AddCurrentRatingFor(_testPlayers[0]);
+                Assert.IsTrue(_mgr.AddCurrentRatingFor(_testPlayers[0]));
             }
-
-            var newCnt = _ratingDao.FindAll().Count;
-            Assert.AreEqual(initCnt + 5, newCnt);
         }
     }
 }

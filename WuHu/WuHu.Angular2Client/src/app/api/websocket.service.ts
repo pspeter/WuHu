@@ -38,18 +38,15 @@ export class WebsocketService {
 
         this.hubProxy.on("broadcastTournamentName", (name: string) => {
             this.tournamentNameSubject.next(name);
-            console.log(name);
         });
     }
 
     start(): void {
         this.hubConnection.start()
             .done(() => {
-                console.log("Connection established");
             })
             .fail((error: any) => {
                 this.errorSubject.next(error);
-                console.error("start() failed")
             });
     }
 
@@ -58,7 +55,6 @@ export class WebsocketService {
     }
 
     updateMatch(match: Match) {
-        console.log("matchSave", match);
         this.hubProxy.invoke("matchSave", match.MatchId, match.ScoreTeam1, match.ScoreTeam2)
             .fail(error => this.errorSubject.next(error));
     }

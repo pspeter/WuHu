@@ -17,13 +17,15 @@
         <tr>
             <th>Platz</th>
             <th>Name</th>
+            <th>Gewinnanteil</th>
             <th>Wertung</th>
         </tr>
 
-        <tr *ngFor="let player of sortedPlayers; let i = index">
+        <tr *ngFor="let player of data; let i = index">
             <td>#{{ i + 1 }}</td>
-            <td>{{ player.Firstname }} "{{player.Nickname}}" {{ player.Lastname }}</td>
-            <td>{{ player.CurrentRating?.Value }}</td>
+            <td>{{ player.Name }}</td>
+            <td>{{ player.WinRate | number : '1.2-2' }}%</td>
+            <td>{{ player.CurrentScore }}</td>
         </tr>
     </table>
 </div>

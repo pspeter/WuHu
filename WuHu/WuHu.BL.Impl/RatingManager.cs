@@ -101,9 +101,9 @@ namespace WuHu.BL.Impl
             return RatingDao.Insert(new Rating(player, DateTime.Now, rating));
         }
 
-        public IList<Rating> GetAllRatings()
+        public IList<Rating> GetAllRatings(int page)
         {
-            return RatingDao.FindAll();
+            return RatingDao.FindAll(page);
         }
 
         public IList<Rating> GetAllRatingsFor(Player player)
@@ -119,6 +119,11 @@ namespace WuHu.BL.Impl
         public Rating GetCurrentRatingFor(Player player)
         {
             return RatingDao.FindCurrentRating(player);
+        }
+
+        public int GetPageCount()
+        {
+            return RatingDao.PageCount();
         }
     }
 }

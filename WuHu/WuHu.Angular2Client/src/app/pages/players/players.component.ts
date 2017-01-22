@@ -84,7 +84,6 @@ export class PlayersComponent implements OnInit, OnDestroy {
                     this.displaySuccess("Spieler " + player.Firstname + " erfolgreich angelegt.")
                 },
                 error: res => {
-                    console.log(res);
                     if (res.status == 400) {
                         this.displayError("Fehlerhafter Spieler");
                     }
@@ -108,7 +107,12 @@ export class PlayersComponent implements OnInit, OnDestroy {
 
     private fileChange(event) {
         let file = event.srcElement.files[0];
-        console.log(file);
+        let filesize: number = ((file.size/1024)/1024);
+        console.log(filesize);
+        if (filesize > 1.5) {
+            this.displayError("Bild zu groß (1.5MB max!)");
+            return;
+        }
 
         let reader = new FileReader();
         reader.onloadend = (e) => {

@@ -47,12 +47,18 @@ export class RatingService {
     /**
      *
      *
+     * @param page
      */
-    public ratingGetAllRatings (extraHttpRequestParams?: any ) : Observable<Array<models.Rating>> {
-        const path = this.basePath + '/api/rating';
+    public ratingGetAllRatings (page: number, extraHttpRequestParams?: any ) : Observable<Array<models.Rating>> {
+        const path = this.basePath + '/api/rating/page/{page}'
+                .replace('{' + 'page' + '}', String(page));
 
         let queryParameters = new URLSearchParams();
         let headerParams = this.defaultHeaders;
+        // verify required parameter 'page' is not null or undefined
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling ratingGetAllRatings.');
+        }
         let requestOptions: RequestOptionsArgs = {
             method: 'GET',
             headers: headerParams,
@@ -100,4 +106,28 @@ export class RatingService {
             });
     }
 
+    /**
+     *
+     *
+     */
+    public ratingGetPageCount (extraHttpRequestParams?: any ) : Observable<number> {
+        const path = this.basePath + '/api/rating/page/count';
+
+        let queryParameters = new URLSearchParams();
+        let headerParams = this.defaultHeaders;
+        let requestOptions: RequestOptionsArgs = {
+            method: 'GET',
+            headers: headerParams,
+            search: queryParameters
+        };
+
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
 }

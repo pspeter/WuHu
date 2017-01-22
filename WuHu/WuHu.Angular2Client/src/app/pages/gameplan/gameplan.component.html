@@ -4,7 +4,7 @@
 
 <div class="col-xs-12">
     <nav class="nav navbar-default tournament-nav">
-        <button class="btn btn-lg btn-success navbar-btn" [disabled]="loading" (click)="addTournament()">Neuer
+        <button class="btn btn-lg btn-default navbar-btn" [disabled]="loading" (click)="addTournament()">Neuer
             Spielplan
         </button>
         <button class="btn btn-lg btn-default navbar-btn" [disabled]="loading" (click)="editTournament()">Spielplan
@@ -22,33 +22,11 @@
     <div class="loader"></div>
 </div>
 
-<div class="row" *ngIf="!loading && !errorMessage && !showWarning && !!tournamentModel">
+<div class="row" class="tournament-form" *ngIf="!loading && !errorMessage && !showWarning && !!tournamentModel">
     <div class="col-xs-12">
         <form class="tournament-form" #tournamentForm="ngForm" (ngSubmit)="onSubmit()">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-xs-12 col-md-6">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" #name="ngModel" class="form-control" id="name"
-                                   [(ngModel)]="tournamentModel.Name" [disabled]="editMode"
-                                   name="name">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="amount">Anzahl</label>
-                            <input type="number" #amount="ngModel" class="form-control" id="amount"
-                                   [(ngModel)]="tournamentModel.Amount" name="amount">
-                        </div>
-
-                        <div class="btn-group">
-                            <button type="submit" class="btn btn-success"
-                                    [disabled]="!tournamentForm.form.valid || tournamentForm.form.pristine">
-                                Absenden
-                            </button>
-                            <button type="button" class="btn btn-default" (click)="reset()">Abbrechen</button>
-                        </div>
-                    </div>
                     <div class="col-xs-12 col-md-6">
                         <div class="form-group">
                             <label for="players">Spieler</label>
@@ -63,6 +41,29 @@
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" #name="ngModel" class="form-control" id="name"
+                                   [(ngModel)]="tournamentModel.Name"
+                                   placeholder="Name des Spielplans" [disabled]="editMode"
+                                   name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="amount">Anzahl</label>
+                            <input type="number" #amount="ngModel" class="form-control" id="amount"
+                                   placeholder="Anzahl an Spielen" [(ngModel)]="tournamentModel.Amount" name="amount">
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-success"
+                                    [disabled]="!tournamentForm.form.valid || tournamentForm.form.pristine">
+                                Absenden
+                            </button>
+                            <button type="button" class="btn btn-default" (click)="reset()">Abbrechen</button>
                         </div>
                     </div>
                 </div>

@@ -75,7 +75,7 @@ export class PlayerService {
      * @param playerId
      */
     public playerGetById (playerId: number, extraHttpRequestParams?: any ) : Observable<models.Player> {
-        const path = this.basePath + '/api/player/{playerId}'
+        const path = this.basePath + '/api/player/id/{playerId}'
                 .replace('{' + 'playerId' + '}', String(playerId));
 
         let queryParameters = new URLSearchParams();
@@ -106,7 +106,7 @@ export class PlayerService {
      * @param username
      */
     public playerGetByUsername (username: string, extraHttpRequestParams?: any ) : Observable<models.Player> {
-        const path = this.basePath + '/api/player/{username}'
+        const path = this.basePath + '/api/player/username/{username}'
                 .replace('{' + 'username' + '}', String(username));
 
         let queryParameters = new URLSearchParams();
@@ -182,7 +182,6 @@ export class PlayerService {
             search: queryParameters
         };
         requestOptions.body = JSON.stringify(player);
-        console.log("put player");
         return this.http.request(path, requestOptions)
             .map((response: Response) => {
                 if (response.status === 204) {

@@ -1,6 +1,15 @@
-
-<div class="page-header row"><h2>WuzlHub</h2></div>
-
 <div class="row">
-    <p>Willkommen!</p>
+    <div class="col-xs-12">
+        <div class="jumbotron">
+            <h1>Willkommen im WuzlHub</h1>
+            <p *ngIf="!isLoggedIn">Hallo Gast!</p>
+            <p *ngIf="isLoggedIn">Hallo {{ currentPlayer?.Firstname }}! </p>
+            <p *ngIf="isLoggedIn">Deine Gewinnrate derzeit liegt bei <strong>{{ currentStats?.WinRate | number : '1.2-2' }}%</strong>. </p>
+            <p *ngIf="isLoggedIn">Du hast derzeit <strong>{{ currentStats?.CurrentScore }}</strong> Punkte.</p>
+            <p>Über die Menüpunkte oben kannst du die derzeitige Rangliste sowie Statistiken aller Spieler ansehen.</p>
+            <p>Außerdem kannst du live die Spielstände der heutigen Spiele mitverfolgen.</p>
+            <p *ngIf="isLoggedIn">Über den <i>Spielstand</i> Tab kannst du deine heutigen Spielstände mitführen.</p>
+            <p *ngIf="isAdmin">Als Admin kannst du außerdem den heutigen Spielplan sowie die Spieler erstellen und verwalten.</p>
+        </div>
+    </div>
 </div>

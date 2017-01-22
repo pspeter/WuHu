@@ -13,6 +13,8 @@ namespace WuHu.Dal.SqlServer
 {
     public class RatingDao : IRatingDao
     {
+        private const int PageSize = 2000;
+
         private const string SqlFindById =
           @"SELECT * 
             FROM Rating JOIN Player on (Rating.playerId = Player.playerId)
@@ -21,7 +23,9 @@ namespace WuHu.Dal.SqlServer
         private const string SqlFindAll =
             @"SELECT * 
                 FROM Rating JOIN Player on (Rating.playerId = Player.playerId)
-                ORDER BY value DESC;";
+                ORDER BY datetime DESC
+                OFFSET @offset ROWS
+                FETCH NEXT @fetch ROWS ONLY;";
 
         private const string SqlFindAllByPlayer =
             @"SELECT * 
@@ -54,43 +58,38 @@ namespace WuHu.Dal.SqlServer
 
         private readonly IDatabase database;
 
+        private Rating BuildVirtualMatch(IDataReader reader)
+        {
+            var p = new Player()
+            {
+                PlayerId = (int) reader["playerId"]
+            };
+
+            return new Rating((int) reader["ratingId"], p, (DateTime) reader["datetime"], (int) reader["value"]);
+        }
+
         public RatingDao(IDatabase database)
         {
             this.database = database;
         }
 
-        protected DbCommand CreateFindAllCmd()
+        protected DbCommand CreateFindAllCmd(int page)
         {
-            return database.CreateCommand(SqlFindAll);
+            var cmd = database.CreateCommand(SqlFindAll);
+            var offset = PageSize * page;
+            database.DefineParameter(cmd, "offset", DbType.Int32, offset);
+            database.DefineParameter(cmd, "fetch", DbType.Int32, PageSize);
+            return cmd;
         }
 
-        public IList<Rating> FindAll()
+        public IList<Rating> FindAll(int page)
         {
-            using (var command = CreateFindAllCmd())
+            using (var command = CreateFindAllCmd(page))
             using (var reader = database.ExecuteReader(command))
             {
                 var result = new List<Rating>();
                 while (reader.Read())
-                    result.Add(new Rating((int)reader["ratingId"],
-                                          new Player((int)reader["playerId"],
-                                              (string)reader["firstName"],
-                                              (string)reader["lastName"],
-                                              (string)reader["nickName"],
-                                              (string)reader["userName"],
-                                              (byte[])reader["password"],
-                                              (byte[])reader["salt"],
-                                              (bool)reader["isAdmin"],
-                                              (bool)reader["playsMondays"],
-                                              (bool)reader["playsTuesdays"],
-                                              (bool)reader["playsWednesdays"],
-                                              (bool)reader["playsThursdays"],
-                                              (bool)reader["playsFridays"],
-                                              (bool)reader["playsSaturdays"],
-                                              (bool)reader["playsSundays"],
-                                              reader.IsDBNull(reader.GetOrdinal("picture")) ?
-                                                null : (byte[])reader["picture"]),
-                                          (DateTime)reader["datetime"],
-                                          (int)reader["value"]));
+                    result.Add(BuildVirtualMatch(reader));
                 return result;
             }
         }
@@ -113,26 +112,7 @@ namespace WuHu.Dal.SqlServer
             {
                 var result = new List<Rating>();
                 while (reader.Read())
-                    result.Add(new Rating((int)reader["ratingId"],
-                                          new Player((int)reader["playerId"],
-                                              (string)reader["firstName"],
-                                              (string)reader["lastName"],
-                                              (string)reader["nickName"],
-                                              (string)reader["userName"],
-                                              (byte[])reader["password"],
-                                              (byte[])reader["salt"],
-                                              (bool)reader["isAdmin"],
-                                              (bool)reader["playsMondays"],
-                                              (bool)reader["playsTuesdays"],
-                                              (bool)reader["playsWednesdays"],
-                                              (bool)reader["playsThursdays"],
-                                              (bool)reader["playsFridays"],
-                                              (bool)reader["playsSaturdays"],
-                                              (bool)reader["playsSundays"],
-                                              reader.IsDBNull(reader.GetOrdinal("picture")) ?
-                                                null : (byte[])reader["picture"]),
-                                          (DateTime)reader["datetime"],
-                                          (int)reader["value"]));
+                    result.Add(BuildVirtualMatch(reader));
                 return result;
             }
         }
@@ -160,26 +140,7 @@ namespace WuHu.Dal.SqlServer
             {
                 if (reader.Read())
                 {
-                    return new Rating((int)reader["ratingId"],
-                                          new Player((int)reader["playerId"],
-                                              (string)reader["firstName"],
-                                              (string)reader["lastName"],
-                                              (string)reader["nickName"],
-                                              (string)reader["userName"],
-                                              (byte[])reader["password"],
-                                              (byte[])reader["salt"],
-                                              (bool)reader["isAdmin"],
-                                              (bool)reader["playsMondays"],
-                                              (bool)reader["playsTuesdays"],
-                                              (bool)reader["playsWednesdays"],
-                                              (bool)reader["playsThursdays"],
-                                              (bool)reader["playsFridays"],
-                                              (bool)reader["playsSaturdays"],
-                                              (bool)reader["playsSundays"],
-                                              reader.IsDBNull(reader.GetOrdinal("picture")) ?
-                                                null : (byte[])reader["picture"]),
-                                          (DateTime)reader["datetime"],
-                                          (int)reader["value"]);
+                    return BuildVirtualMatch(reader);
                 }
                 else
                 {
@@ -202,26 +163,7 @@ namespace WuHu.Dal.SqlServer
             {
                 if (reader.Read())
                 {
-                    return new Rating((int)reader["ratingId"],
-                                      new Player((int)reader["playerId"],
-                                              (string)reader["firstName"],
-                                              (string)reader["lastName"],
-                                              (string)reader["nickName"],
-                                              (string)reader["userName"],
-                                              (byte[])reader["password"],
-                                              (byte[])reader["salt"],
-                                              (bool)reader["isAdmin"],
-                                              (bool)reader["playsMondays"],
-                                              (bool)reader["playsTuesdays"],
-                                              (bool)reader["playsWednesdays"],
-                                              (bool)reader["playsThursdays"],
-                                              (bool)reader["playsFridays"],
-                                              (bool)reader["playsSaturdays"],
-                                              (bool)reader["playsSundays"],
-                                              reader.IsDBNull(reader.GetOrdinal("picture")) ?
-                                                null : (byte[])reader["picture"]),
-                                      (DateTime)reader["datetime"],
-                                      (int)reader["value"]);
+                    return BuildVirtualMatch(reader);
                 }
                 else
                 {
@@ -287,11 +229,11 @@ namespace WuHu.Dal.SqlServer
         {
             return database.CreateCommand(SqlCount);
         }
-        public int Count()
+        public int PageCount()
         {
             using (var command = CreateCountCmd())
             {
-                return database.ExecuteScalar(command);
+                return (database.ExecuteScalar(command) / PageSize) + 1;
             }
         }
     }

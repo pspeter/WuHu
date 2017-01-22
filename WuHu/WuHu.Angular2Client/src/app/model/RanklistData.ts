@@ -24,42 +24,13 @@
 
 'use strict';
 import * as models from './models';
-import {SafeResourceUrl} from "@angular/platform-browser";
 
-export interface Player {
-    PlayerId?: number;
+export interface RanklistData {
+    
 
-    Firstname?: string;
+    Name?: string;
 
-    Lastname?: string;
+    CurrentScore?: number;
 
-    Nickname?: string;
-
-    Username?: string;
-
-    PasswordString?: string;
-
-    IsAdmin?: boolean;
-
-    PlaysMondays?: boolean;
-
-    PlaysTuesdays?: boolean;
-
-    PlaysWednesdays?: boolean;
-
-    PlaysThursdays?: boolean;
-
-    PlaysFridays?: boolean;
-
-    PlaysSaturdays?: boolean;
-
-    PlaysSundays?: boolean;
-
-    Picture?: string;
-
-    SafePicture?: SafeResourceUrl;
-
-    CurrentRating?: models.Rating;
-    IsSelected?: boolean;
-    Ratings?: Array<models.Rating>;
+    WinRate?: number;
 }

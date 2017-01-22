@@ -59,10 +59,10 @@ namespace WuHu.Dal.Test
             playerDao.Insert(new Player("Dobrila", "Reiter", "Pascal", "compiling...", "cistcool", true,
                 false, false, false, false, true, true, true, null));
 
-            playerDao.Insert(new Player("Trinke", "Fanta", "Sei Kambucha", "secretelypepsi", "droptableplayer", true,
+            playerDao.Insert(new Player("Trinke", "Fanta", "Sei Kambucha", "secretelypepsi", "droptableplayer", false,
                 false, false, false, false, true, true, true, null));
 
-            playerDao.Insert(new Player("Mark", "Spinner", "Deitscher", "oleeee", "bayernistcool", true,
+            playerDao.Insert(new Player("Mark", "Spinner", "Deitscher", "oleeee", "bayernistcool", false,
                 false, false, false, false, true, true, true, null));
 
             var rand = new Random();

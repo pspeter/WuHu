@@ -17,12 +17,25 @@ namespace WuHu.WebService.Controllers
         private IRatingManager Logic { get; } = BLFactory.GetRatingManager();
 
         [HttpGet]
-        [Route("", Name = "GetAllRatings")]
+        [Route("page/{page}", Name = "GetRatings")]
         [SwaggerResponse(HttpStatusCode.OK, "Returns rating for player with that id", typeof(IEnumerable<Rating>))]
-        public IEnumerable<Rating> GetAllRatings()
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        public IEnumerable<Rating> GetAllRatings(int page)
         {
-            var ratings = Logic.GetAllRatings();
+            if (page < 0)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+            var ratings = Logic.GetAllRatings(page);
             return ratings;
+        }
+
+        [HttpGet]
+        [Route("page/count")]
+        [SwaggerResponse(HttpStatusCode.OK, "Returns amount of pages for ratings", typeof(int))]
+        public int GetPageCount()
+        {
+            return Logic.GetPageCount();
         }
 
         [HttpGet]

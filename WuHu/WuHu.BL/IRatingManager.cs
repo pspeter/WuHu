@@ -11,9 +11,10 @@ namespace WuHu.BL
     {
         bool AddCurrentRatingFor(Player player);
         bool AddAllCurrentRatings();
-        IList<Rating> GetAllRatings();
+        IList<Rating> GetAllRatings(int page);
         IList<Rating> GetAllRatingsFor(Player player);
         Rating GetCurrentRatingFor(Player player);
         Rating GetCurrentRatingFor(int playerId);
+        int GetPageCount();
     }
 }

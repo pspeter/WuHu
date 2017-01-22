@@ -29,6 +29,7 @@ import {WebsocketService, SignalrWindow} from "./api/websocket.service";
 import {TournamentService} from "./api/tournament.service";
 import { LineChartComponent } from './pages/statistics/line-chart/line-chart.component';
 import {ChartModule} from "angular2-highcharts";
+import {StatisticsService} from "./api/statistics-service";
 
 @NgModule({
     declarations: [
@@ -67,6 +68,7 @@ import {ChartModule} from "angular2-highcharts";
         WebsocketService,
         {provide: SignalrWindow, useValue: window },
         TournamentService,
+        StatisticsService,
     ],
     bootstrap: [AppComponent]
 })

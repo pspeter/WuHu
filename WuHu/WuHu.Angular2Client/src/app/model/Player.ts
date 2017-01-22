@@ -61,4 +61,6 @@ export interface Player {
 
     CurrentRating?: models.Rating;
     IsSelected?: boolean;
+    Ratings?: Array<models.Rating>;
+    RatingData?: Array<Array<any>>;
 }

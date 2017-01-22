@@ -37,7 +37,6 @@ export class LiveComponent implements OnInit, OnDestroy {
                     if (this.matches[i].ScoreTeam2 == null)
                         this.matches[i].ScoreTeam2 = 0;
                 }
-                console.log("next");
 
                 this.ngZone.run(() => this.errorMessage = "");
                 if (this.matches.length == 0) {

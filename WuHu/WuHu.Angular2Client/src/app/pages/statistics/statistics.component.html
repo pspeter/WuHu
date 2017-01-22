@@ -2,17 +2,17 @@
     <h2>Statistiken</h2>
 </div>
 
-<app-line-chart (dataLoaded)="dataLoaded()"></app-line-chart>
-<!--
-<div class="col-xs-12 col-md-4 col-lg-3"> col-md-8 col-lg-9
-    <label for="players">Wähle bis zu 5 Spieler aus</label>
-    <div class="list-group" id="players">
-        <div class="player-list">
-            <button class="list-group-item" *ngFor="let player of players"
-                    (click)="selectPlayer(player)" type="button"
-                    [class.selected]="player.IsSelected">
-                {{ player.Firstname }} {{ player.Lastname }}
-            </button>
-        </div>
+<div class="row messages">
+    <div class="col-xs-12">
+        <div class="alert alert-danger" *ngIf="!!errorMessage">{{errorMessage}}</div>
     </div>
-</div>-->
+    <div class="col-xs-12">
+        <div class="alert alert-info" *ngIf="!!infoMessage">{{infoMessage}}</div>
+    </div>
+
+    <div *ngIf="loading && !errorMessage" class="col-xs-12 center-children">
+        <div class="loader"></div>
+    </div>
+</div>
+
+<app-line-chart class="col-xs-12" *ngIf="!errorMessage" [class.hidden]="loading" [players]="players"></app-line-chart>
