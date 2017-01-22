@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WuHu.BL;
+using WuHu.BL.Impl;
 using WuHu.Common;
 using WuHu.Dal.Common;
 using WuHu.Domain;
@@ -11,7 +13,7 @@ namespace WuHu.Terminal.Services
 {
     static class AuthenticationService
     {
-        private static readonly IPlayerDao PlayerDao = DalFactory.CreatePlayerDao(DalFactory.CreateDatabase());
+        private static readonly IPlayerManager PlayerMgr = BLFactory.GetPlayerManager();
 
 
         public static bool Login(string username, string password)
@@ -22,7 +24,7 @@ namespace WuHu.Terminal.Services
                 return false;
             }
 
-            AuthenticatedUser = PlayerDao.FindByUsername(username);
+            AuthenticatedUser = PlayerMgr.GetPlayer(username);
             if (!AuthenticatedUser.IsAdmin)
             {
                 Logout();
@@ -46,7 +48,7 @@ namespace WuHu.Terminal.Services
         private static bool Authenticate(string username, string password)
         {
             if (username == null || password == null) return false;
-            var user = PlayerDao.FindByUsername(username);
+            var user = PlayerMgr.GetPlayer(username);
             return user != null && 
                 CryptoService.CheckPassword(password, user.Password, user.Salt);
         }

@@ -321,9 +321,9 @@ namespace WuHu.Terminal.ViewModels
             set
             {
                 var img = SaveImage(value);
-                if (_player.Picture != SaveImage(value))
+                if (_player.Picture != img)
                 {
-                    _player.Picture = SaveImage(value);
+                    _player.Picture = img;
                     IsDirty = true;
                     OnPropertyChanged(this);
                 }
