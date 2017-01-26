@@ -227,7 +227,6 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\LiveMatchController.cs" />
     <Compile Include="Controllers\MatchController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Controllers\RatingController.cs" />

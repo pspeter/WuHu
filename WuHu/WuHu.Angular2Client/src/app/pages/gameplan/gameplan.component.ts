@@ -119,6 +119,12 @@ export class GameplanComponent implements OnInit, OnDestroy {
         for (let i = 0; i < this.players.length; ++i) {
             if (this.players[i].IsSelected) submitPlayers.push(this.players[i]);
         }
+
+        if (submitPlayers.length < 4) {
+            this.displayError("Ein Turnier braucht mindestens 4 Spieler.");
+            return;
+        }
+
         this.tournamentModel.Players = submitPlayers;
         this.loading = true;
         if (this.editMode) {

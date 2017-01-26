@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Microsoft.Owin;
+using System.Data.Entity;
 
 namespace WuHu.WebService
 {
@@ -17,6 +18,8 @@ namespace WuHu.WebService
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings
+                .ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
         }
     }
 }
